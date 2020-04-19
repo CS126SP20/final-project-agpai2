@@ -7,6 +7,26 @@
 
 namespace mylibrary {
 
+class Location {
+ public:
+  Location(int row, int col);
+
+  // Vector operators.
+  Location operator+(const Location& rhs) const;
+  // Note: Always returns positive coordinates.
+  Location operator%(const Location& rhs) const;
+
+  bool operator==(const Location& rhs) const;
+
+  // Accessors.
+  int Row() const;
+  int Col() const;
+
+ private:
+  int row_;
+  int col_;
+};
+
 }
 
 #endif  // FINALPROJECT_LOCATION_H

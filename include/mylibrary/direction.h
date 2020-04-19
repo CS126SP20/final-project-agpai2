@@ -7,5 +7,8 @@
 
 namespace mylibrary {
 
+// Represents the possible directions of the snake.
+enum class Direction { kUp, kDown, kLeft, kRight };
+
 }
 #endif  // FINALPROJECT_DIRECTION_H
