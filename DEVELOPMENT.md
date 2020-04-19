@@ -9,3 +9,5 @@
     * Using arrow keys or WASD keys to move player is still in development.
     * Still exploring additional external libraries for game design.
 
+4. The User can now move the player(Link) using the arrow keys or WASD keys
+
