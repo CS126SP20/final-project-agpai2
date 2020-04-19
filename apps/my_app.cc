@@ -4,19 +4,45 @@
 
 #include <cinder/app/App.h>
 
+#include <cinder/audio/Voice.h>
+#include <cinder/gl/gl.h>
+
+#include <cinder/gl/Texture.h>
+#include <cinder/gl/draw.h>
+
+
 
 namespace myapp {
 
 using cinder::app::KeyEvent;
+using cinder::Rectf;
 
-MyApp::MyApp() { }
+using mylibrary::Direction;
+using mylibrary::Location;
 
-void MyApp::setup() { }
+cinder::audio::VoiceRef background_audio_file;
+int player_move_state = 0;
 
-void MyApp::update() { }
+MyApp::MyApp()
+    : engine_{kNumTiles, kNumTiles},
+      size_{kNumTiles} {}
 
-void MyApp::draw() { }
+void MyApp::setup() {
+  PlayBackgroundTheme();
+}
 
-void MyApp::keyDown(KeyEvent event) { }
+void MyApp::update() {}
+
+void MyApp::draw() {}
+
+void MyApp::keyDown(KeyEvent event) {}
+
+void MyApp::PlayBackgroundTheme() {
+  auto source_file = cinder::audio::load
+      (cinder::app::loadAsset("zelda.mp3"));
+  background_audio_file = cinder::audio::Voice::create(source_file);
+  background_audio_file->start();
+}
+void MyApp::DrawPlayer() {}
 
 }  // namespace myapp
