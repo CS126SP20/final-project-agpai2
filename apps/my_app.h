@@ -11,9 +11,9 @@ namespace myapp {
 const int kTileSize = 50;
 const int kNumTiles = 16;
 
-class MyApp : public cinder::app::App {
+class Zelda : public cinder::app::App {
  public:
-  MyApp();
+  Zelda();
   void setup() override;
   void update() override;
   void draw() override;

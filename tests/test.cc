@@ -7,9 +7,24 @@
 
 #include <mylibrary/example.h>
 
+#include <mylibrary/location.h>
 
-TEST_CASE("Random sanity test", "[random]") {
-  const float random = cinder::randFloat();
-  REQUIRE(0. <= random);
-  REQUIRE(random <= 1.);
+using mylibrary::Location;
+
+TEST_CASE("Location vector operations", "[location]") {
+  SECTION("Modulo positive") {
+    Location loc1{12, 9};
+    Location loc2{7, 3};
+
+    Location result = loc1 % loc2;
+    REQUIRE(result == Location{5, 0});
+  }
+
+  SECTION("Modulo positive") {
+    Location loc1{-1, 3};
+    Location loc2{7, 2};
+
+    Location result = loc1 % loc2;
+    REQUIRE(result == Location{6, 1});
+  }
 }

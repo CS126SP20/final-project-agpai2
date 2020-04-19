@@ -21,20 +21,20 @@ using mylibrary::Location;
 cinder::audio::VoiceRef background_audio_file;
 int player_move_state = 0;
 
-MyApp::MyApp()
+Zelda::Zelda()
     : engine_{kNumTiles, kNumTiles},
       size_{kNumTiles} {}
 
-void MyApp::setup() {
+void Zelda::setup() {
   cinder::gl::disableDepthWrite();
   cinder::gl::disableDepthRead();
 
   PlayBackgroundTheme();
 }
 
-void MyApp::update() {}
+void Zelda::update() {}
 
-void MyApp::draw() {
+void Zelda::draw() {
   cinder::gl::enableAlphaBlending();
 
   cinder::gl::clear();
@@ -43,7 +43,7 @@ void MyApp::draw() {
   DrawPlayer();
 }
 
-void MyApp::keyDown(KeyEvent event) {
+void Zelda::keyDown(KeyEvent event) {
   switch (event.getCode()) {
     case KeyEvent::KEY_UP:
     case KeyEvent::KEY_k:
@@ -84,13 +84,14 @@ void MyApp::keyDown(KeyEvent event) {
   }
 }
 
-void MyApp::PlayBackgroundTheme() {
+void Zelda::PlayBackgroundTheme() {
   auto source_file = cinder::audio::load
       (cinder::app::loadAsset("zelda.mp3"));
   background_audio_file = cinder::audio::Voice::create(source_file);
   background_audio_file->start();
 }
-void MyApp::DrawPlayer() {
+
+void Zelda::DrawPlayer() {
   const Location loc = engine_.GetPlayer().GetLoc();
   cinder::fs::path path;
 
