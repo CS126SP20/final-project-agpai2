@@ -17,7 +17,7 @@ class Engine {
  public:
   Engine(int width, int height);
 
-  // Changes the direction of the snake for the next time step.
+  // Changes the direction of the player for the next step.
   void SetDirection(Direction);
 
   // Executes a time step: moves the player.
