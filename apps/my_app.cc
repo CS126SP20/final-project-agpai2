@@ -10,8 +10,6 @@
 #include <cinder/gl/Texture.h>
 #include <cinder/gl/draw.h>
 
-
-
 namespace myapp {
 
 using cinder::app::KeyEvent;
@@ -28,14 +26,63 @@ MyApp::MyApp()
       size_{kNumTiles} {}
 
 void MyApp::setup() {
+  cinder::gl::disableDepthWrite();
+  cinder::gl::disableDepthRead();
+
   PlayBackgroundTheme();
 }
 
 void MyApp::update() {}
 
-void MyApp::draw() {}
+void MyApp::draw() {
+  cinder::gl::enableAlphaBlending();
 
-void MyApp::keyDown(KeyEvent event) {}
+  cinder::gl::clear();
+  cinder::gl::color(1,1,1);
+
+  DrawPlayer();
+}
+
+void MyApp::keyDown(KeyEvent event) {
+  switch (event.getCode()) {
+    case KeyEvent::KEY_UP:
+    case KeyEvent::KEY_k:
+    case KeyEvent::KEY_w: {
+      engine_.SetDirection(Direction::kLeft);
+      player_move_state = 1;
+      DrawPlayer();
+      engine_.Step();
+      break;
+    }
+    case KeyEvent::KEY_DOWN:
+    case KeyEvent::KEY_j:
+    case KeyEvent::KEY_s: {
+      engine_.SetDirection(Direction::kRight);
+      player_move_state = 0;
+      DrawPlayer();
+      engine_.Step();
+      break;
+    }
+    case KeyEvent::KEY_LEFT:
+    case KeyEvent::KEY_h:
+    case KeyEvent::KEY_a: {
+      engine_.SetDirection(Direction::kUp);
+      player_move_state = 2;
+      DrawPlayer();
+      engine_.Step();
+      break;
+    }
+    case KeyEvent::KEY_RIGHT:
+    case KeyEvent::KEY_l:
+    case KeyEvent::KEY_d: {
+      engine_.SetDirection(Direction::kDown);
+      player_move_state = 3;
+      DrawPlayer();
+      engine_.Step();
+      break;
+    }
+  }
+}
 
 void MyApp::PlayBackgroundTheme() {
   auto source_file = cinder::audio::load
@@ -43,6 +90,28 @@ void MyApp::PlayBackgroundTheme() {
   background_audio_file = cinder::audio::Voice::create(source_file);
   background_audio_file->start();
 }
-void MyApp::DrawPlayer() {}
+void MyApp::DrawPlayer() {
+  const Location loc = engine_.GetPlayer().GetLoc();
+  cinder::fs::path path;
+
+  if (player_move_state == 0) {
+    path = cinder::fs::path("link.png");
+  } else if (player_move_state == 1) {
+    path = cinder::fs::path("link-back.png");
+  } else if (player_move_state == 2) {
+    path = cinder::fs::path("link-left.png");
+  } else if (player_move_state == 3) {
+    path = cinder::fs::path("link-right.png");
+
+  }
+
+  cinder::gl::Texture2dRef texture = cinder::gl::Texture2d::create(
+      loadImage(loadAsset(path)));
+
+  cinder::gl::draw(texture, Rectf(kTileSize * loc.Row(),
+                                  kTileSize * loc.Col(),
+                                  kTileSize * loc.Row() + kTileSize,
+                                  kTileSize * loc.Col() + kTileSize));
+}
 
 }  // namespace myapp
