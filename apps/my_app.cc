@@ -30,10 +30,27 @@ void Zelda::setup() {
   cinder::gl::disableDepthWrite();
   cinder::gl::disableDepthRead();
 
+  ReadMapsFromFile();
   PlayBackgroundTheme();
 }
 
-void Zelda::update() {}
+void Zelda::update() {
+  Location location = engine_.GetPlayer().GetLoc();
+
+  int curr_row = location.Col();
+  int curr_col = location.Row();
+
+
+  for (int i = 0; i < game_maps_.size(); i++) {
+    is_move_right_ = game_maps_[i].coordinates_[curr_row][curr_col + 1] != '1';
+
+    is_move_down_ = game_maps_[i].coordinates_[curr_row + 1][curr_col] != '1';
+
+    is_move_left_ = game_maps_[i].coordinates_[curr_row][curr_col - 1] != '1';
+
+    is_move_up_ = game_maps_[i].coordinates_[curr_row - 1][curr_col] != '1';
+  }
+}
 
 void Zelda::draw() {
   cinder::gl::enableAlphaBlending();
@@ -48,36 +65,36 @@ void Zelda::draw() {
 void Zelda::keyDown(KeyEvent event) {
   switch (event.getCode()) {
     case KeyEvent::KEY_UP:
-    case KeyEvent::KEY_k:
     case KeyEvent::KEY_w: {
-      engine_.SetDirection(Direction::kLeft);
+      CheckForDirection(event);
+      //engine_.SetDirection(Direction::kLeft);
       player_move_state = 1;
       DrawPlayer();
       engine_.Step();
       break;
     }
     case KeyEvent::KEY_DOWN:
-    case KeyEvent::KEY_j:
     case KeyEvent::KEY_s: {
-      engine_.SetDirection(Direction::kRight);
+      CheckForDirection(event);
+      //engine_.SetDirection(Direction::kRight);
       player_move_state = 0;
       DrawPlayer();
       engine_.Step();
       break;
     }
     case KeyEvent::KEY_LEFT:
-    case KeyEvent::KEY_h:
     case KeyEvent::KEY_a: {
-      engine_.SetDirection(Direction::kUp);
+      CheckForDirection(event);
+      //engine_.SetDirection(Direction::kUp);
       player_move_state = 2;
       DrawPlayer();
       engine_.Step();
       break;
     }
     case KeyEvent::KEY_RIGHT:
-    case KeyEvent::KEY_l:
     case KeyEvent::KEY_d: {
-      engine_.SetDirection(Direction::kDown);
+      CheckForDirection(event);
+      //engine_.SetDirection(Direction::kDown);
       player_move_state = 3;
       DrawPlayer();
       engine_.Step();
@@ -86,7 +103,40 @@ void Zelda::keyDown(KeyEvent event) {
   }
 }
 
-void Zelda::CheckForDirection(const cinder::app::KeyEvent& event) {}
+void Zelda::CheckForDirection(const cinder::app::KeyEvent& event) {
+
+  if (is_move_up_ &&
+      (event.getCode() == KeyEvent::KEY_UP || event.getCode() == KeyEvent::KEY_w)) {
+    engine_.SetDirection(Direction::kLeft);
+    return;
+  } else {
+    engine_.SetDirection(Direction::kNull);
+  }
+
+  if (is_move_down_ &&
+      (event.getCode() == KeyEvent::KEY_DOWN || event.getCode() == KeyEvent::KEY_s)) {
+    engine_.SetDirection(Direction::kRight);
+    return;
+  } else {
+    engine_.SetDirection(Direction::kNull);
+  }
+
+  if (is_move_left_ &&
+      (event.getCode() == KeyEvent::KEY_LEFT || event.getCode() == KeyEvent::KEY_a)) {
+    engine_.SetDirection(Direction::kUp);
+    return;
+  } else {
+    engine_.SetDirection(Direction::kNull);
+  }
+
+  if (is_move_right_ &&
+      (event.getCode() == KeyEvent::KEY_RIGHT || event.getCode() == KeyEvent::KEY_d)) {
+    engine_.SetDirection(Direction::kDown);
+    return;
+  } else {
+    engine_.SetDirection(Direction::kNull);
+  }
+}
 
 void Zelda::PlayBackgroundTheme() {
   auto source_file = cinder::audio::load
