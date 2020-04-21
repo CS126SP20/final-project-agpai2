@@ -17,13 +17,14 @@ using cinder::Rectf;
 
 using mylibrary::Direction;
 using mylibrary::Location;
+using mylibrary::Map;
 
 cinder::audio::VoiceRef background_audio_file;
 int player_move_state = 0;
 
 Zelda::Zelda()
-    : engine_{kNumTiles, kNumTiles},
-      size_{kNumTiles} {}
+    : engine_{kRowTiles, kColTiles},
+      size_{kRowTiles} {}
 
 void Zelda::setup() {
   cinder::gl::disableDepthWrite();

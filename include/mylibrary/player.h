@@ -16,6 +16,7 @@ class Player {
   void SetLoc (Location set_loc) {
     loc = set_loc;
   }
+
   Location GetLoc() const { return loc;}
 
  private:
