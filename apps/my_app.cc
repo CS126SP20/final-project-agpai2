@@ -37,6 +37,10 @@ void Zelda::setup() {
 void Zelda::update() {
   Location location = engine_.GetPlayer().GetLoc();
 
+  // The current row contains player's column coordinate and
+  // the current column contains to player's row coordinate
+
+  // This is to account for the switch in coordinates axes
   int curr_row = location.Col();
   int curr_col = location.Row();
 
@@ -105,33 +109,41 @@ void Zelda::keyDown(KeyEvent event) {
 
 void Zelda::CheckForDirection(const cinder::app::KeyEvent& event) {
 
+  // Checks if the player can move up
   if (is_move_up_ &&
-      (event.getCode() == KeyEvent::KEY_UP || event.getCode() == KeyEvent::KEY_w)) {
-    engine_.SetDirection(Direction::kLeft);
-    return;
-  } else {
-    engine_.SetDirection(Direction::kNull);
-  }
-
-  if (is_move_down_ &&
-      (event.getCode() == KeyEvent::KEY_DOWN || event.getCode() == KeyEvent::KEY_s)) {
-    engine_.SetDirection(Direction::kRight);
-    return;
-  } else {
-    engine_.SetDirection(Direction::kNull);
-  }
-
-  if (is_move_left_ &&
-      (event.getCode() == KeyEvent::KEY_LEFT || event.getCode() == KeyEvent::KEY_a)) {
+      ((event.getCode() == KeyEvent::KEY_UP) ||
+      (event.getCode() == KeyEvent::KEY_w))) {
     engine_.SetDirection(Direction::kUp);
     return;
   } else {
     engine_.SetDirection(Direction::kNull);
   }
 
-  if (is_move_right_ &&
-      (event.getCode() == KeyEvent::KEY_RIGHT || event.getCode() == KeyEvent::KEY_d)) {
+  // Checks if the player can move down
+  if (is_move_down_ &&
+      ((event.getCode() == KeyEvent::KEY_DOWN) ||
+      (event.getCode() == KeyEvent::KEY_s))) {
     engine_.SetDirection(Direction::kDown);
+    return;
+  } else {
+    engine_.SetDirection(Direction::kNull);
+  }
+
+  // Checks if the player can move left
+  if (is_move_left_ &&
+      ((event.getCode() == KeyEvent::KEY_LEFT )||
+      (event.getCode() == KeyEvent::KEY_a))) {
+    engine_.SetDirection(Direction::kLeft);
+    return;
+  } else {
+    engine_.SetDirection(Direction::kNull);
+  }
+
+  // Checks if the player can move right
+  if (is_move_right_ &&
+      ((event.getCode() == KeyEvent::KEY_RIGHT) ||
+      (event.getCode() == KeyEvent::KEY_d))) {
+    engine_.SetDirection(Direction::kRight);
     return;
   } else {
     engine_.SetDirection(Direction::kNull);
@@ -149,6 +161,8 @@ void Zelda::DrawPlayer() {
   const Location loc = engine_.GetPlayer().GetLoc();
   cinder::fs::path path;
 
+  // The sequence of 'if' conditions changes image of link
+  // based on the direction Link is planning to move
   if (player_move_state == 0) {
     path = cinder::fs::path("link.png");
   } else if (player_move_state == 1) {
@@ -180,8 +194,8 @@ void Zelda::DrawBackground() {
 void Zelda::ReadMapsFromFile() {
   int map_line_count = 0;
 
-  std::string maps_file
-      = "/Users/aniruddhapai/Downloads/cinder_0.9.2_mac/finalproject/zelda-trials/assets/zeldamaps.txt";
+  std::string maps_file =
+      "/Users/aniruddhapai/Downloads/cinder_0.9.2_mac/finalproject/final-project-agpai2/assets/zeldamaps.txt";
   std::ifstream file(maps_file);
 
   while (!file.eof()) {
@@ -190,7 +204,10 @@ void Zelda::ReadMapsFromFile() {
     SetUpMap(map_line);
     map_line_count++;
 
-    if (map_line_count == 13) {
+    // This to account for the fact that the game screen
+    // has 13 rows.
+    // So, game_maps_ takes in a new game screen after 13 counts
+    if (map_line_count == kRowTiles) {
       Map game_screen = Map(map_);
       game_maps_.push_back(game_screen);
       map_line_count = 0;
