@@ -11,3 +11,5 @@
 
 4. The User can now move the player(Link) using the arrow keys or WASD keys
 
+5. Working on implementing a game screen for the character(Link)
+    * The character must be able to move through free space and not through walls 
