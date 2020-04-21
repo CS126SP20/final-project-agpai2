@@ -41,6 +41,7 @@ void Zelda::draw() {
   cinder::gl::clear();
   cinder::gl::color(1,1,1);
 
+  DrawBackground();
   DrawPlayer();
 }
 
@@ -85,6 +86,8 @@ void Zelda::keyDown(KeyEvent event) {
   }
 }
 
+void Zelda::CheckForDirection(const cinder::app::KeyEvent& event) {}
+
 void Zelda::PlayBackgroundTheme() {
   auto source_file = cinder::audio::load
       (cinder::app::loadAsset("zelda.mp3"));
@@ -114,6 +117,51 @@ void Zelda::DrawPlayer() {
                                   kTileSize * loc.Col(),
                                   kTileSize * loc.Row() + kTileSize,
                                   kTileSize * loc.Col() + kTileSize));
+}
+
+void Zelda::DrawBackground() {
+  cinder::fs::path path = cinder::fs::path("zelda-screen1.png");
+  cinder::gl::Texture2dRef texture = cinder::gl::Texture2d::create(
+      loadImage(loadAsset(path)));
+
+  cinder::gl::draw(texture, getWindowBounds());
+}
+
+void Zelda::ReadMapsFromFile() {
+  int map_line_count = 0;
+
+  std::string maps_file
+      = "/Users/aniruddhapai/Downloads/cinder_0.9.2_mac/finalproject/zelda-trials/assets/zeldamaps.txt";
+  std::ifstream file(maps_file);
+
+  while (!file.eof()) {
+    std::string map_line;
+    getline(file, map_line);
+    SetUpMap(map_line);
+    map_line_count++;
+
+    if (map_line_count == 13) {
+      Map game_screen = Map(map_);
+      game_maps_.push_back(game_screen);
+      map_line_count = 0;
+
+      map_.clear();
+    }
+  }
+}
+
+void Zelda::SetUpMap(std::string map_line) {
+  std::vector<char> map_line_char;
+
+  for (int i = 0; i < kColTiles; i++) {
+    if (map_line.at(i) == '1') {
+      map_line_char.push_back('1');
+    } else if (map_line.at(i) == '0') {
+      map_line_char.push_back('0');
+    }
+  }
+
+  map_.push_back(map_line_char);
 }
 
 }  // namespace myapp
