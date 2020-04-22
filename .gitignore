@@ -146,11 +146,3 @@ _deps
 # Don't track database files.
 # assets/*.db
 # assets/*.sqlite*
-
-assets/zelda.mp3
-assets/link.png
-assets/link-back.png
-assets/link-right.png
-assets/link-left.png
-assets/zelda-screen1.png
-assets/zeldamaps.txt
