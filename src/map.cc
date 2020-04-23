@@ -88,7 +88,7 @@ bool Map::IsScreenChange() { return is_screen_change; }
 
 bool Map::IsSwordTaken() { return is_sword_taken; }
 
-int Map::GetGameScreenNum() { return screen_num_; }
+int Map::GetNewScreenNum() { return screen_num_; }
 
 Location Map::GetPlayerNewLoc(const Map& curr_map, Engine engine) {
   Location location = engine.GetPlayer().GetLoc();
@@ -118,20 +118,60 @@ Location Map::GetPlayerNewLoc(const Map& curr_map, Engine engine) {
     return {kLocPosTwo, kLocPosThree};
   }
 
-  if (curr_map.coordinates_[curr_row][curr_col] == char(b) &&
-      engine.GetDirection() == Direction::kUp) {
-    screen_num_ = kScreen4;
-    is_screen_change = true;
-    return {curr_col,kLocPosOne + 1};
-  } else if (curr_map.coordinates_[curr_row][curr_col] == char(b) &&
-             engine.GetDirection() == Direction::kDown) {
-    screen_num_ = kScreen1;
-    is_screen_change = true;
-    return {curr_col,1};
+  for (int j = 0; j < entry_points_.size(); j++) {
+    if (curr_map.coordinates_[curr_row][curr_col] == entry_points_.at(j)) {
+      screen_num_ = GetTransitionScreenNum(GetCurrScreenNum(curr_map), entry_points_.at(j));
+      is_screen_change = true;
+      if (engine.GetDirection() == Direction::kUp) {
+        return {curr_col,kLocPosOne + 1};
+      } else if (engine.GetDirection() == Direction::kDown) {
+        return {curr_col,1};
+      } else if (engine.GetDirection() == Direction::kLeft) {
+        return {kRowWidth - kLocPosThree, curr_row};
+      } else if (engine.GetDirection() == Direction::kRight) {
+        return {1, curr_row};
+      }
+    }
   }
-
-  is_screen_change = false;
   return location;
+}
+
+int Map::GetCurrScreenNum(const Map& curr_map) {
+  int count = 0;
+
+  for (int i = 0; i < game_maps_.size(); i++) {
+    for (int j = 0; j < kColumnHeight; j++) { // 13
+      for (int k = 0; k < kRowWidth; k++) {  // 21
+        if (game_maps_[i].coordinates_[j][k] == curr_map.coordinates_[j][k]) {
+          count++;
+        } else {
+          count = 0;
+          // If the screens are not equal, the outer-loop is called
+          goto outerloop;
+        }
+        if (count == kRowWidth * kColumnHeight) {
+          return i;
+        }
+      }
+    }
+    outerloop:;
+  }
+}
+
+int Map::GetTransitionScreenNum(int num, char entry) {
+
+  for (int i = 0; i < game_maps_.size(); i++) {
+    if (i != num) {
+      for (int j = 0; j < kColumnHeight; j++) {
+        for (int k = 0; k < kRowWidth; k++) {
+          // This is to check for other maps having the same entry/exit points
+          if (game_maps_[i].coordinates_[j][k] == entry) {
+            return i;
+          }
+        }
+      }
+    }
+  }
 }
 
 }

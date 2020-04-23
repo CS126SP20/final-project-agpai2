@@ -28,8 +28,13 @@ class Zelda : public cinder::app::App {
   void PlayBackgroundTheme();
   void DrawPlayer();
   void DrawBackground();
+
+  // Different directions are assigned and set based on link's
+  // current positon.
   void CheckForDirection(const cinder::app::KeyEvent& event);
 
+  // This is to reset link's position after a screen transition
+  void ResetPosition(mylibrary::Location location);
 
  private:
   mylibrary::Engine engine_;
@@ -48,7 +53,6 @@ class Zelda : public cinder::app::App {
   int player_move_state_ = 0;
 
   cinder::audio::VoiceRef background_audio_file_;
-  void ResetPosition(mylibrary::Location location);
 };
 
 }  // namespace myapp

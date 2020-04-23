@@ -7,6 +7,7 @@
 
 #include <mylibrary/engine.h>
 
+#include <string>
 #include <vector>
 
 using mylibrary::Engine;
@@ -29,7 +30,7 @@ class Map {
   Map();
   explicit Map(std::vector<std::vector<char>> game_screen);
 
-  // Gets the number of the new game screen
+  // Gets the new location of player after screen change
   Location GetPlayerNewLoc(const Map& curr_map, Engine engine);
 
   // Gets the labels of the maps/screens
@@ -47,17 +48,23 @@ class Map {
   // Returns a bool value to check if the screen is changed
   bool IsScreenChange();
 
-  // Returns a bool value to check if the screen is changed
+  // Returns a bool value to check if the sword is taken
   bool IsSwordTaken();
 
-  // Gets the map or screen number link is planning ot enter
-  int GetGameScreenNum();
+  // Gets the positional value of a map the player is in
+  int GetCurrScreenNum(const Map& curr_map);
+
+  // Gets the map or screen number link is planning to enter
+  int GetNewScreenNum();
+
+  // Gets the screen number of the screen to transition into
+  int GetTransitionScreenNum(int num, char entry);
 
   // Gets all the Maps/Screens of a game
   std::vector<Map> GetScreen();
 
   // Contains different game screens
-  enum GameScreens { kScreen1, kScreen2, kScreen3, kScreen4 };
+  enum GameScreens { kScreen1, kScreen2, kScreen3 };
 
   // Contains different entry points
   enum EntryPoints { a = 97, b, c, d, e, f, g, h, i, j, k, l, m,
@@ -75,6 +82,8 @@ class Map {
   std::vector<mylibrary::Map> game_maps_;
   // Contains a single game screen
   std::vector<std::vector<char>> map_;
+
+  std::string entry_points_ = "abcdefghijklmnopqrsdtuvwxyz";
 };
 
 }

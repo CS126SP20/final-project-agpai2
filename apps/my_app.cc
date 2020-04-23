@@ -40,7 +40,7 @@ void Zelda::update() {
 
   curr_map_ = mapper_.GetMapLabels();
 
-  map_num = mapper_.GetGameScreenNum();
+  map_num = mapper_.GetNewScreenNum();
 
   int curr_row = location.Col();
   int curr_col = location.Row();
@@ -112,7 +112,8 @@ void Zelda::keyDown(KeyEvent event) {
 void Zelda::CheckForDirection(const cinder::app::KeyEvent& event) {
 
   if (is_move_up_ &&
-      (event.getCode() == KeyEvent::KEY_UP || event.getCode() == KeyEvent::KEY_w)) {
+      (event.getCode() == KeyEvent::KEY_UP ||
+      event.getCode() == KeyEvent::KEY_w)) {
     engine_.SetDirection(Direction::kUp);
     return;
   } else {
@@ -120,7 +121,8 @@ void Zelda::CheckForDirection(const cinder::app::KeyEvent& event) {
   }
 
   if (is_move_down_ &&
-      (event.getCode() == KeyEvent::KEY_DOWN || event.getCode() == KeyEvent::KEY_s)) {
+      (event.getCode() == KeyEvent::KEY_DOWN ||
+      event.getCode() == KeyEvent::KEY_s)) {
     engine_.SetDirection(Direction::kDown);
     return;
   } else {
@@ -128,7 +130,8 @@ void Zelda::CheckForDirection(const cinder::app::KeyEvent& event) {
   }
 
   if (is_move_left_ &&
-      (event.getCode() == KeyEvent::KEY_LEFT || event.getCode() == KeyEvent::KEY_a)) {
+      (event.getCode() == KeyEvent::KEY_LEFT ||
+      event.getCode() == KeyEvent::KEY_a)) {
     engine_.SetDirection(Direction::kLeft);
     return;
   } else {
@@ -136,7 +139,8 @@ void Zelda::CheckForDirection(const cinder::app::KeyEvent& event) {
   }
 
   if (is_move_right_ &&
-      (event.getCode() == KeyEvent::KEY_RIGHT || event.getCode() == KeyEvent::KEY_d)) {
+      (event.getCode() == KeyEvent::KEY_RIGHT ||
+      event.getCode() == KeyEvent::KEY_d)) {
     engine_.SetDirection(Direction::kRight);
     return;
   } else {
@@ -158,6 +162,8 @@ void Zelda::DrawPlayer() {
   const Location loc = engine_.GetPlayer().GetLoc();
   cinder::fs::path path;
 
+  // Different values of player state are set based on the direction
+  // link is facing
   if (player_move_state_ == static_cast<int>(Direction::kDown)) {
     path = cinder::fs::path("link.png");
   } else if (player_move_state_ == static_cast<int>(Direction::kUp)) {
@@ -168,6 +174,7 @@ void Zelda::DrawPlayer() {
     path = cinder::fs::path("link-right.png");
   }
 
+  // This is display the image of link after getting the sword
   if (mapper_.GetScreen()[map_num].coordinates_[loc.Col()][loc.Row()] == 't') {
     path = cinder::fs::path("link-sword.png");
   }
