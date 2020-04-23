@@ -1,3 +1,4 @@
 zelda-screen1.png
+no-sword-screen.png
 sword-screen.png
 screen2.png

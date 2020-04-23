@@ -96,8 +96,7 @@ Location Map::GetPlayerNewLoc(const Map& curr_map, Engine engine) {
   int curr_row = location.Col();
   int curr_col = location.Row();
 
-  if (curr_map.coordinates_[curr_row][curr_col] == char(t) &&
-      engine.GetDirection() == Direction::kUp) {
+  if (curr_map.coordinates_[curr_row][curr_col] == char(t)) {
     is_sword_taken = true;
     screen_num_ = kScreen2;
     return location;
@@ -123,12 +122,12 @@ Location Map::GetPlayerNewLoc(const Map& curr_map, Engine engine) {
       engine.GetDirection() == Direction::kUp) {
     screen_num_ = kScreen4;
     is_screen_change = true;
-    return {kLocPosOne,kLocPosOne + 1};
+    return {curr_col,kLocPosOne + 1};
   } else if (curr_map.coordinates_[curr_row][curr_col] == char(b) &&
              engine.GetDirection() == Direction::kDown) {
     screen_num_ = kScreen1;
     is_screen_change = true;
-    return {kLocPosOne,0};
+    return {curr_col,1};
   }
 
   is_screen_change = false;

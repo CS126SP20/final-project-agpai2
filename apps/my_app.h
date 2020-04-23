@@ -26,7 +26,6 @@ class Zelda : public cinder::app::App {
 
  private:
   void PlayBackgroundTheme();
-  void PlayTreasureSound();
   void DrawPlayer();
   void DrawBackground();
   void CheckForDirection(const cinder::app::KeyEvent& event);

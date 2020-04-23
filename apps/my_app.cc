@@ -154,17 +154,6 @@ void Zelda::PlayBackgroundTheme() {
 
 }
 
-void Zelda::PlayTreasureSound() {
-  cinder::audio::VoiceRef treasure_audio_file;
-
-  auto audio_path = "treasure.mp3";
-
-  auto source_file = cinder::audio::load
-      (cinder::app::loadAsset(audio_path));
-  treasure_audio_file = cinder::audio::Voice::create(source_file);
-  treasure_audio_file->start();
-}
-
 void Zelda::DrawPlayer() {
   const Location loc = engine_.GetPlayer().GetLoc();
   cinder::fs::path path;
@@ -181,7 +170,6 @@ void Zelda::DrawPlayer() {
 
   if (mapper_.GetScreen()[map_num].coordinates_[loc.Col()][loc.Row()] == 't') {
     path = cinder::fs::path("link-sword.png");
-    PlayTreasureSound();
   }
 
   cinder::gl::Texture2dRef texture = cinder::gl::Texture2d::create(
