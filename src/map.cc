@@ -24,9 +24,40 @@ Map::Map(std::vector<std::vector<char>> game_screen) {  // 13, 21
   }
 }
 
-void Map::ReadImageLabels() {}
+void Map::ReadImageLabels() {
+  std::string map_label_file =
+      "/Users/aniruddhapai/Downloads/cinder_0.9.2_mac/finalproject/zelda-trials/assets/maplabels.txt";
+  std::ifstream file(map_label_file);
 
-void Map::ReadGameScreens() {}
+  while (!file.eof()) {
+    std::string map_label;
+    getline(file, map_label);
+    map_labels_.push_back(map_label);
+  }
+}
+
+void Map::ReadGameScreens() {
+  int map_line_count = 0;
+
+  std::string maps_file
+      = "/Users/aniruddhapai/Downloads/cinder_0.9.2_mac/finalproject/zelda-trials/assets/zeldamaps.txt";
+  std::ifstream file(maps_file);
+
+  while (!file.eof()) {
+    std::string map_line;
+    getline(file, map_line);
+    if (!map_line.empty()) {
+      map_line_count++;
+
+      if (map_line_count == kColumnHeight) {
+        Map game_screen = Map(map_);
+        game_maps_.push_back(game_screen);
+        map_line_count = 0;
+        map_.clear();
+      }
+    }
+  }
+}
 
 void Map::SetUpMap(std::string map_line) {}
 
