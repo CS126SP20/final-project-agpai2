@@ -22,3 +22,5 @@
 ## Week 2: Placing enemies/items in Overworld and implementing screen transitions
 1. Working on implementing screen transitions. That is, the screen should change as the player 
    moves to the next screen
+   
+- [x] The player can now move to different screens 
