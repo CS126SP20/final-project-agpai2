@@ -45,9 +45,9 @@ void Engine::SetDirection(const mylibrary::Direction direction) {
 }
 
 void Engine::Step() {
-  Location initial_loc = FromDirection(direction_);
+  Location next_loc = FromDirection(direction_);
   Location new_player_loc =
-      (player_.GetLoc() + initial_loc) % Location(height_, width_);
+      (player_.GetLoc() + next_loc) % Location(height_, width_);
 
   player_.SetLoc(new_player_loc);
 

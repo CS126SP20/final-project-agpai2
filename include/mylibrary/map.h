@@ -5,20 +5,67 @@
 #ifndef FINALPROJECT_MAP_H
 #define FINALPROJECT_MAP_H
 
+#include <mylibrary/engine.h>
+
 #include <vector>
+
+using mylibrary::Engine;
 
 namespace mylibrary {
 
-constexpr int row_width = 21;
-constexpr int column_height = 13;
+constexpr int kRowWidth = 21;
+constexpr int kColumnHeight = 13;
+
+// These are the constants for changing Link's position
+const int kLocPosOne = 10;
+const int kLocPosTwo = 5;
+const int kLocPosThree = 2;
 
 class Map {
  public:
-  char coordinates_[column_height][row_width];  // 13, 21
+  char coordinates_[kColumnHeight][kRowWidth]{};  // 13, 21
 
  public:
   Map();
   explicit Map(std::vector<std::vector<char>> game_screen);
+
+  // Gets the number of the new game screen
+  Location GetPlayerNewLoc(const Map& curr_map, Engine engine);
+
+  // Gets the labels of the maps/screens
+  std::string GetMapLabels();
+
+  // Reads through all the image labels in a file
+  void ReadImageLabels();
+
+  // Reads through all the game screens in a file
+  void ReadGameScreens();
+
+  // Sets Up the Map
+  void SetUpMap(std::string map_line);
+
+  // Returns a bool value to check if the screen is changed
+  bool IsScreenChange();
+
+  // Gets the map or screen number link is planning ot enter
+  int GetGameScreenNum();
+
+  // Gets all the Maps/Screens of a game
+  std::vector<Map> GetScreen();
+
+  // Contains different game screens
+  enum GameScreens { kScreen1, kScreen2, kScreen3 };
+
+ private:
+  int screen_num_{};
+  std::vector<std::string> map_labels_;
+
+  bool is_screen_change = false;
+
+  //Contains all the game screens
+  std::vector<mylibrary::Map> game_maps_;
+  // Contains a single game screen
+  std::vector<std::vector<char>> map_;
 };
 
 }
