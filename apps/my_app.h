@@ -5,9 +5,10 @@
 
 #include <cinder/app/App.h>
 #include <cinder/app/KeyEvent.h>
-#include <mylibrary/engine.h>
-#include <mylibrary/map.h>
 #include <cinder/audio/Voice.h>
+#include <mylibrary/engine.h>
+#include <mylibrary/location.h>
+#include <mylibrary/map.h>
 
 namespace myapp {
 
@@ -27,26 +28,30 @@ class Zelda : public cinder::app::App {
   void PlayBackgroundTheme();
   void DrawPlayer();
   void DrawBackground();
-  void ReadMapsFromFile();
   void CheckForDirection(const cinder::app::KeyEvent& event);
-  void SetUpMap(std::string map_line);
 
 
  private:
   mylibrary::Engine engine_;
+  mylibrary::Map mapper_;
   const size_t size_;
 
-  std::vector<mylibrary::Map> game_maps_;
+  // The current map the player is on
+  std::string curr_map_;
 
-  std::vector<std::vector<char>> map_;
-
+  // The bool values are to check for the possible directions
   bool is_move_right_ = true;
   bool is_move_left_ = true;
   bool is_move_up_ = true;
   bool is_move_down_ = true;
 
-  cinder::audio::VoiceRef background_audio_file;
-  int player_move_state = 0;
+  bool is_treasure_taken_ = false;
+
+  int treasure_count_ = 0;
+  int player_move_state_ = 0;
+
+  cinder::audio::VoiceRef background_audio_file_;
+  void ResetPosition(mylibrary::Location location);
 };
 
 }  // namespace myapp

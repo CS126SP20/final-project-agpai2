@@ -4,7 +4,6 @@
 
 #include <cinder/app/App.h>
 #include <cinder/gl/gl.h>
-
 #include <cinder/gl/Texture.h>
 #include <cinder/gl/draw.h>
 
@@ -17,6 +16,8 @@ using mylibrary::Direction;
 using mylibrary::Location;
 using mylibrary::Map;
 
+int map_num = 0;
+
 Zelda::Zelda()
     : engine_{kRowTiles, kColTiles},
       size_{kRowTiles} {}
@@ -25,12 +26,21 @@ void Zelda::setup() {
   cinder::gl::disableDepthWrite();
   cinder::gl::disableDepthRead();
 
-  ReadMapsFromFile();
+  curr_map_ = "zelda-screen1.png";
+  mapper_.ReadImageLabels();
+  mapper_.ReadGameScreens();
   PlayBackgroundTheme();
 }
 
 void Zelda::update() {
   Location location = engine_.GetPlayer().GetLoc();
+
+  Location new_player_loc = mapper_.GetPlayerNewLoc(
+      mapper_.GetScreen()[map_num],engine_);
+
+  curr_map_ = mapper_.GetMapLabels();
+
+  map_num = mapper_.GetGameScreenNum();
 
   // The current row contains player's column coordinate and
   // the current column contains to player's row coordinate
@@ -39,16 +49,21 @@ void Zelda::update() {
   int curr_row = location.Col();
   int curr_col = location.Row();
 
+  // Resets Link's position based on the screen change
+  ResetPosition(new_player_loc);
 
-  for (int i = 0; i < game_maps_.size(); i++) {
-    is_move_right_ = game_maps_[i].coordinates_[curr_row][curr_col + 1] != '1';
+  // This is to check if it is possible to move in any given direction
+  is_move_right_ =
+      mapper_.GetScreen()[map_num].coordinates_[curr_row][curr_col + 1] != '1';
 
-    is_move_down_ = game_maps_[i].coordinates_[curr_row + 1][curr_col] != '1';
+  is_move_down_ =
+      mapper_.GetScreen()[map_num].coordinates_[curr_row + 1][curr_col] != '1';
 
-    is_move_left_ = game_maps_[i].coordinates_[curr_row][curr_col - 1] != '1';
+  is_move_left_ =
+      mapper_.GetScreen()[map_num].coordinates_[curr_row][curr_col - 1] != '1';
 
-    is_move_up_ = game_maps_[i].coordinates_[curr_row - 1][curr_col] != '1';
-  }
+  is_move_up_ =
+      mapper_.GetScreen()[map_num].coordinates_[curr_row - 1][curr_col] != '1';
 }
 
 void Zelda::draw() {
@@ -66,7 +81,7 @@ void Zelda::keyDown(KeyEvent event) {
     case KeyEvent::KEY_UP:
     case KeyEvent::KEY_w: {
       CheckForDirection(event);
-      player_move_state = static_cast<int>(Direction::kUp);
+      player_move_state_ = static_cast<int>(Direction::kUp);
       DrawPlayer();
       engine_.Step();
       break;
@@ -74,7 +89,7 @@ void Zelda::keyDown(KeyEvent event) {
     case KeyEvent::KEY_DOWN:
     case KeyEvent::KEY_s: {
       CheckForDirection(event);
-      player_move_state = static_cast<int>(Direction::kDown);
+      player_move_state_ = static_cast<int>(Direction::kDown);
       DrawPlayer();
       engine_.Step();
       break;
@@ -82,7 +97,7 @@ void Zelda::keyDown(KeyEvent event) {
     case KeyEvent::KEY_LEFT:
     case KeyEvent::KEY_a: {
       CheckForDirection(event);
-      player_move_state = static_cast<int>(Direction::kLeft);
+      player_move_state_ = static_cast<int>(Direction::kLeft);
       DrawPlayer();
       engine_.Step();
       break;
@@ -90,7 +105,7 @@ void Zelda::keyDown(KeyEvent event) {
     case KeyEvent::KEY_RIGHT:
     case KeyEvent::KEY_d: {
       CheckForDirection(event);
-      player_move_state = static_cast<int>(Direction::kRight);
+      player_move_state_ = static_cast<int>(Direction::kRight);
       DrawPlayer();
       engine_.Step();
       break;
@@ -100,40 +115,36 @@ void Zelda::keyDown(KeyEvent event) {
 
 void Zelda::CheckForDirection(const cinder::app::KeyEvent& event) {
 
-  // Checks if the player can move up
   if (is_move_up_ &&
-      ((event.getCode() == KeyEvent::KEY_UP) ||
-      (event.getCode() == KeyEvent::KEY_w))) {
+      (event.getCode() == KeyEvent::KEY_UP ||
+      event.getCode() == KeyEvent::KEY_w)) {
     engine_.SetDirection(Direction::kUp);
     return;
   } else {
     engine_.SetDirection(Direction::kNull);
   }
 
-  // Checks if the player can move down
   if (is_move_down_ &&
-      ((event.getCode() == KeyEvent::KEY_DOWN) ||
-      (event.getCode() == KeyEvent::KEY_s))) {
+      (event.getCode() == KeyEvent::KEY_DOWN ||
+      event.getCode() == KeyEvent::KEY_s)) {
     engine_.SetDirection(Direction::kDown);
     return;
   } else {
     engine_.SetDirection(Direction::kNull);
   }
 
-  // Checks if the player can move left
   if (is_move_left_ &&
-      ((event.getCode() == KeyEvent::KEY_LEFT )||
-      (event.getCode() == KeyEvent::KEY_a))) {
+      (event.getCode() == KeyEvent::KEY_LEFT ||
+      event.getCode() == KeyEvent::KEY_a)) {
     engine_.SetDirection(Direction::kLeft);
     return;
   } else {
     engine_.SetDirection(Direction::kNull);
   }
 
-  // Checks if the player can move right
   if (is_move_right_ &&
-      ((event.getCode() == KeyEvent::KEY_RIGHT) ||
-      (event.getCode() == KeyEvent::KEY_d))) {
+      (event.getCode() == KeyEvent::KEY_RIGHT ||
+      event.getCode() == KeyEvent::KEY_d)) {
     engine_.SetDirection(Direction::kRight);
     return;
   } else {
@@ -142,27 +153,32 @@ void Zelda::CheckForDirection(const cinder::app::KeyEvent& event) {
 }
 
 void Zelda::PlayBackgroundTheme() {
+  auto audio_path = "zelda.mp3";
+
   auto source_file = cinder::audio::load
-      (cinder::app::loadAsset("zelda.mp3"));
-  background_audio_file = cinder::audio::Voice::create(source_file);
-  background_audio_file->start();
+      (cinder::app::loadAsset(audio_path));
+  background_audio_file_ = cinder::audio::Voice::create(source_file);
+  background_audio_file_->start();
+
 }
 
 void Zelda::DrawPlayer() {
   const Location loc = engine_.GetPlayer().GetLoc();
   cinder::fs::path path;
 
-  // The sequence of 'if' conditions changes image of link
-  // based on the direction Link is planning to move
-  if (player_move_state == static_cast<int>(Direction::kDown)) {
+  if (player_move_state_ == static_cast<int>(Direction::kDown)) {
     path = cinder::fs::path("link.png");
-  } else if (player_move_state == static_cast<int>(Direction::kUp)) {
+  } else if (player_move_state_ == static_cast<int>(Direction::kUp)) {
     path = cinder::fs::path("link-back.png");
-  } else if (player_move_state == static_cast<int>(Direction::kLeft)) {
+  } else if (player_move_state_ == static_cast<int>(Direction::kLeft)) {
     path = cinder::fs::path("link-left.png");
-  } else if (player_move_state == static_cast<int>(Direction::kRight)) {
+  } else if (player_move_state_ == static_cast<int>(Direction::kRight)) {
     path = cinder::fs::path("link-right.png");
+  }
 
+  if (treasure_count_ == 1) {
+    path = cinder::fs::path("link-sword.png");
+    treasure_count_= 0;
   }
 
   cinder::gl::Texture2dRef texture = cinder::gl::Texture2d::create(
@@ -175,51 +191,20 @@ void Zelda::DrawPlayer() {
 }
 
 void Zelda::DrawBackground() {
-  cinder::fs::path path = cinder::fs::path("zelda-screen1.png");
+  if (is_treasure_taken_) {
+    curr_map_ = "no-sword-screen.png";
+  }
+
   cinder::gl::Texture2dRef texture = cinder::gl::Texture2d::create(
-      loadImage(loadAsset(path)));
+      loadImage(loadAsset(curr_map_)));
 
   cinder::gl::draw(texture, getWindowBounds());
 }
 
-void Zelda::ReadMapsFromFile() {
-  int map_line_count = 0;
-
-  std::string maps_file =
-      "/Users/aniruddhapai/Downloads/cinder_0.9.2_mac/finalproject/final-project-agpai2/assets/zeldamaps.txt";
-  std::ifstream file(maps_file);
-
-  while (!file.eof()) {
-    std::string map_line;
-    getline(file, map_line);
-    SetUpMap(map_line);
-    map_line_count++;
-
-    // This to account for the fact that the game screen
-    // has 13 rows.
-    // So, game_maps_ takes in a new game screen after 13 counts
-    if (map_line_count == kRowTiles) {
-      Map game_screen = Map(map_);
-      game_maps_.push_back(game_screen);
-      map_line_count = 0;
-
-      map_.clear();
-    }
+void Zelda::ResetPosition(Location location) {
+  if (mapper_.IsScreenChange()) {
+    engine_.Reset(location);
   }
-}
-
-void Zelda::SetUpMap(std::string map_line) {
-  std::vector<char> map_line_char;
-
-  for (int i = 0; i < kColTiles; i++) {
-    if (map_line.at(i) == '1') {
-      map_line_char.push_back('1');
-    } else if (map_line.at(i) == '0') {
-      map_line_char.push_back('0');
-    }
-  }
-
-  map_.push_back(map_line_char);
 }
 
 }  // namespace myapp
