@@ -47,6 +47,7 @@ void Map::ReadGameScreens() {
     std::string map_line;
     getline(file, map_line);
     if (!map_line.empty()) {
+      SetUpMap(map_line);
       map_line_count++;
 
       if (map_line_count == kColumnHeight) {
@@ -59,9 +60,25 @@ void Map::ReadGameScreens() {
   }
 }
 
-void Map::SetUpMap(std::string map_line) {}
+void Map::SetUpMap(std::string map_line) {
+  std::vector<char> map_line_char;
 
-std::string Map::GetMapLabels() {}
+  // This is done to pre-allocate a set memory to every line of a map
+  map_line_char.reserve(kRowWidth);
+  for (int i = 0; i < kRowWidth; i++) {
+    map_line_char.push_back(map_line.at(i));
+  }
+
+  map_.push_back(map_line_char);
+}
+
+std::string Map::GetMapLabels() {
+  for (int i = 0; i < map_labels_.size(); i++) {
+    if (i == screen_num_) {
+      return map_labels_[i];
+    }
+  }
+}
 
 std::vector<Map> Map::GetScreen(){ return game_maps_; }
 
@@ -69,6 +86,39 @@ bool Map::IsScreenChange() { return is_screen_change; }
 
 int Map::GetGameScreenNum() { return screen_num_; }
 
-Location Map::GetPlayerNewLoc(const Map& curr_map, Engine engine) {}
+Location Map::GetPlayerNewLoc(const Map& curr_map, Engine engine) {
+
+  Location location = engine.GetPlayer().GetLoc();
+
+  int curr_row = location.Col();
+  int curr_col = location.Row();
+
+  if (curr_map.coordinates_[curr_row][curr_col] == 'a' &&
+      engine.GetDirection() == Direction::kUp) {
+    screen_num_ = kScreen2;
+    is_screen_change = true;
+    return {kLocPosOne,kLocPosOne + 1};
+  } else if (curr_map.coordinates_[curr_row][curr_col] == 'a' &&
+             engine.GetDirection() == Direction::kDown) {
+    screen_num_ = kScreen1;
+    is_screen_change = true;
+    return {kLocPosTwo, kLocPosThree};
+  }
+
+  if (curr_map.coordinates_[curr_row][curr_col] == 'b' &&
+      engine.GetDirection() == Direction::kUp) {
+    screen_num_ = kScreen3;
+    is_screen_change = true;
+    return {kLocPosOne,kLocPosOne + 1};
+  } else if (curr_map.coordinates_[curr_row][curr_col] == 'b' &&
+             engine.GetDirection() == Direction::kDown) {
+    screen_num_ = kScreen1;
+    is_screen_change = true;
+    return {kLocPosOne,0};
+  }
+
+  is_screen_change = false;
+  return location;
+}
 
 }

@@ -29,6 +29,9 @@ class Engine {
   // Gets the player
   Player GetPlayer() const;
 
+  //Gets the direction
+  Direction GetDirection();
+
  private:
   const int width_;
   const int height_;

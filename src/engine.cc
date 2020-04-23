@@ -54,4 +54,6 @@ void Engine::Step() {
   last_direction_ = direction_;
 }
 
+Direction Engine::GetDirection() { return direction_; }
+
 }
