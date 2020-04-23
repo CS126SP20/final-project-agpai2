@@ -24,3 +24,5 @@
    moves to the next screen
    
 - [x] The player can now move to different screens 
+
+2. Developed and modified code in the Map class to account for any general screen change
