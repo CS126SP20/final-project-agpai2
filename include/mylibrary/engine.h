@@ -10,7 +10,7 @@
 
 namespace mylibrary {
 
-constexpr int kLocConstant = 3;
+constexpr int kLocConstant = 5;
 
 class Engine {
  public:

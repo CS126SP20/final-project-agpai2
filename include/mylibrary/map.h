@@ -47,6 +47,9 @@ class Map {
   // Returns a bool value to check if the screen is changed
   bool IsScreenChange();
 
+  // Returns a bool value to check if the screen is changed
+  bool IsSwordTaken();
+
   // Gets the map or screen number link is planning ot enter
   int GetGameScreenNum();
 
@@ -54,13 +57,19 @@ class Map {
   std::vector<Map> GetScreen();
 
   // Contains different game screens
-  enum GameScreens { kScreen1, kScreen2, kScreen3 };
+  enum GameScreens { kScreen1, kScreen2, kScreen3, kScreen4 };
+
+  // Contains different entry points
+  enum EntryPoints { a = 97, b, c, d, e, f, g, h, i, j, k, l, m,
+    n, o, p, q, r, s, t, u, v, w, x, y, z};
 
  private:
   int screen_num_{};
   std::vector<std::string> map_labels_;
 
   bool is_screen_change = false;
+
+  bool is_sword_taken = false;
 
   //Contains all the game screens
   std::vector<mylibrary::Map> game_maps_;

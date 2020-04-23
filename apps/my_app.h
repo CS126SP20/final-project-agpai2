@@ -26,6 +26,7 @@ class Zelda : public cinder::app::App {
 
  private:
   void PlayBackgroundTheme();
+  void PlayTreasureSound();
   void DrawPlayer();
   void DrawBackground();
   void CheckForDirection(const cinder::app::KeyEvent& event);
@@ -45,9 +46,6 @@ class Zelda : public cinder::app::App {
   bool is_move_up_ = true;
   bool is_move_down_ = true;
 
-  bool is_treasure_taken_ = false;
-
-  int treasure_count_ = 0;
   int player_move_state_ = 0;
 
   cinder::audio::VoiceRef background_audio_file_;

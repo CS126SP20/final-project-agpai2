@@ -80,37 +80,51 @@ std::string Map::GetMapLabels() {
   }
 }
 
-std::vector<Map> Map::GetScreen(){ return game_maps_; }
+std::vector<Map> Map::GetScreen(){
+  return game_maps_;
+}
 
 bool Map::IsScreenChange() { return is_screen_change; }
+
+bool Map::IsSwordTaken() { return is_sword_taken; }
 
 int Map::GetGameScreenNum() { return screen_num_; }
 
 Location Map::GetPlayerNewLoc(const Map& curr_map, Engine engine) {
-
   Location location = engine.GetPlayer().GetLoc();
 
   int curr_row = location.Col();
   int curr_col = location.Row();
 
-  if (curr_map.coordinates_[curr_row][curr_col] == 'a' &&
+  if (curr_map.coordinates_[curr_row][curr_col] == char(t) &&
       engine.GetDirection() == Direction::kUp) {
+    is_sword_taken = true;
     screen_num_ = kScreen2;
+    return location;
+  }
+
+  if (curr_map.coordinates_[curr_row][curr_col] == char(a) &&
+      engine.GetDirection() == Direction::kUp) {
+    if (!is_sword_taken) {
+      screen_num_ = kScreen3;
+    } else {
+      screen_num_ = kScreen2;
+    }
     is_screen_change = true;
     return {kLocPosOne,kLocPosOne + 1};
-  } else if (curr_map.coordinates_[curr_row][curr_col] == 'a' &&
+  } else if (curr_map.coordinates_[curr_row][curr_col] == char(a) &&
              engine.GetDirection() == Direction::kDown) {
     screen_num_ = kScreen1;
     is_screen_change = true;
     return {kLocPosTwo, kLocPosThree};
   }
 
-  if (curr_map.coordinates_[curr_row][curr_col] == 'b' &&
+  if (curr_map.coordinates_[curr_row][curr_col] == char(b) &&
       engine.GetDirection() == Direction::kUp) {
-    screen_num_ = kScreen3;
+    screen_num_ = kScreen4;
     is_screen_change = true;
     return {kLocPosOne,kLocPosOne + 1};
-  } else if (curr_map.coordinates_[curr_row][curr_col] == 'b' &&
+  } else if (curr_map.coordinates_[curr_row][curr_col] == char(b) &&
              engine.GetDirection() == Direction::kDown) {
     screen_num_ = kScreen1;
     is_screen_change = true;

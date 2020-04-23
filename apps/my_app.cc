@@ -42,10 +42,6 @@ void Zelda::update() {
 
   map_num = mapper_.GetGameScreenNum();
 
-  // The current row contains player's column coordinate and
-  // the current column contains to player's row coordinate
-
-  // This is to account for the switch in coordinates axes
   int curr_row = location.Col();
   int curr_col = location.Row();
 
@@ -116,8 +112,7 @@ void Zelda::keyDown(KeyEvent event) {
 void Zelda::CheckForDirection(const cinder::app::KeyEvent& event) {
 
   if (is_move_up_ &&
-      (event.getCode() == KeyEvent::KEY_UP ||
-      event.getCode() == KeyEvent::KEY_w)) {
+      (event.getCode() == KeyEvent::KEY_UP || event.getCode() == KeyEvent::KEY_w)) {
     engine_.SetDirection(Direction::kUp);
     return;
   } else {
@@ -125,8 +120,7 @@ void Zelda::CheckForDirection(const cinder::app::KeyEvent& event) {
   }
 
   if (is_move_down_ &&
-      (event.getCode() == KeyEvent::KEY_DOWN ||
-      event.getCode() == KeyEvent::KEY_s)) {
+      (event.getCode() == KeyEvent::KEY_DOWN || event.getCode() == KeyEvent::KEY_s)) {
     engine_.SetDirection(Direction::kDown);
     return;
   } else {
@@ -134,8 +128,7 @@ void Zelda::CheckForDirection(const cinder::app::KeyEvent& event) {
   }
 
   if (is_move_left_ &&
-      (event.getCode() == KeyEvent::KEY_LEFT ||
-      event.getCode() == KeyEvent::KEY_a)) {
+      (event.getCode() == KeyEvent::KEY_LEFT || event.getCode() == KeyEvent::KEY_a)) {
     engine_.SetDirection(Direction::kLeft);
     return;
   } else {
@@ -143,8 +136,7 @@ void Zelda::CheckForDirection(const cinder::app::KeyEvent& event) {
   }
 
   if (is_move_right_ &&
-      (event.getCode() == KeyEvent::KEY_RIGHT ||
-      event.getCode() == KeyEvent::KEY_d)) {
+      (event.getCode() == KeyEvent::KEY_RIGHT || event.getCode() == KeyEvent::KEY_d)) {
     engine_.SetDirection(Direction::kRight);
     return;
   } else {
@@ -162,6 +154,17 @@ void Zelda::PlayBackgroundTheme() {
 
 }
 
+void Zelda::PlayTreasureSound() {
+  cinder::audio::VoiceRef treasure_audio_file;
+
+  auto audio_path = "treasure.mp3";
+
+  auto source_file = cinder::audio::load
+      (cinder::app::loadAsset(audio_path));
+  treasure_audio_file = cinder::audio::Voice::create(source_file);
+  treasure_audio_file->start();
+}
+
 void Zelda::DrawPlayer() {
   const Location loc = engine_.GetPlayer().GetLoc();
   cinder::fs::path path;
@@ -176,9 +179,9 @@ void Zelda::DrawPlayer() {
     path = cinder::fs::path("link-right.png");
   }
 
-  if (treasure_count_ == 1) {
+  if (mapper_.GetScreen()[map_num].coordinates_[loc.Col()][loc.Row()] == 't') {
     path = cinder::fs::path("link-sword.png");
-    treasure_count_= 0;
+    PlayTreasureSound();
   }
 
   cinder::gl::Texture2dRef texture = cinder::gl::Texture2d::create(
@@ -191,10 +194,6 @@ void Zelda::DrawPlayer() {
 }
 
 void Zelda::DrawBackground() {
-  if (is_treasure_taken_) {
-    curr_map_ = "no-sword-screen.png";
-  }
-
   cinder::gl::Texture2dRef texture = cinder::gl::Texture2d::create(
       loadImage(loadAsset(curr_map_)));
 
