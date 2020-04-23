@@ -17,3 +17,8 @@
 - [x] The player can now move through free spaces. The player does not move through walls
 
 5. Finally, decided and confirmed to use Box2d for game animations
+
+
+## Week 2: Placing enemies/items in Overworld and implementing screen transitions
+1. Working on implementing screen transitions. That is, the screen should change as the player 
+   moves to the next screen
