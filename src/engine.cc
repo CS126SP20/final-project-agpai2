@@ -27,7 +27,11 @@ Location FromDirection(const Direction direction) {
 Player Engine::GetPlayer() const { return player_; }
 
 void Engine::Reset() {
-  Location location(kLocConstant, 2 * kLocConstant);
+  Location location(2 * kLocConstant, kLocConstant);
+  player_.SetLoc(location);
+}
+
+void Engine::Reset(Location location) {
   player_.SetLoc(location);
 }
 
@@ -36,8 +40,8 @@ Engine::Engine(int width, int height)
       height_{height},
       direction_{Direction::kRight},
       last_direction_{Direction::kUp},
-      player_{Location(0,0)} {
-  Reset();
+      player_{Location(2 * kLocConstant, kLocConstant)} {
+  //Reset();
 }
 
 void Engine::SetDirection(const mylibrary::Direction direction) {

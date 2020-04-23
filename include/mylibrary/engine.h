@@ -5,7 +5,6 @@
 #ifndef FINALPROJECT_ENGINE_H
 #define FINALPROJECT_ENGINE_H
 
-
 #include "direction.h"
 #include "player.h"
 
@@ -25,6 +24,9 @@ class Engine {
 
   // Start the game over.
   void Reset();
+
+  // Resets the players location after a screen transition
+  void Reset(Location location);
 
   // Gets the player
   Player GetPlayer() const;
