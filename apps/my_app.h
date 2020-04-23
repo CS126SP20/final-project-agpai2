@@ -7,6 +7,7 @@
 #include <cinder/app/KeyEvent.h>
 #include <mylibrary/engine.h>
 #include <mylibrary/map.h>
+#include <cinder/audio/Voice.h>
 
 namespace myapp {
 
@@ -43,6 +44,9 @@ class Zelda : public cinder::app::App {
   bool is_move_left_ = true;
   bool is_move_up_ = true;
   bool is_move_down_ = true;
+
+  cinder::audio::VoiceRef background_audio_file;
+  int player_move_state = 0;
 };
 
 }  // namespace myapp

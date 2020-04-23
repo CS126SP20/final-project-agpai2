@@ -8,7 +8,7 @@
 namespace mylibrary {
 
 // Represents the possible directions of the player.
-enum class Direction { kUp, kDown, kLeft, kRight, kNull };
+enum class Direction { kDown, kUp, kLeft, kRight, kNull };
 
 }
 #endif  // FINALPROJECT_DIRECTION_H

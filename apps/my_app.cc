@@ -3,8 +3,6 @@
 #include "my_app.h"
 
 #include <cinder/app/App.h>
-
-#include <cinder/audio/Voice.h>
 #include <cinder/gl/gl.h>
 
 #include <cinder/gl/Texture.h>
@@ -18,9 +16,6 @@ using cinder::Rectf;
 using mylibrary::Direction;
 using mylibrary::Location;
 using mylibrary::Map;
-
-cinder::audio::VoiceRef background_audio_file;
-int player_move_state = 0;
 
 Zelda::Zelda()
     : engine_{kRowTiles, kColTiles},
@@ -71,8 +66,7 @@ void Zelda::keyDown(KeyEvent event) {
     case KeyEvent::KEY_UP:
     case KeyEvent::KEY_w: {
       CheckForDirection(event);
-      //engine_.SetDirection(Direction::kLeft);
-      player_move_state = 1;
+      player_move_state = static_cast<int>(Direction::kUp);
       DrawPlayer();
       engine_.Step();
       break;
@@ -80,8 +74,7 @@ void Zelda::keyDown(KeyEvent event) {
     case KeyEvent::KEY_DOWN:
     case KeyEvent::KEY_s: {
       CheckForDirection(event);
-      //engine_.SetDirection(Direction::kRight);
-      player_move_state = 0;
+      player_move_state = static_cast<int>(Direction::kDown);
       DrawPlayer();
       engine_.Step();
       break;
@@ -89,8 +82,7 @@ void Zelda::keyDown(KeyEvent event) {
     case KeyEvent::KEY_LEFT:
     case KeyEvent::KEY_a: {
       CheckForDirection(event);
-      //engine_.SetDirection(Direction::kUp);
-      player_move_state = 2;
+      player_move_state = static_cast<int>(Direction::kLeft);
       DrawPlayer();
       engine_.Step();
       break;
@@ -98,8 +90,7 @@ void Zelda::keyDown(KeyEvent event) {
     case KeyEvent::KEY_RIGHT:
     case KeyEvent::KEY_d: {
       CheckForDirection(event);
-      //engine_.SetDirection(Direction::kDown);
-      player_move_state = 3;
+      player_move_state = static_cast<int>(Direction::kRight);
       DrawPlayer();
       engine_.Step();
       break;
@@ -163,13 +154,13 @@ void Zelda::DrawPlayer() {
 
   // The sequence of 'if' conditions changes image of link
   // based on the direction Link is planning to move
-  if (player_move_state == 0) {
+  if (player_move_state == static_cast<int>(Direction::kDown)) {
     path = cinder::fs::path("link.png");
-  } else if (player_move_state == 1) {
+  } else if (player_move_state == static_cast<int>(Direction::kUp)) {
     path = cinder::fs::path("link-back.png");
-  } else if (player_move_state == 2) {
+  } else if (player_move_state == static_cast<int>(Direction::kLeft)) {
     path = cinder::fs::path("link-left.png");
-  } else if (player_move_state == 3) {
+  } else if (player_move_state == static_cast<int>(Direction::kRight)) {
     path = cinder::fs::path("link-right.png");
 
   }
