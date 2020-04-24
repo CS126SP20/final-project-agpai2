@@ -8,7 +8,7 @@
 #include "direction.h"
 #include "player.h"
 
-namespace mylibrary {
+namespace zelda {
 
 constexpr int kLocConstant = 5;
 
@@ -43,6 +43,6 @@ class Engine {
   Player player_;
 };
 
-}
+} // namespace zelda
 
 #endif  // FINALPROJECT_ENGINE_H

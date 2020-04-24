@@ -3,9 +3,9 @@
 #define FINALPROJECT_MYLIBRARY_EXAMPLE_H_
 
 
-namespace mylibrary {
+namespace zelda {
 
-}  // namespace mylibrary
+}  // namespace zelda
 
 
 #endif // FINALPROJECT_MYLIBRARY_EXAMPLE_H_

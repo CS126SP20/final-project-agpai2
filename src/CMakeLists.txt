@@ -15,24 +15,26 @@ file(GLOB SOURCE_LIST CONFIGURE_DEPENDS
 
 
 ci_make_library(
-        LIBRARY_NAME mylibrary
+        LIBRARY_NAME zelda
         CINDER_PATH  ${CINDER_PATH}
         SOURCES      ${SOURCE_LIST}
         INCLUDES     "${FinalProject_SOURCE_DIR}/include"
-        LIBRARIES
+        LIBRARIES gflags sqlite-modern-cpp sqlite3 nlohmann_json
         BLOCKS Box2D
 )
 
-# All users of this library will need at least C++14
-target_compile_features(mylibrary PUBLIC cxx_std_14)
 
-set_property(TARGET mylibrary PROPERTY
+
+# All users of this library will need at least C++14
+target_compile_features(zelda PUBLIC cxx_std_14)
+
+set_property(TARGET zelda PROPERTY
         MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
 
 # Cross-platform compiler lints
 if (CMAKE_CXX_COMPILER_ID STREQUAL "Clang"
         OR CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
-    target_compile_options(mylibrary PRIVATE
+    target_compile_options(zelda PRIVATE
             -Wall
             -Wextra
             -Wswitch
@@ -45,7 +47,7 @@ if (CMAKE_CXX_COMPILER_ID STREQUAL "Clang"
             -pedantic-errors)
 elseif (CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
     cmake_policy(SET CMP0091 NEW)
-    target_compile_options(mylibrary PRIVATE
+    target_compile_options(zelda PRIVATE
             /W3)
 endif ()
 

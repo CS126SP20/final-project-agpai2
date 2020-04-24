@@ -5,11 +5,11 @@
 #include <catch2/catch.hpp>
 #include <cinder/Rand.h>
 
-#include <mylibrary/example.h>
+#include <zelda/example.h>
 
-#include <mylibrary/location.h>
+#include <zelda/location.h>
 
-using mylibrary::Location;
+using zelda::Location;
 
 TEST_CASE("Location vector operations", "[location]") {
   SECTION("Modulo positive") {

@@ -6,11 +6,11 @@
 #include <cinder/app/App.h>
 #include <cinder/app/KeyEvent.h>
 #include <cinder/audio/Voice.h>
-#include <mylibrary/engine.h>
-#include <mylibrary/location.h>
-#include <mylibrary/map.h>
+#include <zelda/engine.h>
+#include <zelda/location.h>
+#include <zelda/map.h>
 
-namespace myapp {
+namespace zeldaapp {
 
 const int kTileSize = 70;
 const int kRowTiles = 13;
@@ -34,11 +34,11 @@ class Zelda : public cinder::app::App {
   void CheckForDirection(const cinder::app::KeyEvent& event);
 
   // This is to reset link's position after a screen transition
-  void ResetPosition(mylibrary::Location location);
+  void ResetPosition(zelda::Location location);
 
  private:
-  mylibrary::Engine engine_;
-  mylibrary::Map mapper_;
+  zelda::Engine engine_;
+  zelda::Map mapper_;
   const size_t size_;
 
   // The current map the player is on
@@ -55,6 +55,6 @@ class Zelda : public cinder::app::App {
   cinder::audio::VoiceRef background_audio_file_;
 };
 
-}  // namespace myapp
+}  // namespace zeldaapp
 
 #endif  // FINALPROJECT_APPS_MYAPP_H_

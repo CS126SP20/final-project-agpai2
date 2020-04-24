@@ -5,10 +5,11 @@
 #ifndef FINALPROJECT_DIRECTION_H
 #define FINALPROJECT_DIRECTION_H
 
-namespace mylibrary {
+namespace zelda {
 
 // Represents the possible directions of the player.
 enum class Direction { kDown, kUp, kLeft, kRight, kNull };
 
-}
+} // namespace zelda
+
 #endif  // FINALPROJECT_DIRECTION_H

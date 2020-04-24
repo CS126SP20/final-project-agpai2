@@ -3,16 +3,16 @@
 //
 
 
-#include "mylibrary/map.h"
+#include "zelda/map.h"
 
 #include <fstream>
 #include <string>
 #include <vector>
 
-using mylibrary::Direction;
-using mylibrary::Location;
+using zelda::Direction;
+using zelda::Location;
 
-namespace mylibrary {
+namespace zelda {
 
 Map::Map() = default;
 
@@ -120,7 +120,9 @@ Location Map::GetPlayerNewLoc(const Map& curr_map, Engine engine) {
 
   for (int j = 0; j < entry_points_.size(); j++) {
     if (curr_map.coordinates_[curr_row][curr_col] == entry_points_.at(j)) {
-      screen_num_ = GetTransitionScreenNum(GetCurrScreenNum(curr_map), entry_points_.at(j));
+      screen_num_ = GetTransitionScreenNum(GetCurrScreenNum(curr_map),
+          entry_points_.at(j));
+
       is_screen_change = true;
       if (engine.GetDirection() == Direction::kUp) {
         return {curr_col,kLocPosOne + 1};
@@ -174,4 +176,4 @@ int Map::GetTransitionScreenNum(int num, char entry) {
   }
 }
 
-}
+} // namespace zelda

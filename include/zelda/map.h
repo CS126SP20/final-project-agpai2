@@ -5,14 +5,14 @@
 #ifndef FINALPROJECT_MAP_H
 #define FINALPROJECT_MAP_H
 
-#include <mylibrary/engine.h>
+#include <zelda/engine.h>
 
 #include <string>
 #include <vector>
 
-using mylibrary::Engine;
+using zelda::Engine;
 
-namespace mylibrary {
+namespace zelda {
 
 constexpr int kRowWidth = 21;
 constexpr int kColumnHeight = 13;
@@ -79,12 +79,13 @@ class Map {
   bool is_sword_taken = false;
 
   //Contains all the game screens
-  std::vector<mylibrary::Map> game_maps_;
+  std::vector<zelda::Map> game_maps_;
   // Contains a single game screen
   std::vector<std::vector<char>> map_;
 
   std::string entry_points_ = "abcdefghijklmnopqrsdtuvwxyz";
 };
 
-}
+} // namespace zelda
+
 #endif  // FINALPROJECT_MAP_H

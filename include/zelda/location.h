@@ -5,7 +5,7 @@
 #ifndef FINALPROJECT_LOCATION_H
 #define FINALPROJECT_LOCATION_H
 
-namespace mylibrary {
+namespace zelda {
 
 class Location {
  public:
@@ -27,6 +27,6 @@ class Location {
   int col_;
 };
 
-}
+} // namespace zelda
 
 #endif  // FINALPROJECT_LOCATION_H

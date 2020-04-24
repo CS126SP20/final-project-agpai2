@@ -2,9 +2,9 @@
 // Created by Aniruddha Pai on 4/18/20.
 //
 
-#include <mylibrary/location.h>
+#include <zelda/location.h>
 
-namespace mylibrary {
+namespace zelda {
 
 Location::Location(int row, int col) : row_(row), col_(col) {}
 
@@ -28,4 +28,4 @@ Location Location::operator%(const Location& rhs) const {
 int Location::Row() const { return row_; }
 int Location::Col() const { return col_; }
 
-}
+} // namespace zelda

@@ -2,11 +2,11 @@
 // Created by Aniruddha Pai on 4/17/20.
 //
 
-#include <mylibrary/engine.h>
-#include <mylibrary/location.h>
-#include <mylibrary/player.h>
+#include <zelda/engine.h>
+#include <zelda/location.h>
+#include <zelda/player.h>
 
-namespace mylibrary {
+namespace zelda {
 
 // Converts a direction into a delta location.
 Location FromDirection(const Direction direction) {
@@ -44,7 +44,7 @@ Engine::Engine(int width, int height)
   //Reset();
 }
 
-void Engine::SetDirection(const mylibrary::Direction direction) {
+void Engine::SetDirection(const zelda::Direction direction) {
   direction_ = direction;
 }
 
@@ -60,4 +60,4 @@ void Engine::Step() {
 
 Direction Engine::GetDirection() { return direction_; }
 
-}
+} // namespace zelda

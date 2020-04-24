@@ -1,20 +1,20 @@
 // Copyright (c) 2020 [Your Name]. All rights reserved.
 
-#include "my_app.h"
+#include "zelda_app.h"
 
 #include <cinder/app/App.h>
-#include <cinder/gl/gl.h>
 #include <cinder/gl/Texture.h>
 #include <cinder/gl/draw.h>
+#include <cinder/gl/gl.h>
 
-namespace myapp {
+namespace zeldaapp {
 
 using cinder::app::KeyEvent;
 using cinder::Rectf;
 
-using mylibrary::Direction;
-using mylibrary::Location;
-using mylibrary::Map;
+using zelda::Direction;
+using zelda::Location;
+using zelda::Map;
 
 int map_num = 0;
 
@@ -224,4 +224,4 @@ void Zelda::ResetPosition(Location location) {
   }
 }
 
-}  // namespace myapp
+}  // namespace zeldaapp
