@@ -19,6 +19,12 @@ class Player {
   // Gets the current location of the player
   Location GetLoc() const;
 
+  // Add information to Menu
+  void AddInfoToMenu();
+
+  // To View the Menu screen
+  void ViewMenu();
+
  private:
   Location loc_;
 };
