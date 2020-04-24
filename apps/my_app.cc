@@ -18,6 +18,13 @@ using mylibrary::Map;
 
 int map_num = 0;
 
+int front_move_count = 0;
+int left_move_count = 0;
+int right_move_count = 0;
+int back_move_count = 0;
+
+cinder::fs::path move_path;
+
 Zelda::Zelda()
     : engine_{kRowTiles, kColTiles},
       size_{kRowTiles} {}
@@ -78,6 +85,7 @@ void Zelda::keyDown(KeyEvent event) {
     case KeyEvent::KEY_w: {
       CheckForDirection(event);
       player_move_state_ = static_cast<int>(Direction::kUp);
+      back_move_count++;
       DrawPlayer();
       engine_.Step();
       break;
@@ -86,6 +94,7 @@ void Zelda::keyDown(KeyEvent event) {
     case KeyEvent::KEY_s: {
       CheckForDirection(event);
       player_move_state_ = static_cast<int>(Direction::kDown);
+      front_move_count++;
       DrawPlayer();
       engine_.Step();
       break;
@@ -94,6 +103,7 @@ void Zelda::keyDown(KeyEvent event) {
     case KeyEvent::KEY_a: {
       CheckForDirection(event);
       player_move_state_ = static_cast<int>(Direction::kLeft);
+      left_move_count++;
       DrawPlayer();
       engine_.Step();
       break;
@@ -102,6 +112,7 @@ void Zelda::keyDown(KeyEvent event) {
     case KeyEvent::KEY_d: {
       CheckForDirection(event);
       player_move_state_ = static_cast<int>(Direction::kRight);
+      right_move_count++;
       DrawPlayer();
       engine_.Step();
       break;
@@ -160,27 +171,39 @@ void Zelda::PlayBackgroundTheme() {
 
 void Zelda::DrawPlayer() {
   const Location loc = engine_.GetPlayer().GetLoc();
-  cinder::fs::path path;
 
-  // Different values of player state are set based on the direction
-  // link is facing
   if (player_move_state_ == static_cast<int>(Direction::kDown)) {
-    path = cinder::fs::path("link.png");
+    if (front_move_count % 2 == 0) {
+      move_path = cinder::fs::path("link-front-1.png");
+    } else {
+      move_path = cinder::fs::path("link-front-2.png");
+    }
   } else if (player_move_state_ == static_cast<int>(Direction::kUp)) {
-    path = cinder::fs::path("link-back.png");
+    if (back_move_count % 2 == 0) {
+      move_path = cinder::fs::path("link-back-1.png");
+    } else {
+      move_path = cinder::fs::path("link-back-2.png");
+    }
   } else if (player_move_state_ == static_cast<int>(Direction::kLeft)) {
-    path = cinder::fs::path("link-left.png");
+    if (left_move_count % 2 == 0) {
+      move_path = cinder::fs::path("link-left-1.png");
+    } else {
+      move_path = cinder::fs::path("link-left-2.png");
+    }
   } else if (player_move_state_ == static_cast<int>(Direction::kRight)) {
-    path = cinder::fs::path("link-right.png");
+    if (right_move_count % 2 == 0) {
+      move_path = cinder::fs::path("link-right-1.png");
+    } else {
+      move_path = cinder::fs::path("link-right-2.png");
+    }
   }
 
-  // This is display the image of link after getting the sword
   if (mapper_.GetScreen()[map_num].coordinates_[loc.Col()][loc.Row()] == 't') {
-    path = cinder::fs::path("link-sword.png");
+    move_path = cinder::fs::path("link-sword.png");
   }
 
   cinder::gl::Texture2dRef texture = cinder::gl::Texture2d::create(
-      loadImage(loadAsset(path)));
+      loadImage(loadAsset(move_path)));
 
   cinder::gl::draw(texture, Rectf(kTileSize * loc.Row(),
                                   kTileSize * loc.Col(),
