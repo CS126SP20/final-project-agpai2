@@ -26,3 +26,5 @@
 - [x] The player can now move to different screens 
 
 2. Developed and modified code in the Map class to account for any general screen change
+
+3. Made a change in code to show Link's movement while moving
