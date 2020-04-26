@@ -87,7 +87,7 @@ void Zelda::keyDown(KeyEvent event) {
       player_move_state_ = static_cast<int>(Direction::kUp);
       back_move_count++;
       DrawPlayer();
-      engine_.Step();
+      engine_.PlayerStep();
       break;
     }
     case KeyEvent::KEY_DOWN:
@@ -96,7 +96,7 @@ void Zelda::keyDown(KeyEvent event) {
       player_move_state_ = static_cast<int>(Direction::kDown);
       front_move_count++;
       DrawPlayer();
-      engine_.Step();
+      engine_.PlayerStep();
       break;
     }
     case KeyEvent::KEY_LEFT:
@@ -105,7 +105,7 @@ void Zelda::keyDown(KeyEvent event) {
       player_move_state_ = static_cast<int>(Direction::kLeft);
       left_move_count++;
       DrawPlayer();
-      engine_.Step();
+      engine_.PlayerStep();
       break;
     }
     case KeyEvent::KEY_RIGHT:
@@ -114,7 +114,7 @@ void Zelda::keyDown(KeyEvent event) {
       player_move_state_ = static_cast<int>(Direction::kRight);
       right_move_count++;
       DrawPlayer();
-      engine_.Step();
+      engine_.PlayerStep();
       break;
     }
   }

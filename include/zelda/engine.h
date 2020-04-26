@@ -20,10 +20,7 @@ class Engine {
   void SetDirection(Direction);
 
   // Executes a time step: moves the player.
-  void Step();
-
-  // Start the game over.
-  void Reset();
+  void PlayerStep();
 
   // Resets the players location after a screen transition
   void Reset(Location location);
@@ -33,6 +30,9 @@ class Engine {
 
   //Gets the direction
   Direction GetDirection();
+
+  // Changes the coordinates after change in direction
+  Location FromDirection(Direction direction);
 
  private:
   const int width_;

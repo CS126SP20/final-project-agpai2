@@ -9,7 +9,7 @@
 namespace zelda {
 
 // Converts a direction into a delta location.
-Location FromDirection(const Direction direction) {
+Location Engine::FromDirection(const Direction direction) {
   switch (direction) {
     case Direction::kUp:
       return {0, -1};
@@ -26,11 +26,6 @@ Location FromDirection(const Direction direction) {
 
 Player Engine::GetPlayer() const { return player_; }
 
-void Engine::Reset() {
-  Location location(2 * kLocConstant, kLocConstant);
-  player_.SetLoc(location);
-}
-
 void Engine::Reset(Location location) {
   player_.SetLoc(location);
 }
@@ -41,14 +36,13 @@ Engine::Engine(int width, int height)
       direction_{Direction::kRight},
       last_direction_{Direction::kUp},
       player_{Location(2 * kLocConstant, kLocConstant)} {
-  //Reset();
 }
 
 void Engine::SetDirection(const zelda::Direction direction) {
   direction_ = direction;
 }
 
-void Engine::Step() {
+void Engine::PlayerStep() {
   Location next_loc = FromDirection(direction_);
   Location new_player_loc =
       (player_.GetLoc() + next_loc) % Location(height_, width_);
