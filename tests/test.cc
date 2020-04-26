@@ -159,3 +159,68 @@ TEST_CASE("Player's and Monster's Location", "[player][monster]") {
     REQUIRE(monster.GetLoc() == Location{6,9});
   }
 }
+
+TEST_CASE("Screen Labels and Screens", "[screens][labels]") {
+  Map map;
+  map.ReadGameScreens();
+  map.ReadImageLabels();
+
+  std::vector<Map> game_screens = map.GetScreen();
+
+  SECTION("Number of Labels and screens") {
+    REQUIRE(game_screens.size() == 12);
+  }
+
+  SECTION("Map Label") {
+    std::string map_label = "zelda-screen1.png";
+    REQUIRE(map.GetMapLabels() == map_label);
+    REQUIRE(map.GetNewScreenNum() == 0);
+  }
+
+  SECTION("Screen Number") {
+    int screen_num = map.GetCurrScreenNum(sample_map);
+    REQUIRE(screen_num == 5);
+  }
+}
+
+TEST_CASE("Check for Screen Change", "[screen]") {
+  Map map;
+  map.ReadGameScreens();
+  map.ReadImageLabels();
+
+  int row = 0;
+  int column = 0;
+
+  Engine engine(row, column);
+  Location location = map.GetPlayerNewLoc(sample_map, engine);
+
+  SECTION("No Screen Change has taken place") {
+    REQUIRE_FALSE(map.IsScreenChange());
+  }
+
+  SECTION("Initial player Location - before screen change") {
+    REQUIRE(location == Location(10,5));
+  }
+
+  engine.Reset(Location(0,4));
+  Location new_loc = map.GetPlayerNewLoc(sample_map, engine);
+  SECTION("Screen Change has taken place") {
+    REQUIRE(map.IsScreenChange());
+  }
+
+  SECTION("New player Location - after screen change") {
+    REQUIRE(new_loc == Location(1,4));
+  }
+
+  SECTION("Changed Map Number") {
+    int change_screen_num = map.GetTransitionScreenNum(5, 'h');
+    REQUIRE(change_screen_num == 3);
+
+    change_screen_num = map.GetTransitionScreenNum(4, 'e');
+    REQUIRE(change_screen_num == 5);
+  }
+
+  SECTION("Is Sword Taken") {
+    REQUIRE_FALSE(map.IsSwordTaken());
+  }
+}
