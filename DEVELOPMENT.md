@@ -32,3 +32,6 @@
 4. Wrote test cases for as many testable functions as possible
 
 5. Working on expanding the game map and making most/all caves accessible 
+
+- [x] Expanded the game map towards the first dungeon
+- [x] Most caves are now accessible to Link
