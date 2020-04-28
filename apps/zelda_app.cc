@@ -33,7 +33,7 @@ void Zelda::setup() {
   cinder::gl::disableDepthWrite();
   cinder::gl::disableDepthRead();
 
-  curr_map_ = "zelda-screen1.png";
+  curr_map_ = "screen-H8.png";
   mapper_.ReadImageLabels();
   mapper_.ReadGameScreens();
   PlayBackgroundTheme();
