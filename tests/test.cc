@@ -168,7 +168,7 @@ TEST_CASE("Screen Labels and Screens", "[screens][labels]") {
   std::vector<Map> game_screens = map.GetScreen();
 
   SECTION("Number of Labels and screens") {
-    REQUIRE(game_screens.size() == 25);
+    REQUIRE(game_screens.size() == 26);
   }
 
   SECTION("Map Label") {

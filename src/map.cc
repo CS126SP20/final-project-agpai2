@@ -2,10 +2,10 @@
 // Created by Aniruddha Pai on 4/21/20.
 //
 
-
 #include "zelda/map.h"
 
 #include <fstream>
+#include <iostream>
 #include <string>
 #include <vector>
 

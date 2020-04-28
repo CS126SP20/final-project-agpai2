@@ -37,9 +37,13 @@ class Zelda : public cinder::app::App {
   void ResetPosition(zelda::Location location);
 
  private:
-  zelda::Engine engine_;
+  zelda::Engine player_engine_;
   zelda::Map mapper_;
   const size_t size_;
+
+  std::chrono::time_point<std::chrono::system_clock> last_intact_time_;
+  std::chrono::time_point<std::chrono::system_clock> last_pause_time_;
+  bool is_game_paused_;
 
   // The current map the player is on
   std::string curr_map_;
