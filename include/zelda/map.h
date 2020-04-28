@@ -33,6 +33,9 @@ class Map {
   // Gets the new location of player after screen change
   Location GetPlayerNewLoc(const Map& curr_map, Engine engine);
 
+  // Gets the number of the new cave screen
+  Location CheckForCaveEntry(const Map& curr_map, Engine engine);
+
   // Gets the labels of the maps/screens
   std::string GetMapLabels();
 
@@ -74,9 +77,11 @@ class Map {
   int screen_num_{};
   std::vector<std::string> map_labels_;
 
-  bool is_screen_change = false;
+  bool is_screen_change_ = false;
 
-  bool is_sword_taken = false;
+  bool is_sword_taken_ = false;
+
+  bool is_cave_enter_ = false;
 
   //Contains all the game screens
   std::vector<zelda::Map> game_maps_;
@@ -84,6 +89,7 @@ class Map {
   std::vector<std::vector<char>> map_;
 
   std::string entry_points_ = "abcdefghijklmnopqrsdtuvwxyz";
+  std::string cave_entry_points_ = "`~!@#$%^&*()_-+=[{}]|;:',<>.?/";
 };
 
 } // namespace zelda

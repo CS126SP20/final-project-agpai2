@@ -12,6 +12,11 @@
 using zelda::Direction;
 using zelda::Location;
 
+int prev_row = 0;
+int prev_col = 0;
+
+int cave_enter_count = 0;
+
 namespace zelda {
 
 Map::Map() = default;
@@ -84,9 +89,9 @@ std::vector<Map> Map::GetScreen(){
   return game_maps_;
 }
 
-bool Map::IsScreenChange() { return is_screen_change; }
+bool Map::IsScreenChange() { return is_screen_change_; }
 
-bool Map::IsSwordTaken() { return is_sword_taken; }
+bool Map::IsSwordTaken() { return is_sword_taken_; }
 
 int Map::GetNewScreenNum() { return screen_num_; }
 
@@ -97,24 +102,24 @@ Location Map::GetPlayerNewLoc(const Map& curr_map, Engine engine) {
   int curr_col = location.Row();
 
   if (curr_map.coordinates_[curr_row][curr_col] == char(t)) {
-    is_sword_taken = true;
+    is_sword_taken_ = true;
     screen_num_ = kScreen2;
     return location;
   }
 
   if (curr_map.coordinates_[curr_row][curr_col] == char(a) &&
       engine.GetDirection() == Direction::kUp) {
-    if (!is_sword_taken) {
+    if (!is_sword_taken_) {
       screen_num_ = kScreen3;
     } else {
       screen_num_ = kScreen2;
     }
-    is_screen_change = true;
+    is_screen_change_ = true;
     return {kLocPosOne,kLocPosOne + 1};
   } else if (curr_map.coordinates_[curr_row][curr_col] == char(a) &&
              engine.GetDirection() == Direction::kDown) {
     screen_num_ = kScreen1;
-    is_screen_change = true;
+    is_screen_change_ = true;
     return {kLocPosTwo, kLocPosThree};
   }
 
@@ -123,7 +128,7 @@ Location Map::GetPlayerNewLoc(const Map& curr_map, Engine engine) {
       screen_num_ = GetTransitionScreenNum(GetCurrScreenNum(curr_map),
           entry_points_.at(j));
 
-      is_screen_change = true;
+      is_screen_change_ = true;
       if (engine.GetDirection() == Direction::kUp) {
         return {curr_col,kLocPosOne + 1};
       } else if (engine.GetDirection() == Direction::kDown) {
@@ -135,6 +140,39 @@ Location Map::GetPlayerNewLoc(const Map& curr_map, Engine engine) {
       }
     }
   }
+  Location new_loc = CheckForCaveEntry(curr_map, engine);
+
+  return new_loc;
+}
+
+Location Map::CheckForCaveEntry(const Map& curr_map, Engine engine) {
+  Location location = engine.GetPlayer().GetLoc();
+
+  int curr_row = location.Col();
+  int curr_col = location.Row();
+
+  for (int i = 0; i < cave_entry_points_.size(); i++) {
+    if (curr_map.coordinates_[curr_row][curr_col] == cave_entry_points_.at(i)) {
+      screen_num_ = GetTransitionScreenNum(GetCurrScreenNum(curr_map),
+          cave_entry_points_.at(i));
+      is_screen_change_ = true;
+      if (cave_enter_count == 0) {
+        cave_enter_count++;
+        is_cave_enter_ = true;
+      }
+
+      if (is_cave_enter_) {
+        is_cave_enter_ = false;
+        prev_row = curr_row + 1;
+        prev_col = curr_col;
+        return {kLocPosOne, kLocPosOne + 1};
+      } else {
+        cave_enter_count = 0;
+        return {prev_col, prev_row};
+      }
+    }
+  }
+
   return location;
 }
 
