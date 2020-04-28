@@ -168,18 +168,19 @@ TEST_CASE("Screen Labels and Screens", "[screens][labels]") {
   std::vector<Map> game_screens = map.GetScreen();
 
   SECTION("Number of Labels and screens") {
-    REQUIRE(game_screens.size() == 12);
+    REQUIRE(game_screens.size() == 25);
   }
 
   SECTION("Map Label") {
-    std::string map_label = "zelda-screen1.png";
+    std::string map_label = "screen-H8.png";
     REQUIRE(map.GetMapLabels() == map_label);
     REQUIRE(map.GetNewScreenNum() == 0);
   }
 
   SECTION("Screen Number") {
     int screen_num = map.GetCurrScreenNum(sample_map);
-    REQUIRE(screen_num == 5);
+    std::cout << screen_num;
+    REQUIRE(screen_num == 7);
   }
 }
 

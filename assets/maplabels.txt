@@ -17,3 +17,10 @@ screen-F8.png
 graveman-cave.png
 screen-F7.png
 screen-F6.png
+screen-I6.png
+screen-E7.png
+screen-H6.png
+screen-E6.png
+screen-I5.png
+screen-I4.png
+screen-H4.png
