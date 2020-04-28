@@ -30,3 +30,5 @@
 3. Made a change in code to show Link's movement while moving
 
 4. Wrote test cases for as many testable functions as possible
+
+5. Working on expanding the game map and making most/all caves accessible 
