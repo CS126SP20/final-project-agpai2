@@ -35,3 +35,5 @@
 
 - [x] Expanded the game map towards the first dungeon
 - [x] Most caves are now accessible to Link
+
+6. The Player's inventory count shows on the console. Next step is to make it appear on the game screen
