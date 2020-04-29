@@ -6,6 +6,7 @@
 #include <cinder/app/App.h>
 #include <cinder/app/KeyEvent.h>
 #include <cinder/audio/Voice.h>
+#include <zelda/direction.h>
 #include <zelda/engine.h>
 #include <zelda/location.h>
 #include <zelda/map.h>
@@ -25,9 +26,17 @@ class Zelda : public cinder::app::App {
   void keyDown(cinder::app::KeyEvent) override;
 
  private:
+  // Plays the game's background theme
   void PlayBackgroundTheme();
+
+  // Draws the player
   void DrawPlayer();
+
+  // Draws the game screen's background
   void DrawBackground();
+
+  // Plays the treasure sound
+  void PlayTreasureSound();
 
   // Different directions are assigned and set based on link's
   // current positon.
@@ -41,6 +50,7 @@ class Zelda : public cinder::app::App {
   zelda::Map mapper_;
   const size_t size_;
 
+  // This is done to keep track of time, while the game is paused
   std::chrono::time_point<std::chrono::system_clock> last_intact_time_;
   std::chrono::time_point<std::chrono::system_clock> last_pause_time_;
   bool is_game_paused_;
@@ -54,9 +64,10 @@ class Zelda : public cinder::app::App {
   bool is_move_up_ = true;
   bool is_move_down_ = true;
 
-  int player_move_state_ = 0;
+  zelda::Direction player_move_state_;
 
   cinder::audio::VoiceRef background_audio_file_;
+  cinder::audio::VoiceRef treasure_audio_file_;
 };
 
 }  // namespace zeldaapp
