@@ -16,6 +16,7 @@ namespace zeldaapp {
 
 const int kCharacterSize = 70;
 const int kAttackLinkSize = 100;
+const float kRatio = 1.43;
 
 const int kRowTiles = 13;
 const int kColTiles = 21;
@@ -40,6 +41,9 @@ class Zelda : public cinder::app::App {
 
   // Draws the monster
   void DrawMonster();
+
+  // Draws attacking link
+  void DrawAttackLink();
 
   // Draws the game screen's background
   void DrawBackground();
@@ -74,6 +78,8 @@ class Zelda : public cinder::app::App {
   bool is_move_left_ = true;
   bool is_move_up_ = true;
   bool is_move_down_ = true;
+
+  bool is_attack_ = false;
 
   zelda::Direction player_move_state_;
 

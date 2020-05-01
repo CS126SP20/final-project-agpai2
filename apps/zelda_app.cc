@@ -26,7 +26,11 @@ int back_move_count = 0;
 // This count is kept to slow down the monster
 int slow_monster_count = 0;
 
+// This count is kept to for a time delay to show Link attack
+int attack_count = 0;
+
 cinder::fs::path move_path;
+cinder::fs::path attack_path;
 
 Zelda::Zelda()
     : player_engine_{kRowTiles, kColTiles},
@@ -95,7 +99,13 @@ void Zelda::draw() {
   cinder::gl::color(1,1,1);
 
   DrawBackground();
-  DrawPlayer();
+
+  if (!is_attack_) {
+    DrawPlayer();
+  } else {
+    DrawAttackLink();
+  }
+
   DrawMonster();
 }
 
@@ -154,6 +164,11 @@ void Zelda::keyDown(KeyEvent event) {
         last_intact_time_ += std::chrono::system_clock::now() - last_pause_time_;
       }
       break;
+    }
+    case KeyEvent::KEY_SPACE: {
+      if (mapper_.IsSwordTaken()) {
+        is_attack_ = true;
+      }
     }
   }
 }
@@ -298,6 +313,41 @@ void Zelda::DrawMonster() {
                                         kCharacterSize));
       }
     }
+  }
+}
+
+void Zelda::DrawAttackLink() {
+  const Location loc = player_engine_.GetPlayer().GetLoc();
+
+  if (player_move_state_ == Direction::kDown) {
+    attack_path = cinder::fs::path("link-attack-front.png");
+  } else if (player_move_state_ == Direction::kUp) {
+    attack_path = cinder::fs::path("link-attack-back.png");
+  } else if (player_move_state_ == Direction::kLeft) {
+    attack_path = cinder::fs::path("link-attack-left.png");
+  } else if (player_move_state_ == Direction::kRight) {
+    attack_path = cinder::fs::path("link-attack-right.png");
+  }
+
+  cinder::gl::Texture2dRef texture = cinder::gl::Texture2d::create(
+      loadImage(loadAsset(attack_path)));
+
+  cinder::gl::draw(texture, Rectf((kAttackLinkSize *
+  (loc.Row()/kRatio) * getWindowWidth()/kFullScreenWidth),
+                                  (kAttackLinkSize * (loc.Col()/kRatio) *
+                                  getWindowHeight()/kFullScreenHeight),
+                                  (kAttackLinkSize * (loc.Row()/kRatio) *
+                                  getWindowWidth()/kFullScreenWidth) +
+                                  kAttackLinkSize,
+                                  (kAttackLinkSize * (loc.Col()/kRatio) *
+                                  getWindowHeight()/kFullScreenHeight) +
+                                  kAttackLinkSize));
+
+  attack_count++;
+
+  if (attack_count % 5 == 0) {
+    is_attack_ = false;
+    attack_count = 0;
   }
 }
 
