@@ -13,9 +13,14 @@
 
 namespace zeldaapp {
 
-const int kTileSize = 70;
+const int kLinkSize = 70;
+const int kAttackLinkSize = 100;
+
 const int kRowTiles = 13;
 const int kColTiles = 21;
+
+const int kFullScreenHeight = 900;
+const int kFullScreenWidth = 1440;
 
 class Zelda : public cinder::app::App {
  public:

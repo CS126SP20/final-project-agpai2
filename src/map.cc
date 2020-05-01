@@ -31,7 +31,7 @@ Map::Map(std::vector<std::vector<char>> game_screen) {  // 13, 21
 
 void Map::ReadImageLabels() {
   std::string map_label_file =
-      "/Users/aniruddhapai/Downloads/cinder_0.9.2_mac/finalproject/zelda-trials/assets/maplabels.txt";
+      "/Users/aniruddhapai/Downloads/cinder_0.9.2_mac/finalproject/final-project-agpai2/assets/maplabels.txt";
   std::ifstream file(map_label_file);
 
   while (!file.eof()) {
@@ -45,7 +45,7 @@ void Map::ReadGameScreens() {
   int map_line_count = 0;
 
   std::string maps_file
-      = "/Users/aniruddhapai/Downloads/cinder_0.9.2_mac/finalproject/zelda-trials/assets/zeldamaps.txt";
+      = "/Users/aniruddhapai/Downloads/cinder_0.9.2_mac/finalproject/final-project-agpai2/assets/zeldamaps.txt";
   std::ifstream file(maps_file);
 
   while (!file.eof()) {

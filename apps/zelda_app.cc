@@ -243,10 +243,13 @@ void Zelda::DrawPlayer() {
   cinder::gl::Texture2dRef texture = cinder::gl::Texture2d::create(
       loadImage(loadAsset(move_path)));
 
-  cinder::gl::draw(texture, Rectf(kTileSize * loc.Row(),
-                                  kTileSize * loc.Col(),
-                                  kTileSize * loc.Row() + kTileSize,
-                                  kTileSize * loc.Col() + kTileSize));
+  cinder::gl::draw(texture, Rectf((kLinkSize * loc.Row()) *
+  getWindowWidth()/kFullScreenWidth,
+      (kLinkSize * loc.Col()) * getWindowHeight()/kFullScreenHeight,
+      (kLinkSize * loc.Row()) * getWindowWidth()/kFullScreenWidth +
+      kLinkSize,
+      (kLinkSize * loc.Col()) * getWindowHeight()/kFullScreenHeight +
+      kLinkSize));
 }
 
 void Zelda::DrawBackground() {
