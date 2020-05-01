@@ -37,3 +37,9 @@
 - [x] Most caves are now accessible to Link
 
 6. The Player's inventory count shows on the console. Next step is to make it appear on the game screen
+
+## Week 3: Completing the missing elements of game and final touches
+1. Not using Box2D to implement any functionality in the game. Instead, using a json library to implement 
+   pause menu/player inventory
+   
+2. Working on placing monsters on game screen and moving them randomly

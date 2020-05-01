@@ -20,7 +20,7 @@ ci_make_library(
         SOURCES      ${SOURCE_LIST}
         INCLUDES     "${FinalProject_SOURCE_DIR}/include"
         LIBRARIES gflags sqlite-modern-cpp sqlite3 nlohmann_json
-        BLOCKS Box2D
+        BLOCKS
 )
 
 
