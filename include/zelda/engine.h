@@ -7,7 +7,6 @@
 
 #include "direction.h"
 #include "player.h"
-#include "monster.h"
 
 namespace zelda {
 

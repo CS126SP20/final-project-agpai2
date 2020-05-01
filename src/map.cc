@@ -5,7 +5,6 @@
 #include "zelda/map.h"
 
 #include <fstream>
-#include <iostream>
 #include <string>
 #include <vector>
 

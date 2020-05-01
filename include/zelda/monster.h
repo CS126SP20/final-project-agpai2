@@ -5,24 +5,25 @@
 #ifndef FINALPROJECT_MONSTER_H
 #define FINALPROJECT_MONSTER_H
 
+#include "direction.h"
 #include "location.h"
+#include "map.h"
 
 namespace zelda {
 
-//int monster_start_screen = 3;
-
 class Monster {
  public:
-  explicit Monster(Location location);
+  Monster();
 
-  // Sets the new location of the player
-  void SetLoc(Location set_loc);
+  // Moves the Monster
+  std::vector<Map> MoveMonster(int map_num);
 
-  // Gets the current location of the player
-  Location GetLoc() const;
+  void SetUpMaps(Map maps);
 
  private:
-  Location loc_;
+  std::vector<Map> map_screens_;
+  char monster = 'M';
+
 };
 
 } // namespace zelda

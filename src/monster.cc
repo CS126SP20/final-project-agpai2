@@ -3,14 +3,22 @@
 //
 
 #include "zelda/monster.h"
+#include <zelda/map.h>
+
+using zelda::Map;
+using zelda::Direction;
 
 namespace zelda {
 
-Monster::Monster(Location location)
-    : loc_{location} {}
+int random_dir = 0;
 
-void Monster::SetLoc(Location set_loc) { loc_ = set_loc; }
+Monster::Monster() {}
 
-Location Monster::GetLoc() const { return loc_; }
+void Monster::SetUpMaps(Map maps) {
+  map_screens_ = maps.GetScreen();
+}
+
+
+std::vector<Map> Monster::MoveMonster(int map_num) {}
 
 } // namespace zelda
