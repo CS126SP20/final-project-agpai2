@@ -47,3 +47,6 @@
 - [x] The monsters are incorporated into the zeldamaps.txt denoted by M. They now move randomly in the free space
 
 3. Wrote code to make Link attack. Link can attack in all directions
+
+4. Wrote code to display the pause menu. The details to be printed in the pause menu are being printed in the 
+   console. Next step would be to display them on the menu
