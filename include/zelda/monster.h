@@ -11,6 +11,9 @@
 
 namespace zelda {
 
+const int kMapHeight = 13;
+const int kMapWidth = 21;
+
 class Monster {
  public:
   Monster();
@@ -22,7 +25,8 @@ class Monster {
 
  private:
   std::vector<Map> map_screens_;
-  char monster = 'M';
+  char monster_ = 'M';
+  char empty_tile_ = '0';
 
 };
 
