@@ -25,7 +25,7 @@ std::vector<std::vector<char>> sample_screen = {{ '1','1','1','0','0','1','0','0
                                                 { '1','1','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','1','1'},
                                                 { '1','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','1','1'},
                                                 { 'h','0','0','0','0','1','0','0','0','0','0','0','1','0','0','0','0','1','0','1','1'},
-                                                { 'h','0','1','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','j'},
+                                                { 'h','0','1','0','0','0','0','0','0','0','0','0','0','M','0','0','0','0','0','0','j'},
                                                 { 'h','0','0','0','0','1','0','1','1','0','0','1','1','0','1','0','0','1','0','0','j'},
                                                 { 'h','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','j'},
                                                 { 'h','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','j'},
@@ -137,9 +137,8 @@ TEST_CASE("Change in Location", "[direction][location]") {
   }
 }
 
-TEST_CASE("Player's and Monster's Location", "[player][monster]") {
+TEST_CASE("Player's Location", "[player]") {
   Player player(Location(2, 5));
-  Monster monster(Location(7,2));
 
   SECTION("Player Location") {
     REQUIRE(player.GetLoc() == Location{2,5});
@@ -149,14 +148,21 @@ TEST_CASE("Player's and Monster's Location", "[player][monster]") {
     player.SetLoc(Location(1,2));
     REQUIRE(player.GetLoc() == Location{1,2});
   }
+}
 
-  SECTION("Monster Location") {
-    REQUIRE(monster.GetLoc() == Location{7,2});
-  }
+TEST_CASE("Monster Movement", "[monster]") {
+  Map map;
+  map.ReadGameScreens();
+  map.ReadImageLabels();
 
-  SECTION("Monster Location after movement") {
-    monster.SetLoc(Location(6,9));
-    REQUIRE(monster.GetLoc() == Location{6,9});
+  Monster monster;
+  monster.SetUpMaps(map);
+
+  REQUIRE_FALSE(monster.IsMonsterMove());
+
+  SECTION("Monster moves") {
+    monster.MoveMonster(3);
+    REQUIRE(monster.IsMonsterMove());
   }
 }
 

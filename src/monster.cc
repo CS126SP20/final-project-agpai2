@@ -20,6 +20,7 @@ void Monster::SetUpMaps(Map maps) {
 
 
 std::vector<Map> Monster::MoveMonster(int map_num) {
+  is_monster_move_ = false;
 
   for (int i = 0; i < kMapHeight; i++) {
     for (int j = 0; j < kMapWidth; j++) {
@@ -30,21 +31,25 @@ std::vector<Map> Monster::MoveMonster(int map_num) {
           if (map_screens_[map_num].coordinates_[i + 1][j] == empty_tile_) { //down
             map_screens_[map_num].coordinates_[i + 1][j] = monster_;
             map_screens_[map_num].coordinates_[i][j] = empty_tile_;
+            is_monster_move_ = true;
           }
         } else if (rand_direction == static_cast<int>(Direction::kUp)) {
           if (map_screens_[map_num].coordinates_[i - 1][j] == empty_tile_) {  //up
             map_screens_[map_num].coordinates_[i - 1][j] = monster_;
             map_screens_[map_num].coordinates_[i][j] = empty_tile_;
+            is_monster_move_ = true;
           }
         } else if (rand_direction == static_cast<int>(Direction::kLeft)) {
           if (map_screens_[map_num].coordinates_[i][j - 1] == empty_tile_) {  //left
             map_screens_[map_num].coordinates_[i][j - 1] = monster_;
             map_screens_[map_num].coordinates_[i][j] = empty_tile_;
+            is_monster_move_ = true;
           }
         } else if (rand_direction == static_cast<int>(Direction::kRight)) {
           if (map_screens_[map_num].coordinates_[i][j + 1] == empty_tile_) {  //right
             map_screens_[map_num].coordinates_[i][j + 1] = monster_;
             map_screens_[map_num].coordinates_[i][j] = empty_tile_;
+            is_monster_move_ = true;
           }
         }
       }
@@ -53,5 +58,7 @@ std::vector<Map> Monster::MoveMonster(int map_num) {
 
   return map_screens_;
 }
+
+bool Monster::IsMonsterMove() { return is_monster_move_; }
 
 } // namespace zelda

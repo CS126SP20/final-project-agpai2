@@ -21,12 +21,18 @@ class Monster {
   // Moves the Monster
   std::vector<Map> MoveMonster(int map_num);
 
+  // Sets up the game screens for all monsters
   void SetUpMaps(Map maps);
+
+  // Returns a bool value to check for monster movement
+  bool IsMonsterMove();
 
  private:
   std::vector<Map> map_screens_;
   char monster_ = 'M';
   char empty_tile_ = '0';
+
+  bool is_monster_move_ = false;
 
 };
 
