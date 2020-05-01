@@ -45,3 +45,5 @@
 2. Working on placing monsters on game screen and moving them randomly
 
 - [x] The monsters are incorporated into the zeldamaps.txt denoted by M. They now move randomly in the free space
+
+3. Wrote code to make Link attack. Link can attack in all directions
