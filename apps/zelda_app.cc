@@ -52,7 +52,7 @@ void Zelda::update() {
   if (is_game_paused_) { return; }
 
   slow_monster_count++;
-  if (slow_monster_count % kRowTiles) {
+  if (slow_monster_count % kRowTiles == 0) {
     mapper_.SetGameScreens(monster_.MoveMonster(map_num));
     slow_monster_count = 0;
   }
@@ -257,16 +257,49 @@ void Zelda::DrawPlayer() {
   cinder::gl::Texture2dRef texture = cinder::gl::Texture2d::create(
       loadImage(loadAsset(move_path)));
 
-  cinder::gl::draw(texture, Rectf((kCharacterSize * loc.Row()) *
-  getWindowWidth()/kFullScreenWidth,
-      (kCharacterSize * loc.Col()) * getWindowHeight()/kFullScreenHeight,
-      (kCharacterSize * loc.Row()) * getWindowWidth()/kFullScreenWidth +
+  cinder::gl::draw(texture, Rectf((kCharacterSize * loc.Row() *
+  getWindowWidth()/kFullScreenWidth),
+      (kCharacterSize * loc.Col() * getWindowHeight()/kFullScreenHeight),
+      (kCharacterSize * loc.Row() * getWindowWidth()/kFullScreenWidth) +
                                       kCharacterSize,
-      (kCharacterSize * loc.Col()) * getWindowHeight()/kFullScreenHeight +
+      (kCharacterSize * loc.Col() * getWindowHeight()/kFullScreenHeight) +
                                       kCharacterSize));
 }
 
-void Zelda::DrawMonster() {}
+void Zelda::DrawMonster() {
+  cinder::fs::path monster_path;
+
+  monster_path = cinder::fs::path("octorok-right-1.png");
+  if (mapper_.direction == Direction::kUp) {
+    monster_path = cinder::fs::path("octorok-up-1.png");
+  } else if (mapper_.direction == Direction::kDown) {
+    monster_path = cinder::fs::path("octorok-down-1.png");
+  } else if (mapper_.direction == Direction::kLeft) {
+    monster_path = cinder::fs::path("octorok-left-1.png");
+  } else if (mapper_.direction == Direction::kRight) {
+    monster_path = cinder::fs::path("octorok-right-1.png");
+  }
+  //monster_path = cinder::fs::path("octorok-right-1.png");
+  cinder::gl::Texture2dRef texture = cinder::gl::Texture2d::create(
+      loadImage(loadAsset(monster_path)));
+
+  for (int i = 0; i < kRowTiles; i++) {
+    for (int j = 0; j < kColTiles; j++) {
+      if (mapper_.GetScreen()[map_num].coordinates_[i][j] == 'M') {
+        cinder::gl::draw(texture, Rectf((kCharacterSize * j *
+        getWindowWidth()/kFullScreenWidth),
+                                        (kCharacterSize * i *
+                                        getWindowHeight()/kFullScreenHeight),
+                                        (kCharacterSize * j *
+                                        getWindowWidth()/kFullScreenWidth) +
+                                        kCharacterSize,
+                                        (kCharacterSize * i *
+                                        getWindowHeight()/kFullScreenHeight) +
+                                        kCharacterSize));
+      }
+    }
+  }
+}
 
 void Zelda::DrawBackground() {
   cinder::gl::Texture2dRef texture = cinder::gl::Texture2d::create(
