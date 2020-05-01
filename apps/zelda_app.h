@@ -48,6 +48,9 @@ class Zelda : public cinder::app::App {
   // Draws the game screen's background
   void DrawBackground();
 
+  // Displays the Pause menu screen
+  void DisplayMenu();
+
   // Plays the treasure sound
   void PlayTreasureSound();
 

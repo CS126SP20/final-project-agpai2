@@ -27,6 +27,11 @@ class Player {
 
  private:
   Location loc_;
+
+  int max_health_ = 3;
+  int current_health = 3;
+  int monsters_killed_ = 0;
+  int inventory_count_ = 0;
 };
 
 } // namespace zelda

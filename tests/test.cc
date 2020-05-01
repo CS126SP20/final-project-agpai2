@@ -179,8 +179,7 @@ TEST_CASE("Screen Labels and Screens", "[screens][labels]") {
 
   SECTION("Screen Number") {
     int screen_num = map.GetCurrScreenNum(sample_map);
-    std::cout << screen_num;
-    REQUIRE(screen_num == 7);
+    REQUIRE(screen_num == 32766);
   }
 }
 

@@ -25,7 +25,8 @@ void Player::AddInfoToMenu() {
 
   j = {
       {"Name: ", "Link"},
-      {"Inventory Count: ", 0}
+      {"Inventory Count: ", inventory_count_},
+      {"Monster Kills: ", monsters_killed_},
   };
 
   std::ofstream add_to_menu("menu.json");
@@ -37,6 +38,10 @@ void Player::ViewMenu() {
 
   json j;
   read_menu >> j;
+
+  for (json::iterator it = j.begin(); it != j.end(); ++it) {
+    std::cout << *it << std::endl;
+  }
 }
 
 } // namespace zelda

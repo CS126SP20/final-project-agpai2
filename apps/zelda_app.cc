@@ -93,7 +93,10 @@ void Zelda::update() {
 void Zelda::draw() {
   cinder::gl::enableAlphaBlending();
 
-  if (is_game_paused_) { return; }
+  if (is_game_paused_) {
+    DisplayMenu();
+    return;
+  }
 
   cinder::gl::clear();
   cinder::gl::color(1,1,1);
@@ -159,6 +162,8 @@ void Zelda::keyDown(KeyEvent event) {
       is_game_paused_ = !is_game_paused_;
 
       if (is_game_paused_) {
+        player_engine_.GetPlayer().AddInfoToMenu();
+        player_engine_.GetPlayer().ViewMenu();
         last_pause_time_ = std::chrono::system_clock::now();
       } else {
         last_intact_time_ += std::chrono::system_clock::now() - last_pause_time_;
@@ -354,6 +359,15 @@ void Zelda::DrawAttackLink() {
 void Zelda::DrawBackground() {
   cinder::gl::Texture2dRef texture = cinder::gl::Texture2d::create(
       loadImage(loadAsset(curr_map_)));
+
+  cinder::gl::draw(texture, getWindowBounds());
+}
+
+void Zelda::DisplayMenu() {
+  cinder::fs::path menu_path = cinder::fs::path("inventory.png");
+  cinder::gl::Texture2dRef texture = cinder::gl::Texture2d::create(
+      loadImage(loadAsset(menu_path)));
+
 
   cinder::gl::draw(texture, getWindowBounds());
 }
