@@ -23,10 +23,14 @@ int left_move_count = 0;
 int right_move_count = 0;
 int back_move_count = 0;
 
+// This count is kept to slow down the monster
+int slow_monster_count = 0;
+
 cinder::fs::path move_path;
 
 Zelda::Zelda()
     : player_engine_{kRowTiles, kColTiles},
+      monster_{},
       is_game_paused_{false},
       size_{kRowTiles} {}
 
@@ -37,12 +41,21 @@ void Zelda::setup() {
   curr_map_ = "screen-H8.png";
   mapper_.ReadImageLabels();
   mapper_.ReadGameScreens();
+
+  monster_.SetUpMaps(mapper_);
+
   PlayBackgroundTheme();
   PlayTreasureSound();
 }
 
 void Zelda::update() {
   if (is_game_paused_) { return; }
+
+  slow_monster_count++;
+  if (slow_monster_count % kRowTiles) {
+    mapper_.SetGameScreens(monster_.MoveMonster(map_num));
+    slow_monster_count = 0;
+  }
 
   Location location = player_engine_.GetPlayer().GetLoc();
 
@@ -83,6 +96,7 @@ void Zelda::draw() {
 
   DrawBackground();
   DrawPlayer();
+  DrawMonster();
 }
 
 void Zelda::keyDown(KeyEvent event) {
@@ -243,14 +257,16 @@ void Zelda::DrawPlayer() {
   cinder::gl::Texture2dRef texture = cinder::gl::Texture2d::create(
       loadImage(loadAsset(move_path)));
 
-  cinder::gl::draw(texture, Rectf((kLinkSize * loc.Row()) *
+  cinder::gl::draw(texture, Rectf((kCharacterSize * loc.Row()) *
   getWindowWidth()/kFullScreenWidth,
-      (kLinkSize * loc.Col()) * getWindowHeight()/kFullScreenHeight,
-      (kLinkSize * loc.Row()) * getWindowWidth()/kFullScreenWidth +
-      kLinkSize,
-      (kLinkSize * loc.Col()) * getWindowHeight()/kFullScreenHeight +
-      kLinkSize));
+      (kCharacterSize * loc.Col()) * getWindowHeight()/kFullScreenHeight,
+      (kCharacterSize * loc.Row()) * getWindowWidth()/kFullScreenWidth +
+                                      kCharacterSize,
+      (kCharacterSize * loc.Col()) * getWindowHeight()/kFullScreenHeight +
+                                      kCharacterSize));
 }
+
+void Zelda::DrawMonster() {}
 
 void Zelda::DrawBackground() {
   cinder::gl::Texture2dRef texture = cinder::gl::Texture2d::create(

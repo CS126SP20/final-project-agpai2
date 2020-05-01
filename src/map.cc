@@ -88,6 +88,10 @@ std::vector<Map> Map::GetScreen(){
   return game_maps_;
 }
 
+void Map::SetGameScreens(std::vector<Map> game_screens) {
+  game_maps_ = std::move(game_screens);
+}
+
 bool Map::IsScreenChange() { return is_screen_change_; }
 
 bool Map::IsSwordTaken() { return is_sword_taken_; }

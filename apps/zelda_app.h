@@ -10,10 +10,11 @@
 #include <zelda/engine.h>
 #include <zelda/location.h>
 #include <zelda/map.h>
+#include <zelda/monster.h>
 
 namespace zeldaapp {
 
-const int kLinkSize = 70;
+const int kCharacterSize = 70;
 const int kAttackLinkSize = 100;
 
 const int kRowTiles = 13;
@@ -37,6 +38,9 @@ class Zelda : public cinder::app::App {
   // Draws the player
   void DrawPlayer();
 
+  // Draws the monster
+  void DrawMonster();
+
   // Draws the game screen's background
   void DrawBackground();
 
@@ -54,6 +58,8 @@ class Zelda : public cinder::app::App {
   zelda::Engine player_engine_;
   zelda::Map mapper_;
   const size_t size_;
+
+  zelda::Monster monster_;
 
   // This is done to keep track of time, while the game is paused
   std::chrono::time_point<std::chrono::system_clock> last_intact_time_;

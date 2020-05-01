@@ -66,6 +66,9 @@ class Map {
   // Gets all the Maps/Screens of a game
   std::vector<Map> GetScreen();
 
+  // Sets all the Maps/Screens of a game
+  void SetGameScreens(std::vector<Map> game_screens);
+
   // Contains different game screens
   enum GameScreens { kScreen1, kScreen2, kScreen3 };
 
