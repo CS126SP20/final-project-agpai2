@@ -43,3 +43,5 @@
    pause menu/player inventory
    
 2. Working on placing monsters on game screen and moving them randomly
+
+- [x] The monsters are incorporated into the zeldamaps.txt denoted by M. They now move randomly in the free space
