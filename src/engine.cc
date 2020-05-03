@@ -54,4 +54,8 @@ void Engine::PlayerStep() {
 
 Direction Engine::GetDirection() { return direction_; }
 
+void Engine::SetCurrentPlayerHealth(int current_health) {
+  player_.SetCurrentHealth(current_health);
+}
+
 } // namespace zelda

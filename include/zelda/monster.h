@@ -28,10 +28,13 @@ class Monster {
   std::vector<Map> MoveMonster(Direction d, Location l, int map_num);
 
   // Returns a bool value indicating if the monster was attacked
-  bool CheckIfMonstersAttacked(Direction d, Location l, int map_num);
+  bool IsMonstersAttacked(Direction d, Location l, int map_num);
 
   // Returns a bool value to check for monster movement
   bool IsMonsterMove();
+
+  // Returns a bool value based on if the monster has attacked Link
+  bool IsMonsterAttackLink(Location location, int map_num);
 
  private:
   std::vector<Map> map_screens_;
@@ -42,7 +45,6 @@ class Monster {
   bool is_monster_attacked_ = false;
 
   bool is_player_attack_ = false;
-
 };
 
 } // namespace zelda

@@ -61,6 +61,15 @@ void Zelda::update() {
   if (slow_monster_count % kColTiles == 0) {
     mapper_.SetGameScreens(monster_.MoveMonster(player_move_state_,
         location ,map_num));
+
+    if (monster_.IsMonsterAttackLink(location, map_num)) {
+      int current_player_health = player_engine_.GetPlayer().GetCurrentHealth();
+      std::cout << " Current Health " << current_player_health << std::endl;
+      current_player_health--;
+      std::cout << "New Current Health " << current_player_health << std::endl;
+      player_engine_.SetCurrentPlayerHealth(current_player_health);
+    }
+
     slow_monster_count = 0;
   }
 

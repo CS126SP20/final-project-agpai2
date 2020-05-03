@@ -34,6 +34,9 @@ class Engine {
   // Changes the coordinates after change in direction
   Location FromDirection(Direction direction);
 
+  // Sets the current health of the player
+  void SetCurrentPlayerHealth(int current_health);
+
  private:
   const int width_;
   const int height_;

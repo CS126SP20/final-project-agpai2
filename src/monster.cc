@@ -25,37 +25,37 @@ void Monster::SetIsPlayerAttack(bool set_is_player_attack) {
 std::vector<Map> Monster::MoveMonster(Direction d, Location l, int map_num) {
   is_monster_move_ = false;
 
-  if (CheckIfMonstersAttacked(d, l, map_num)) {
+  if (IsMonstersAttacked(d, l, map_num)) {
     goto exitloops;
   }
 
   for (int i = 0; i < kMapHeight; i++) {
     for (int j = 0; j < kMapWidth; j++) {
-      if (map_screens_[map_num].coordinates_[i][j] == 'M') {
+      if (map_screens_[map_num].coordinates_[i][j] == monster_) {
         rand_direction = rand() % 4;
 
         if (rand_direction == 0) {
-          if (map_screens_[map_num].coordinates_[i + 1][j] == '0') { //down
-            map_screens_[map_num].coordinates_[i + 1][j] = 'M';
-            map_screens_[map_num].coordinates_[i][j] = '0';
+          if (map_screens_[map_num].coordinates_[i + 1][j] == empty_tile_) { //down
+            map_screens_[map_num].coordinates_[i + 1][j] = monster_;
+            map_screens_[map_num].coordinates_[i][j] = empty_tile_;
             is_monster_move_ = true;
           }
         } else if (rand_direction == 1) {
-          if (map_screens_[map_num].coordinates_[i - 1][j] == '0') {  //up
-            map_screens_[map_num].coordinates_[i - 1][j] = 'M';
-            map_screens_[map_num].coordinates_[i][j] = '0';
+          if (map_screens_[map_num].coordinates_[i - 1][j] == empty_tile_) {  //up
+            map_screens_[map_num].coordinates_[i - 1][j] = monster_;
+            map_screens_[map_num].coordinates_[i][j] = empty_tile_;
             is_monster_move_ = true;
           }
         } else if (rand_direction == 2) {
-          if (map_screens_[map_num].coordinates_[i][j - 1] == '0') {  //left
-            map_screens_[map_num].coordinates_[i][j - 1] = 'M';
-            map_screens_[map_num].coordinates_[i][j] = '0';
+          if (map_screens_[map_num].coordinates_[i][j - 1] == empty_tile_) {  //left
+            map_screens_[map_num].coordinates_[i][j - 1] = monster_;
+            map_screens_[map_num].coordinates_[i][j] = empty_tile_;
             is_monster_move_ = true;
           }
         } else if (rand_direction == 3) {
-          if (map_screens_[map_num].coordinates_[i][j + 1] == '0') {  //right
-            map_screens_[map_num].coordinates_[i][j + 1] = 'M';
-            map_screens_[map_num].coordinates_[i][j] = '0';
+          if (map_screens_[map_num].coordinates_[i][j + 1] == empty_tile_) {  //right
+            map_screens_[map_num].coordinates_[i][j + 1] = monster_;
+            map_screens_[map_num].coordinates_[i][j] = empty_tile_;
             is_monster_move_ = true;
           }
         }
@@ -68,29 +68,29 @@ std::vector<Map> Monster::MoveMonster(Direction d, Location l, int map_num) {
   return map_screens_;
 }
 
-bool Monster::CheckIfMonstersAttacked(Direction d, Location l, int map_num) {
+bool Monster::IsMonstersAttacked(Direction d, Location l, int map_num) {
   int p_row = l.Col();
   int p_col = l.Row();
 
   if (is_player_attack_) {
-    if (map_screens_[map_num].coordinates_[p_row - 1][p_col] == 'M' &&
+    if (map_screens_[map_num].coordinates_[p_row - 1][p_col] == monster_ &&
         d == Direction::kUp) {
-      map_screens_[map_num].coordinates_[p_row - 1][p_col] = '0';
+      map_screens_[map_num].coordinates_[p_row - 1][p_col] = empty_tile_;
       is_monster_attacked_ = true;
-    } else if (map_screens_[map_num].coordinates_[p_row + 1][p_col] == 'M' &&
+    } else if (map_screens_[map_num].coordinates_[p_row + 1][p_col] == monster_ &&
                d == Direction::kDown) {
-      map_screens_[map_num].coordinates_[p_row + 1][p_col] = '0';
+      map_screens_[map_num].coordinates_[p_row + 1][p_col] = empty_tile_;
       is_monster_attacked_ = true;
-    } else if (map_screens_[map_num].coordinates_[p_row][p_col - 1] == 'M' &&
+    } else if (map_screens_[map_num].coordinates_[p_row][p_col - 1] == monster_ &&
                d == Direction::kLeft) {
-      map_screens_[map_num].coordinates_[p_row][p_col - 1] = '0';
+      map_screens_[map_num].coordinates_[p_row][p_col - 1] = empty_tile_;
       is_monster_attacked_ = true;
-    } else if (map_screens_[map_num].coordinates_[p_row][p_col + 1] == 'M' &&
+    } else if (map_screens_[map_num].coordinates_[p_row][p_col + 1] == monster_ &&
                d == Direction::kRight) {
-      map_screens_[map_num].coordinates_[p_row][p_col + 1] = '0';
+      map_screens_[map_num].coordinates_[p_row][p_col + 1] = empty_tile_;
       is_monster_attacked_ = true;
-    } else if (map_screens_[map_num].coordinates_[p_row][p_col] == 'M') {
-      map_screens_[map_num].coordinates_[p_row][p_col] = '0';
+    } else if (map_screens_[map_num].coordinates_[p_row][p_col] == monster_) {
+      map_screens_[map_num].coordinates_[p_row][p_col] = empty_tile_;
       is_monster_attacked_ = true;
     }
   }
@@ -100,5 +100,12 @@ bool Monster::CheckIfMonstersAttacked(Direction d, Location l, int map_num) {
 }
 
 bool Monster::IsMonsterMove() { return is_monster_move_; }
+
+bool Monster::IsMonsterAttackLink(Location location, int map_num) {
+  int p_row = location.Col();
+  int p_col = location.Row();
+
+  return map_screens_[map_num].coordinates_[p_row][p_col] == monster_;
+}
 
 } // namespace zelda

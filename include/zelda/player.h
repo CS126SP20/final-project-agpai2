@@ -16,6 +16,12 @@ class Player {
   // Sets the new location of the player
   void SetLoc(Location set_loc);
 
+  // Sets the current health of the player
+  void SetCurrentHealth(int set_current_health);
+
+  // Gets the current health of the player
+  int GetCurrentHealth();
+
   // Gets the current location of the player
   Location GetLoc() const;
 
@@ -29,9 +35,8 @@ class Player {
   Location loc_;
 
   int max_health_ = 3;
-  int current_health = 3;
+  int current_health_ = 3;
   int monsters_killed_ = 0;
-  int inventory_count_ = 0;
 };
 
 } // namespace zelda
