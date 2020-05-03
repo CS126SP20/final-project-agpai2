@@ -174,6 +174,7 @@ void Zelda::keyDown(KeyEvent event) {
     case KeyEvent::KEY_SPACE: {
       if (mapper_.IsSwordTaken()) {
         is_attack_ = true;
+        monster_.SetIsPlayerAttack(true);
       }
     }
   }

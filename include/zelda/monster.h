@@ -21,6 +21,9 @@ class Monster {
   // Sets up the game screens for all monsters
   void SetUpMaps(Map maps);
 
+  // Sets the bool value when the player attacks
+  void SetIsPlayerAttack(bool set_is_player_attack);
+
   // Moves the Monster
   std::vector<Map> MoveMonster(Direction d, Location l, int map_num);
 

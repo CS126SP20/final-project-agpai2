@@ -18,6 +18,10 @@ void Monster::SetUpMaps(Map maps) {
   map_screens_ = maps.GetScreen();
 }
 
+void Monster::SetIsPlayerAttack(bool set_is_player_attack) {
+  is_player_attack_ = set_is_player_attack;
+}
+
 std::vector<Map> Monster::MoveMonster(Direction d, Location l, int map_num) {
   is_monster_move_ = false;
 
@@ -95,47 +99,6 @@ bool Monster::CheckIfMonstersAttacked(Direction d, Location l, int map_num) {
   return is_monster_attacked_;
 }
 
-/*
-std::vector<Map> Monster::MoveMonster(int map_num) {
-  is_monster_move_ = false;
-
-  for (int i = 0; i < kMapHeight; i++) {
-    for (int j = 0; j < kMapWidth; j++) {
-      if (map_screens_[map_num].coordinates_[i][j] == monster_) {
-        rand_direction = rand() % 4;
-
-        if (rand_direction == static_cast<int>(Direction::kDown)) {
-          if (map_screens_[map_num].coordinates_[i + 1][j] == empty_tile_) { //down
-            map_screens_[map_num].coordinates_[i + 1][j] = monster_;
-            map_screens_[map_num].coordinates_[i][j] = empty_tile_;
-            is_monster_move_ = true;
-          }
-        } else if (rand_direction == static_cast<int>(Direction::kUp)) {
-          if (map_screens_[map_num].coordinates_[i - 1][j] == empty_tile_) {  //up
-            map_screens_[map_num].coordinates_[i - 1][j] = monster_;
-            map_screens_[map_num].coordinates_[i][j] = empty_tile_;
-            is_monster_move_ = true;
-          }
-        } else if (rand_direction == static_cast<int>(Direction::kLeft)) {
-          if (map_screens_[map_num].coordinates_[i][j - 1] == empty_tile_) {  //left
-            map_screens_[map_num].coordinates_[i][j - 1] = monster_;
-            map_screens_[map_num].coordinates_[i][j] = empty_tile_;
-            is_monster_move_ = true;
-          }
-        } else if (rand_direction == static_cast<int>(Direction::kRight)) {
-          if (map_screens_[map_num].coordinates_[i][j + 1] == empty_tile_) {  //right
-            map_screens_[map_num].coordinates_[i][j + 1] = monster_;
-            map_screens_[map_num].coordinates_[i][j] = empty_tile_;
-            is_monster_move_ = true;
-          }
-        }
-      }
-    }
-  }
-
-  return map_screens_;
-}
-*/
 bool Monster::IsMonsterMove() { return is_monster_move_; }
 
 } // namespace zelda

@@ -99,6 +99,8 @@ bool Map::IsSwordTaken() { return is_sword_taken_; }
 int Map::GetNewScreenNum() { return screen_num_; }
 
 Location Map::GetPlayerNewLoc(const Map& curr_map, Engine engine) {
+  is_screen_change_ = false;
+
   Location location = engine.GetPlayer().GetLoc();
 
   int curr_row = location.Col();
@@ -149,6 +151,8 @@ Location Map::GetPlayerNewLoc(const Map& curr_map, Engine engine) {
 }
 
 Location Map::CheckForCaveEntry(const Map& curr_map, Engine engine) {
+  is_screen_change_ = false;
+
   Location location = engine.GetPlayer().GetLoc();
 
   int curr_row = location.Col();
