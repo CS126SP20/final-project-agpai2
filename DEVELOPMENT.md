@@ -52,3 +52,5 @@
    console. Next step would be to display them on the menu
 
 5. Link can now attack the monsters. Attacking the monsters will cause them to disappear from the screen
+
+6. Wrote code to decrease Link's health by a point when in contact with the monster
