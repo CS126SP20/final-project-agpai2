@@ -50,3 +50,5 @@
 
 4. Wrote code to display the pause menu. The details to be printed in the pause menu are being printed in the 
    console. Next step would be to display them on the menu
+
+5. Link can now attack the monsters. Attacking the monsters will cause them to disappear from the screen
