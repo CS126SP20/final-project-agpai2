@@ -32,7 +32,7 @@ std::vector<std::vector<char>> sample_screen = {{ '1','1','1','0','0','1','0','0
                                                 { '1','0','0','0','0','1','0','0','0','0','0','0','1','0','0','0','0','1','0','1','1'},
                                                 { '1','1','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','1','1'},
                                                 { '1','1','1','1','0','1','0','1','1','0','0','1','1','0','1','0','0','1','0','1','1'},
-                                                { '1','1','1','1','e','1','e','e','1','e','e','e','1','e','1','e','e','1','e','1','1' }};
+                                                { '1','1','1','1','e','1','e','e','1','e','e','e','1','e','1','e','e','1','e','1','1'}};
 
 Map sample_map = Map(sample_screen);
 
@@ -161,12 +161,58 @@ TEST_CASE("Monster Movement", "[monster]") {
   REQUIRE_FALSE(monster.IsMonsterMove());
 
   SECTION("Monster moves") {
-    monster.MoveMonster(3);
+    monster.MoveMonster(Direction::kUp, Location{0,0}, 3);
     REQUIRE(monster.IsMonsterMove());
+    REQUIRE(monster.GetMonsterDirection() == Direction::kUp);
   }
 }
 
-TEST_CASE("Screen Labels and Screens", "[screens][labels]") {
+TEST_CASE("Player attacks Monster", "[monster]") {
+  Map map;
+  map.ReadGameScreens();
+  map.ReadImageLabels();
+
+  Monster monster;
+  monster.SetUpMaps(map);
+
+  SECTION("Monster is not attacked") {
+    REQUIRE_FALSE(monster.IsPlayerAttack());
+  }
+
+  monster.SetIsPlayerAttack(true);
+  SECTION("Monster is attacked") {
+    REQUIRE(monster.IsPlayerAttack());
+  }
+}
+
+TEST_CASE("Monster attacks Player", "[location][monster][map]") {
+  Map map;
+  map.ReadGameScreens();
+  map.ReadImageLabels();
+
+  Monster monster;
+  monster.SetUpMaps(map);
+
+  SECTION("Player is not attacked") {
+    REQUIRE_FALSE(monster.IsMonsterAttackLink(Location(13, 5), 7));
+  }
+
+  SECTION("Player is attacked") {
+    REQUIRE(monster.IsMonsterAttackLink(Location(12, 6), 3));
+  }
+}
+
+TEST_CASE("Single Game Screen", "[map][screens]") {
+  Map map;
+
+  std::vector<Map> single_screen;
+  single_screen.push_back(sample_map);
+  map.SetGameScreens(single_screen);
+
+  REQUIRE(map.GetScreen().size() == 1);
+}
+
+TEST_CASE("Screen Labels and Screens", "[map][screens][labels]") {
   Map map;
   map.ReadGameScreens();
   map.ReadImageLabels();

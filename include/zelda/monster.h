@@ -40,6 +40,9 @@ class Monster {
   // Returns a bool value to check for monster movement
   bool IsMonsterMove();
 
+  // Returns a bool value based on if the player has attacked the monster
+  bool IsPlayerAttack();
+
  private:
   std::vector<Map> map_screens_;
 

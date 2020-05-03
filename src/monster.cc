@@ -114,4 +114,6 @@ bool Monster::IsMonsterAttackLink(Location location, int map_num) {
 
 bool Monster::IsMonsterMove() { return is_monster_move_; }
 
+bool Monster::IsPlayerAttack() { return is_player_attack_; }
+
 } // namespace zelda
