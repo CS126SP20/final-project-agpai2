@@ -16,8 +16,11 @@ using zelda::Direction;
 using zelda::Location;
 using zelda::Map;
 
+// This keeps in track the screen that Link is in
 int map_num = 0;
 
+// These counts are kept to keep in track the player movements
+// and change the animation sprites accordingly
 int front_move_count = 0;
 int left_move_count = 0;
 int right_move_count = 0;
@@ -29,14 +32,16 @@ int slow_monster_count = 0;
 // This count is kept to for a time delay to show Link attack
 int attack_count = 0;
 
+// These are the paths that are used to load images for player movements,
+// player attacks, and monster movements
 cinder::fs::path move_path;
 cinder::fs::path attack_path;
+cinder::fs::path monster_path;
 
 Zelda::Zelda()
     : player_engine_{kRowTiles, kColTiles},
       monster_{},
-      is_game_paused_{false},
-      size_{kRowTiles} {}
+      is_game_paused_{false} {}
 
 void Zelda::setup() {
   cinder::gl::disableDepthWrite();
@@ -59,7 +64,7 @@ void Zelda::update() {
 
   slow_monster_count++;
   if (slow_monster_count % kColTiles == 0) {
-    mapper_.SetGameScreens(monster_.MoveMonster(player_move_state_,
+    mapper_.SetGameScreens(monster_.MoveMonster(player_direction_,
         location ,map_num));
 
     if (monster_.IsMonsterAttackLink(location, map_num)) {
@@ -128,9 +133,9 @@ void Zelda::keyDown(KeyEvent event) {
     case KeyEvent::KEY_w: {
       if (!is_game_paused_) {
         CheckForDirection(event);
-        player_move_state_ = Direction::kUp;
+        player_direction_ = Direction::kUp;
         back_move_count++;
-        DrawPlayer();
+        //DrawPlayer();
         player_engine_.PlayerStep();
       }
       break;
@@ -139,9 +144,9 @@ void Zelda::keyDown(KeyEvent event) {
     case KeyEvent::KEY_s: {
       if (!is_game_paused_) {
         CheckForDirection(event);
-        player_move_state_ = Direction::kDown;
+        player_direction_ = Direction::kDown;
         front_move_count++;
-        DrawPlayer();
+        //DrawPlayer();
         player_engine_.PlayerStep();
       }
       break;
@@ -150,9 +155,9 @@ void Zelda::keyDown(KeyEvent event) {
     case KeyEvent::KEY_a: {
       if (!is_game_paused_) {
         CheckForDirection(event);
-        player_move_state_ = Direction::kLeft;
+        player_direction_ = Direction::kLeft;
         left_move_count++;
-        DrawPlayer();
+        //DrawPlayer();
         player_engine_.PlayerStep();
       }
       break;
@@ -161,9 +166,9 @@ void Zelda::keyDown(KeyEvent event) {
     case KeyEvent::KEY_d: {
       if (!is_game_paused_) {
         CheckForDirection(event);
-        player_move_state_ = Direction::kRight;
+        player_direction_ = Direction::kRight;
         right_move_count++;
-        DrawPlayer();
+        //DrawPlayer();
         player_engine_.PlayerStep();
       }
       break;
@@ -228,46 +233,44 @@ void Zelda::CheckForDirection(const cinder::app::KeyEvent& event) {
   }
 }
 
-void Zelda::PlayBackgroundTheme() {
-  auto audio_path = "zelda.mp3";
+void Zelda::DisplayMenu() {
+  cinder::fs::path menu_path = cinder::fs::path("inventory.png");
+  cinder::gl::Texture2dRef texture = cinder::gl::Texture2d::create(
+      loadImage(loadAsset(menu_path)));
 
-  auto source_file = cinder::audio::load
-      (cinder::app::loadAsset(audio_path));
-  background_audio_file_ = cinder::audio::Voice::create(source_file);
-  background_audio_file_->start();
 
+  cinder::gl::draw(texture, getWindowBounds());
 }
 
-void Zelda::PlayTreasureSound() {
-  auto audio_path = "treasure.mp3";
+void Zelda::DrawBackground() {
+  cinder::gl::Texture2dRef texture = cinder::gl::Texture2d::create(
+      loadImage(loadAsset(curr_map_)));
 
-  auto source_file = cinder::audio::load
-      (cinder::app::loadAsset(audio_path));
-  treasure_audio_file_ = cinder::audio::Voice::create(source_file);
+  cinder::gl::draw(texture, getWindowBounds());
 }
 
 void Zelda::DrawPlayer() {
   const Location loc = player_engine_.GetPlayer().GetLoc();
 
-  if (player_move_state_ == Direction::kDown) {
+  if (player_direction_ == Direction::kDown) {
     if (front_move_count % 2 == 0) {
       move_path = cinder::fs::path("link-front-1.png");
     } else {
       move_path = cinder::fs::path("link-front-2.png");
     }
-  } else if (player_move_state_ == Direction::kUp) {
+  } else if (player_direction_ == Direction::kUp) {
     if (back_move_count % 2 == 0) {
       move_path = cinder::fs::path("link-back-1.png");
     } else {
       move_path = cinder::fs::path("link-back-2.png");
     }
-  } else if (player_move_state_ == Direction::kLeft) {
+  } else if (player_direction_ == Direction::kLeft) {
     if (left_move_count % 2 == 0) {
       move_path = cinder::fs::path("link-left-1.png");
     } else {
       move_path = cinder::fs::path("link-left-2.png");
     }
-  } else if (player_move_state_ == Direction::kRight) {
+  } else if (player_direction_ == Direction::kRight) {
     if (right_move_count % 2 == 0) {
       move_path = cinder::fs::path("link-right-1.png");
     } else {
@@ -297,17 +300,51 @@ void Zelda::DrawPlayer() {
                                       kCharacterSize));
 }
 
-void Zelda::DrawMonster() {
-  cinder::fs::path monster_path;
+void Zelda::DrawAttackLink() {
+  const Location loc = player_engine_.GetPlayer().GetLoc();
 
+  if (player_direction_ == Direction::kDown) {
+    attack_path = cinder::fs::path("link-attack-front.png");
+  } else if (player_direction_ == Direction::kUp) {
+    attack_path = cinder::fs::path("link-attack-back.png");
+  } else if (player_direction_ == Direction::kLeft) {
+    attack_path = cinder::fs::path("link-attack-left.png");
+  } else if (player_direction_ == Direction::kRight) {
+    attack_path = cinder::fs::path("link-attack-right.png");
+  }
+
+  cinder::gl::Texture2dRef texture = cinder::gl::Texture2d::create(
+      loadImage(loadAsset(attack_path)));
+
+  cinder::gl::draw(texture, Rectf((kAttackLinkSize *
+                                   (loc.Row()/kRatio) * getWindowWidth()/kFullScreenWidth),
+                                  (kAttackLinkSize * (loc.Col()/kRatio) *
+                                   getWindowHeight()/kFullScreenHeight),
+                                  (kAttackLinkSize * (loc.Row()/kRatio) *
+                                   getWindowWidth()/kFullScreenWidth) +
+                                  kAttackLinkSize,
+                                  (kAttackLinkSize * (loc.Col()/kRatio) *
+                                   getWindowHeight()/kFullScreenHeight) +
+                                  kAttackLinkSize));
+
+  attack_count++;
+
+  if (attack_count % 5 == 0) {
+    is_attack_ = false;
+    attack_count = 0;
+  }
+}
+
+void Zelda::DrawMonster() {
   monster_path = cinder::fs::path("octorok-right-1.png");
-  if (mapper_.direction == Direction::kUp) {
+
+  if (monster_.GetMonsterDirection() == Direction::kUp) {
     monster_path = cinder::fs::path("octorok-up-1.png");
-  } else if (mapper_.direction == Direction::kDown) {
+  } else if (monster_.GetMonsterDirection() == Direction::kDown) {
     monster_path = cinder::fs::path("octorok-down-1.png");
-  } else if (mapper_.direction == Direction::kLeft) {
+  } else if (monster_.GetMonsterDirection() == Direction::kLeft) {
     monster_path = cinder::fs::path("octorok-left-1.png");
-  } else if (mapper_.direction == Direction::kRight) {
+  } else if (monster_.GetMonsterDirection() == Direction::kRight) {
     monster_path = cinder::fs::path("octorok-right-1.png");
   }
   //monster_path = cinder::fs::path("octorok-right-1.png");
@@ -332,55 +369,22 @@ void Zelda::DrawMonster() {
   }
 }
 
-void Zelda::DrawAttackLink() {
-  const Location loc = player_engine_.GetPlayer().GetLoc();
+void Zelda::PlayBackgroundTheme() {
+  auto audio_path = "zelda.mp3";
 
-  if (player_move_state_ == Direction::kDown) {
-    attack_path = cinder::fs::path("link-attack-front.png");
-  } else if (player_move_state_ == Direction::kUp) {
-    attack_path = cinder::fs::path("link-attack-back.png");
-  } else if (player_move_state_ == Direction::kLeft) {
-    attack_path = cinder::fs::path("link-attack-left.png");
-  } else if (player_move_state_ == Direction::kRight) {
-    attack_path = cinder::fs::path("link-attack-right.png");
-  }
+  auto source_file = cinder::audio::load
+      (cinder::app::loadAsset(audio_path));
+  background_audio_file_ = cinder::audio::Voice::create(source_file);
+  background_audio_file_->start();
 
-  cinder::gl::Texture2dRef texture = cinder::gl::Texture2d::create(
-      loadImage(loadAsset(attack_path)));
-
-  cinder::gl::draw(texture, Rectf((kAttackLinkSize *
-  (loc.Row()/kRatio) * getWindowWidth()/kFullScreenWidth),
-                                  (kAttackLinkSize * (loc.Col()/kRatio) *
-                                  getWindowHeight()/kFullScreenHeight),
-                                  (kAttackLinkSize * (loc.Row()/kRatio) *
-                                  getWindowWidth()/kFullScreenWidth) +
-                                  kAttackLinkSize,
-                                  (kAttackLinkSize * (loc.Col()/kRatio) *
-                                  getWindowHeight()/kFullScreenHeight) +
-                                  kAttackLinkSize));
-
-  attack_count++;
-
-  if (attack_count % 5 == 0) {
-    is_attack_ = false;
-    attack_count = 0;
-  }
 }
 
-void Zelda::DrawBackground() {
-  cinder::gl::Texture2dRef texture = cinder::gl::Texture2d::create(
-      loadImage(loadAsset(curr_map_)));
+void Zelda::PlayTreasureSound() {
+  auto audio_path = "treasure.mp3";
 
-  cinder::gl::draw(texture, getWindowBounds());
-}
-
-void Zelda::DisplayMenu() {
-  cinder::fs::path menu_path = cinder::fs::path("inventory.png");
-  cinder::gl::Texture2dRef texture = cinder::gl::Texture2d::create(
-      loadImage(loadAsset(menu_path)));
-
-
-  cinder::gl::draw(texture, getWindowBounds());
+  auto source_file = cinder::audio::load
+      (cinder::app::loadAsset(audio_path));
+  treasure_audio_file_ = cinder::audio::Voice::create(source_file);
 }
 
 void Zelda::ResetPosition(Location location) {

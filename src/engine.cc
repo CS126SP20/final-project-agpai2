@@ -8,6 +8,26 @@
 
 namespace zelda {
 
+Engine::Engine(int width, int height)
+    : width_{width},
+      height_{height},
+      direction_{Direction::kRight},
+      last_direction_{Direction::kUp},
+      player_{Location(2 * kLocConstant, kLocConstant)} {
+}
+
+void Engine::SetDirection(const zelda::Direction direction) {
+  direction_ = direction;
+}
+
+Direction Engine::GetDirection() { return direction_; }
+
+Player Engine::GetPlayer() const { return player_; }
+
+void Engine::SetCurrentPlayerHealth(int current_health) {
+  player_.SetCurrentHealth(current_health);
+}
+
 // Converts a direction into a delta location.
 Location Engine::FromDirection(const Direction direction) {
   switch (direction) {
@@ -24,24 +44,6 @@ Location Engine::FromDirection(const Direction direction) {
   }
 }
 
-Player Engine::GetPlayer() const { return player_; }
-
-void Engine::Reset(Location location) {
-  player_.SetLoc(location);
-}
-
-Engine::Engine(int width, int height)
-    : width_{width},
-      height_{height},
-      direction_{Direction::kRight},
-      last_direction_{Direction::kUp},
-      player_{Location(2 * kLocConstant, kLocConstant)} {
-}
-
-void Engine::SetDirection(const zelda::Direction direction) {
-  direction_ = direction;
-}
-
 void Engine::PlayerStep() {
   Location next_loc = FromDirection(direction_);
   Location new_player_loc =
@@ -52,10 +54,8 @@ void Engine::PlayerStep() {
   last_direction_ = direction_;
 }
 
-Direction Engine::GetDirection() { return direction_; }
-
-void Engine::SetCurrentPlayerHealth(int current_health) {
-  player_.SetCurrentHealth(current_health);
+void Engine::Reset(Location location) {
+  player_.SetLoc(location);
 }
 
 } // namespace zelda

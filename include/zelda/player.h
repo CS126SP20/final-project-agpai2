@@ -16,14 +16,14 @@ class Player {
   // Sets the new location of the player
   void SetLoc(Location set_loc);
 
+  // Gets the current location of the player
+  Location GetLoc() const;
+
   // Sets the current health of the player
   void SetCurrentHealth(int set_current_health);
 
   // Gets the current health of the player
   int GetCurrentHealth();
-
-  // Gets the current location of the player
-  Location GetLoc() const;
 
   // Add information to Menu
   void AddInfoToMenu();

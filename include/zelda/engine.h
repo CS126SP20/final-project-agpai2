@@ -19,27 +19,28 @@ class Engine {
   // Changes the direction of the player for the next step.
   void SetDirection(Direction);
 
+  //Gets the direction
+  Direction GetDirection();
+
+  // Gets the player
+  Player GetPlayer() const;
+
+  // Sets the current health of the player
+  void SetCurrentPlayerHealth(int current_health);
+
+  // Changes the coordinates after change in direction
+  Location FromDirection(Direction direction);
+
   // Executes a time step: moves the player.
   void PlayerStep();
 
   // Resets the players location after a screen transition
   void Reset(Location location);
 
-  // Gets the player
-  Player GetPlayer() const;
-
-  //Gets the direction
-  Direction GetDirection();
-
-  // Changes the coordinates after change in direction
-  Location FromDirection(Direction direction);
-
-  // Sets the current health of the player
-  void SetCurrentPlayerHealth(int current_health);
-
  private:
   const int width_;
   const int height_;
+
   Direction direction_;
   Direction last_direction_;
 

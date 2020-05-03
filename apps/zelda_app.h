@@ -14,13 +14,16 @@
 
 namespace zeldaapp {
 
+// These constants are created to adjust the size of the character
 const int kCharacterSize = 70;
 const int kAttackLinkSize = 100;
 const float kRatio = 1.43;
 
+// These constants are the number of tiles in a row and column of a screen
 const int kRowTiles = 13;
 const int kColTiles = 21;
 
+// These constants are dimensions of a full size screen
 const int kFullScreenHeight = 900;
 const int kFullScreenWidth = 1440;
 
@@ -33,30 +36,30 @@ class Zelda : public cinder::app::App {
   void keyDown(cinder::app::KeyEvent) override;
 
  private:
-  // Plays the game's background theme
-  void PlayBackgroundTheme();
-
-  // Draws the player
-  void DrawPlayer();
-
-  // Draws the monster
-  void DrawMonster();
-
-  // Draws attacking link
-  void DrawAttackLink();
-
-  // Draws the game screen's background
-  void DrawBackground();
+  // Different directions are assigned and set based on link's
+  // current positon.
+  void CheckForDirection(const cinder::app::KeyEvent& event);
 
   // Displays the Pause menu screen
   void DisplayMenu();
 
+  // Draws the game screen's background
+  void DrawBackground();
+
+  // Draws the player
+  void DrawPlayer();
+
+  // Draws attacking link
+  void DrawAttackLink();
+
+  // Draws the monster
+  void DrawMonster();
+
+  // Plays the game's background theme
+  void PlayBackgroundTheme();
+
   // Plays the treasure sound
   void PlayTreasureSound();
-
-  // Different directions are assigned and set based on link's
-  // current positon.
-  void CheckForDirection(const cinder::app::KeyEvent& event);
 
   // This is to reset link's position after a screen transition
   void ResetPosition(zelda::Location location);
@@ -64,8 +67,6 @@ class Zelda : public cinder::app::App {
  private:
   zelda::Engine player_engine_;
   zelda::Map mapper_;
-  const size_t size_;
-
   zelda::Monster monster_;
 
   // This is done to keep track of time, while the game is paused
@@ -84,8 +85,10 @@ class Zelda : public cinder::app::App {
 
   bool is_attack_ = false;
 
-  zelda::Direction player_move_state_;
+  // This is to keep track of player direction
+  zelda::Direction player_direction_;
 
+  // These are to play the audio files
   cinder::audio::VoiceRef background_audio_file_;
   cinder::audio::VoiceRef treasure_audio_file_;
 };
