@@ -55,13 +55,14 @@ void Zelda::setup() {
 void Zelda::update() {
   if (is_game_paused_) { return; }
 
+  Location location = player_engine_.GetPlayer().GetLoc();
+
   slow_monster_count++;
-  if (slow_monster_count % kRowTiles == 0) {
-    mapper_.SetGameScreens(monster_.MoveMonster(map_num));
+  if (slow_monster_count % kColTiles == 0) {
+    mapper_.SetGameScreens(monster_.MoveMonster(player_move_state_,
+        location ,map_num));
     slow_monster_count = 0;
   }
-
-  Location location = player_engine_.GetPlayer().GetLoc();
 
   Location new_player_loc = mapper_.GetPlayerNewLoc(
       mapper_.GetScreen()[map_num],player_engine_);
