@@ -56,3 +56,5 @@
 6. Wrote code to decrease Link's health by a point when in contact with the monster
 
 7. Working on adding an intro screen, which the user can skip or watch completely before playing the game
+
+- [x] The user can now either watch the entire game intro and increase its speed by clicking enter
