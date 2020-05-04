@@ -29,6 +29,12 @@ void Player::SetCurrentHealth(int set_current_health) {
 
 int Player::GetCurrentHealth() { return current_health_; }
 
+void Player::SetMoneyAmount(int set_money_amount) {
+  total_money_ = set_money_amount;
+}
+
+int Player::GetMoneyAmount() { return total_money_; }
+
 void Player::SetMonstersKilled(int monsters_killed) {
   monsters_killed_ = monsters_killed;
 }

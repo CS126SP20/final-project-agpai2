@@ -28,6 +28,10 @@ void Engine::SetCurrentPlayerHealth(int current_health) {
   player_.SetCurrentHealth(current_health);
 }
 
+void Engine::SetTotalMoney(int set_total_money) {
+  player_.SetMoneyAmount(set_total_money);
+}
+
 void Engine::SetTotalMonstersKilled(int total_monsters_killed) {
   player_.SetMonstersKilled(total_monsters_killed);
 }

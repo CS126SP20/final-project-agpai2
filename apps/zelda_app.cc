@@ -50,6 +50,7 @@ void Zelda::setup() {
   curr_map_ = "screen-H8.png";
   mapper_.ReadImageLabels();
   mapper_.ReadGameScreens();
+  maps = mapper_.GetScreen();
 
   monster_.SetUpMaps(mapper_);
 
@@ -136,7 +137,7 @@ void Zelda::draw() {
     }
   } else {
     DrawBackground();
-
+    DrawMoney();
     if (is_game_paused_) {
       DisplayMenu();
       return;
@@ -271,6 +272,35 @@ void Zelda::DrawBackground() {
   cinder::gl::draw(texture, getWindowBounds());
 }
 
+void Zelda::DrawMoney() {
+  Location loc = player_engine_.GetPlayer().GetLoc();
+
+  cinder::fs::path money_path = cinder::fs::path("rupee.png");
+
+  cinder::gl::Texture2dRef texture = cinder::gl::Texture2d::create(
+      loadImage(loadAsset(money_path)));
+
+  for (int i = 0; i < kRowTiles; i++) {
+    for (int j = 0; j < kColTiles; j++) {
+      if (maps[map_num].coordinates_[i][j] == 'C') {
+        cinder::gl::draw(texture, Rectf((kCharacterSize * j *
+        getWindowWidth()/kFullScreenWidth),(kCharacterSize * i *
+        getWindowHeight()/kFullScreenHeight),(kCharacterSize * j *
+            getWindowWidth()/kFullScreenWidth) + kCharacterSize,
+                (kCharacterSize * i *
+                getWindowHeight()/kFullScreenHeight) + kCharacterSize));
+      }
+    }
+  }
+
+  if (maps[map_num].coordinates_[loc.Col()][loc.Row()] == 'C') {
+    maps[map_num].coordinates_[loc.Col()][loc.Row()] = '0';
+    player_engine_.SetTotalMoney(
+        player_engine_.GetPlayer().GetMoneyAmount() + 10);
+    mapper_.SetGameScreens(maps);
+  }
+}
+
 void Zelda::DrawPlayer() {
   const Location loc = player_engine_.GetPlayer().GetLoc();
 
@@ -339,15 +369,13 @@ void Zelda::DrawAttackLink() {
       loadImage(loadAsset(attack_path)));
 
   cinder::gl::draw(texture, Rectf((kAttackLinkSize *
-                                   (loc.Row()/kRatio) * getWindowWidth()/kFullScreenWidth),
-                                  (kAttackLinkSize * (loc.Col()/kRatio) *
-                                   getWindowHeight()/kFullScreenHeight),
-                                  (kAttackLinkSize * (loc.Row()/kRatio) *
-                                   getWindowWidth()/kFullScreenWidth) +
-                                  kAttackLinkSize,
-                                  (kAttackLinkSize * (loc.Col()/kRatio) *
-                                   getWindowHeight()/kFullScreenHeight) +
-                                  kAttackLinkSize));
+  (loc.Row()/kRatio) * getWindowWidth()/kFullScreenWidth),
+      (kAttackLinkSize * (loc.Col()/kRatio) *
+      getWindowHeight()/kFullScreenHeight),
+      (kAttackLinkSize * (loc.Row()/kRatio) *
+      getWindowWidth()/kFullScreenWidth) + kAttackLinkSize,
+      (kAttackLinkSize * (loc.Col()/kRatio) *
+      getWindowHeight()/kFullScreenHeight) + kAttackLinkSize));
 
   attack_count++;
 
@@ -378,14 +406,11 @@ void Zelda::DrawMonster() {
       if (mapper_.GetScreen()[map_num].coordinates_[i][j] == 'M') {
         cinder::gl::draw(texture, Rectf((kCharacterSize * j *
         getWindowWidth()/kFullScreenWidth),
-                                        (kCharacterSize * i *
-                                        getWindowHeight()/kFullScreenHeight),
-                                        (kCharacterSize * j *
-                                        getWindowWidth()/kFullScreenWidth) +
-                                        kCharacterSize,
-                                        (kCharacterSize * i *
-                                        getWindowHeight()/kFullScreenHeight) +
-                                        kCharacterSize));
+            (kCharacterSize * i * getWindowHeight()/kFullScreenHeight),
+            (kCharacterSize * j * getWindowWidth()/kFullScreenWidth) +
+            kCharacterSize,
+            (kCharacterSize * i * getWindowHeight()/kFullScreenHeight) +
+            kCharacterSize));
       }
     }
   }

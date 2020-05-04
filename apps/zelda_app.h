@@ -53,6 +53,9 @@ class Zelda : public cinder::app::App {
   // Draws the game screen's background
   void DrawBackground();
 
+  // Draws the money on the screen
+  void DrawMoney();
+
   // Draws the player
   void DrawPlayer();
 
@@ -86,6 +89,9 @@ class Zelda : public cinder::app::App {
 
   // The current map the player is on
   std::string curr_map_;
+
+  // Maintains a copy of all the maps
+  std::vector<zelda::Map> maps;
 
   // The bool values are to check for the possible directions
   bool is_move_right_ = true;

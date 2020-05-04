@@ -28,6 +28,9 @@ class Engine {
   // Sets the current health of the player
   void SetCurrentPlayerHealth(int current_health);
 
+  // Sets the total money the player has
+  void SetTotalMoney(int set_total_money);
+
   // Sets the total number of monsters killed
   void SetTotalMonstersKilled(int total_monsters_killed);
 

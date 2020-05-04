@@ -25,6 +25,12 @@ class Player {
   // Gets the current health of the player
   int GetCurrentHealth();
 
+  // Sets the amount of money the player has
+  void SetMoneyAmount(int set_money_amount);
+
+  // Gets the amount of money the player has
+  int GetMoneyAmount();
+
   // Sets the number of monsters killed
   void SetMonstersKilled(int monsters_killed);
 
@@ -40,6 +46,7 @@ class Player {
   int max_health_ = 3;
   int current_health_ = 3;
   int monsters_killed_ = 0;
+  int total_money_ = 0;
 };
 
 } // namespace zelda
