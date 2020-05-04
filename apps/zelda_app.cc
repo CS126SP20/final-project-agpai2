@@ -71,6 +71,8 @@ void Zelda::update() {
     // movie's current frame
     movie_texture_ = movie_->getTexture();
 
+  movie_->setRate(1);
+
   if(!is_intro_finished_ && movie_->isDone()) {
     is_intro_finished_ = true;
   }
@@ -212,45 +214,46 @@ void Zelda::keyDown(KeyEvent event) {
         monster_.SetIsPlayerAttack(true);
       }
     }
+    case KeyEvent::KEY_RETURN: {
+      movie_->setRate(5);
+    }
   }
 }
 
 void Zelda::CheckForDirection(const cinder::app::KeyEvent& event) {
 
-  if (is_move_up_ &&
-      (event.getCode() == KeyEvent::KEY_UP ||
-      event.getCode() == KeyEvent::KEY_w)) {
-    player_engine_.SetDirection(Direction::kUp);
-    return;
-  } else {
-    player_engine_.SetDirection(Direction::kNull);
-  }
+  if (is_intro_finished_) {
+    if (is_move_up_ && (event.getCode() == KeyEvent::KEY_UP ||
+                        event.getCode() == KeyEvent::KEY_w)) {
+      player_engine_.SetDirection(Direction::kUp);
+      return;
+    } else {
+      player_engine_.SetDirection(Direction::kNull);
+    }
 
-  if (is_move_down_ &&
-      (event.getCode() == KeyEvent::KEY_DOWN ||
-      event.getCode() == KeyEvent::KEY_s)) {
-    player_engine_.SetDirection(Direction::kDown);
-    return;
-  } else {
-    player_engine_.SetDirection(Direction::kNull);
-  }
+    if (is_move_down_ && (event.getCode() == KeyEvent::KEY_DOWN ||
+                          event.getCode() == KeyEvent::KEY_s)) {
+      player_engine_.SetDirection(Direction::kDown);
+      return;
+    } else {
+      player_engine_.SetDirection(Direction::kNull);
+    }
 
-  if (is_move_left_ &&
-      (event.getCode() == KeyEvent::KEY_LEFT ||
-      event.getCode() == KeyEvent::KEY_a)) {
-    player_engine_.SetDirection(Direction::kLeft);
-    return;
-  } else {
-    player_engine_.SetDirection(Direction::kNull);
-  }
+    if (is_move_left_ && (event.getCode() == KeyEvent::KEY_LEFT ||
+                          event.getCode() == KeyEvent::KEY_a)) {
+      player_engine_.SetDirection(Direction::kLeft);
+      return;
+    } else {
+      player_engine_.SetDirection(Direction::kNull);
+    }
 
-  if (is_move_right_ &&
-      (event.getCode() == KeyEvent::KEY_RIGHT ||
-      event.getCode() == KeyEvent::KEY_d)) {
-    player_engine_.SetDirection(Direction::kRight);
-    return;
-  } else {
-    player_engine_.SetDirection(Direction::kNull);
+    if (is_move_right_ && (event.getCode() == KeyEvent::KEY_RIGHT ||
+                           event.getCode() == KeyEvent::KEY_d)) {
+      player_engine_.SetDirection(Direction::kRight);
+      return;
+    } else {
+      player_engine_.SetDirection(Direction::kNull);
+    }
   }
 }
 
