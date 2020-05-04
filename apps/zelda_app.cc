@@ -33,10 +33,14 @@ int slow_monster_count = 0;
 int attack_count = 0;
 
 // These are the paths that are used to load images for player movements,
-// player attacks, and monster movements
+// player attacks, show monster movements, and also display the inventory
 cinder::fs::path move_path;
 cinder::fs::path attack_path;
 cinder::fs::path monster_path;
+cinder::fs::path inventory_path;
+
+char monster = 'M';
+char money = 'C';
 
 Zelda::Zelda()
     : player_engine_{kRowTiles, kColTiles},
@@ -257,7 +261,13 @@ void Zelda::CheckForDirection(const cinder::app::KeyEvent& event) {
 }
 
 void Zelda::DisplayMenu() {
-  cinder::fs::path menu_path = cinder::fs::path("inventory.png");
+  if (mapper_.IsSwordTaken()) {
+    inventory_path = cinder::fs::path("inventory-1.png");
+  } else {
+    inventory_path = cinder::fs::path("inventory.png");
+  }
+
+  cinder::fs::path menu_path = cinder::fs::path(inventory_path);
   cinder::gl::Texture2dRef texture = cinder::gl::Texture2d::create(
       loadImage(loadAsset(menu_path)));
 
@@ -293,7 +303,7 @@ void Zelda::DrawMoney() {
     }
   }
 
-  if (maps[map_num].coordinates_[loc.Col()][loc.Row()] == 'C') {
+  if (maps[map_num].coordinates_[loc.Col()][loc.Row()] == money) {
     maps[map_num].coordinates_[loc.Col()][loc.Row()] = '0';
     player_engine_.SetTotalMoney(
         player_engine_.GetPlayer().GetMoneyAmount() + 10);
@@ -397,13 +407,12 @@ void Zelda::DrawMonster() {
   } else if (monster_.GetMonsterDirection() == Direction::kRight) {
     monster_path = cinder::fs::path("octorok-right-1.png");
   }
-  //monster_path = cinder::fs::path("octorok-right-1.png");
   cinder::gl::Texture2dRef texture = cinder::gl::Texture2d::create(
       loadImage(loadAsset(monster_path)));
 
   for (int i = 0; i < kRowTiles; i++) {
     for (int j = 0; j < kColTiles; j++) {
-      if (mapper_.GetScreen()[map_num].coordinates_[i][j] == 'M') {
+      if (mapper_.GetScreen()[map_num].coordinates_[i][j] == monster) {
         cinder::gl::draw(texture, Rectf((kCharacterSize * j *
         getWindowWidth()/kFullScreenWidth),
             (kCharacterSize * i * getWindowHeight()/kFullScreenHeight),
