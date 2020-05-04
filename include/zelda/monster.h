@@ -28,6 +28,9 @@ class Monster {
   // Gets the direction the monster is facing
   Direction GetMonsterDirection();
 
+  // Gets the number of monsters killed
+  int GetMonstersKilled();
+
   // Returns a bool value indicating if the monster was attacked
   bool IsMonstersAttacked(Direction d, Location l, int map_num);
 
@@ -50,8 +53,9 @@ class Monster {
   char empty_tile_ = '0';
 
   Direction monster_direction_;
-
   bool is_monster_move_ = false;
+
+  int monsters_killed_ = 0;
   bool is_monster_attacked_ = false;
 
   bool is_player_attack_ = false;

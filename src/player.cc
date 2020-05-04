@@ -29,6 +29,10 @@ void Player::SetCurrentHealth(int set_current_health) {
 
 int Player::GetCurrentHealth() { return current_health_; }
 
+void Player::SetMonstersKilled(int monsters_killed) {
+  monsters_killed_ = monsters_killed;
+}
+
 int count = 0;
 void Player::AddInfoToMenu() {
   cout << "Count "<< count++ << " Current Health " << current_health_ << endl;

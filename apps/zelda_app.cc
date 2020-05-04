@@ -84,6 +84,9 @@ void Zelda::update() {
     mapper_.SetGameScreens(monster_.MoveMonster(player_direction_,
         location ,map_num));
 
+    player_engine_.SetTotalMonstersKilled(
+        monster_.GetMonstersKilled());
+
     if (monster_.IsMonsterAttackLink(location, map_num)) {
       int current_player_health = player_engine_.GetPlayer().GetCurrentHealth();
       std::cout << " Current Health " << current_player_health << std::endl;
@@ -91,7 +94,6 @@ void Zelda::update() {
       std::cout << "New Current Health " << current_player_health << std::endl;
       player_engine_.SetCurrentPlayerHealth(current_player_health);
     }
-
     slow_monster_count = 0;
   }
 
@@ -158,7 +160,6 @@ void Zelda::keyDown(KeyEvent event) {
         CheckForDirection(event);
         player_direction_ = Direction::kUp;
         back_move_count++;
-        //DrawPlayer();
         player_engine_.PlayerStep();
       }
       break;
@@ -169,7 +170,6 @@ void Zelda::keyDown(KeyEvent event) {
         CheckForDirection(event);
         player_direction_ = Direction::kDown;
         front_move_count++;
-        //DrawPlayer();
         player_engine_.PlayerStep();
       }
       break;
@@ -180,7 +180,6 @@ void Zelda::keyDown(KeyEvent event) {
         CheckForDirection(event);
         player_direction_ = Direction::kLeft;
         left_move_count++;
-        //DrawPlayer();
         player_engine_.PlayerStep();
       }
       break;
@@ -191,7 +190,6 @@ void Zelda::keyDown(KeyEvent event) {
         CheckForDirection(event);
         player_direction_ = Direction::kRight;
         right_move_count++;
-        //DrawPlayer();
         player_engine_.PlayerStep();
       }
       break;

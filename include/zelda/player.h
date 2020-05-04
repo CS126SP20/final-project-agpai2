@@ -25,6 +25,9 @@ class Player {
   // Gets the current health of the player
   int GetCurrentHealth();
 
+  // Sets the number of monsters killed
+  void SetMonstersKilled(int monsters_killed);
+
   // Add information to Menu
   void AddInfoToMenu();
 

@@ -28,6 +28,9 @@ class Engine {
   // Sets the current health of the player
   void SetCurrentPlayerHealth(int current_health);
 
+  // Sets the total number of monsters killed
+  void SetTotalMonstersKilled(int total_monsters_killed);
+
   // Changes the coordinates after change in direction
   Location FromDirection(Direction direction);
 

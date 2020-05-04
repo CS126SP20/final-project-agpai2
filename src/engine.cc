@@ -28,6 +28,10 @@ void Engine::SetCurrentPlayerHealth(int current_health) {
   player_.SetCurrentHealth(current_health);
 }
 
+void Engine::SetTotalMonstersKilled(int total_monsters_killed) {
+  player_.SetMonstersKilled(total_monsters_killed);
+}
+
 // Converts a direction into a delta location.
 Location Engine::FromDirection(const Direction direction) {
   switch (direction) {

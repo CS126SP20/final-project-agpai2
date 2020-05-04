@@ -24,6 +24,8 @@ void Monster::SetIsPlayerAttack(bool set_is_player_attack) {
 
 Direction Monster::GetMonsterDirection() { return monster_direction_; }
 
+int Monster::GetMonstersKilled() { return monsters_killed_; }
+
 bool Monster::IsMonstersAttacked(Direction d, Location l, int map_num) {
   int p_row = l.Col();
   int p_col = l.Row();
@@ -32,21 +34,26 @@ bool Monster::IsMonstersAttacked(Direction d, Location l, int map_num) {
     if (map_screens_[map_num].coordinates_[p_row - 1][p_col] == monster_ &&
         d == Direction::kUp) {
       map_screens_[map_num].coordinates_[p_row - 1][p_col] = empty_tile_;
+      monsters_killed_++;
       is_monster_attacked_ = true;
     } else if (map_screens_[map_num].coordinates_[p_row + 1][p_col] == monster_ &&
                d == Direction::kDown) {
       map_screens_[map_num].coordinates_[p_row + 1][p_col] = empty_tile_;
+      monsters_killed_++;
       is_monster_attacked_ = true;
     } else if (map_screens_[map_num].coordinates_[p_row][p_col - 1] == monster_ &&
                d == Direction::kLeft) {
       map_screens_[map_num].coordinates_[p_row][p_col - 1] = empty_tile_;
+      monsters_killed_++;
       is_monster_attacked_ = true;
     } else if (map_screens_[map_num].coordinates_[p_row][p_col + 1] == monster_ &&
                d == Direction::kRight) {
       map_screens_[map_num].coordinates_[p_row][p_col + 1] = empty_tile_;
+      monsters_killed_++;
       is_monster_attacked_ = true;
     } else if (map_screens_[map_num].coordinates_[p_row][p_col] == monster_) {
       map_screens_[map_num].coordinates_[p_row][p_col] = empty_tile_;
+      monsters_killed_++;
       is_monster_attacked_ = true;
     }
   }
