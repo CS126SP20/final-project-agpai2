@@ -55,10 +55,25 @@ void Zelda::setup() {
 
   PlayBackgroundTheme();
   PlayTreasureSound();
+
+  cinder::fs::path movie_path = getAssetPath("zelda-nes-intro.mov");
+
+  if(!movie_path.empty()) {
+    PlayGameIntro(movie_path);
+  }
 }
 
 void Zelda::update() {
   if (is_game_paused_) { return; }
+
+  if(movie_)
+    // This is done to get the movie texture representing the
+    // movie's current frame
+    movie_texture_ = movie_->getTexture();
+
+  if(!is_intro_finished_ && movie_->isDone()) {
+    is_intro_finished_ = true;
+  }
 
   Location location = player_engine_.GetPlayer().GetLoc();
 
@@ -108,23 +123,29 @@ void Zelda::update() {
 void Zelda::draw() {
   cinder::gl::enableAlphaBlending();
 
-  if (is_game_paused_) {
-    DisplayMenu();
-    return;
-  }
-
   cinder::gl::clear();
   cinder::gl::color(1,1,1);
 
-  DrawBackground();
-
-  if (!is_attack_) {
-    DrawPlayer();
+  if (!is_intro_finished_) {
+    if (movie_texture_) {
+      cinder::gl::draw(movie_texture_, getWindowBounds());
+    }
   } else {
-    DrawAttackLink();
-  }
+    DrawBackground();
 
-  DrawMonster();
+    if (is_game_paused_) {
+      DisplayMenu();
+      return;
+    }
+
+    if (!is_attack_) {
+      DrawPlayer();
+    } else {
+      DrawAttackLink();
+    }
+
+    DrawMonster();
+  }
 }
 
 void Zelda::keyDown(KeyEvent event) {
@@ -370,21 +391,30 @@ void Zelda::DrawMonster() {
 }
 
 void Zelda::PlayBackgroundTheme() {
-  auto audio_path = "zelda.mp3";
+  auto background_theme_path = "zelda.mp3";
 
   auto source_file = cinder::audio::load
-      (cinder::app::loadAsset(audio_path));
+      (cinder::app::loadAsset(background_theme_path));
   background_audio_file_ = cinder::audio::Voice::create(source_file);
-  background_audio_file_->start();
 
+  if (is_intro_finished_) {
+    background_audio_file_->start();
+  }
 }
 
 void Zelda::PlayTreasureSound() {
-  auto audio_path = "treasure.mp3";
+  auto treasure_theme_path = "treasure.mp3";
 
   auto source_file = cinder::audio::load
-      (cinder::app::loadAsset(audio_path));
+      (cinder::app::loadAsset(treasure_theme_path));
   treasure_audio_file_ = cinder::audio::Voice::create(source_file);
+}
+
+void Zelda::PlayGameIntro(const cinder::fs::path& path) {
+  movie_ = cinder::qtime::MovieGl::create(path);
+  movie_->play();
+
+  movie_texture_.reset();
 }
 
 void Zelda::ResetPosition(Location location) {

@@ -6,6 +6,13 @@
 #include <cinder/app/App.h>
 #include <cinder/app/KeyEvent.h>
 #include <cinder/audio/Voice.h>
+
+#include <cinder/gl/Texture.h>
+#include <cinder/gl/gl.h>
+#include <cinder/Surface.h>
+#include <cinder/app/RendererGl.h>
+#include <cinder/qtime/QuickTimeGl.h>
+
 #include <zelda/direction.h>
 #include <zelda/engine.h>
 #include <zelda/location.h>
@@ -61,6 +68,9 @@ class Zelda : public cinder::app::App {
   // Plays the treasure sound
   void PlayTreasureSound();
 
+  // Plays the game intro scene
+  void PlayGameIntro(const cinder::fs::path &path);
+
   // This is to reset link's position after a screen transition
   void ResetPosition(zelda::Location location);
 
@@ -91,6 +101,12 @@ class Zelda : public cinder::app::App {
   // These are to play the audio files
   cinder::audio::VoiceRef background_audio_file_;
   cinder::audio::VoiceRef treasure_audio_file_;
+
+  // These are to maintain the movie textures and play the movie
+  cinder::gl::TextureRef movie_texture_;
+  cinder::qtime::MovieGlRef movie_;
+  bool is_intro_finished_ = false;
+
 };
 
 }  // namespace zeldaapp
