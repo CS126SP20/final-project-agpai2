@@ -62,45 +62,53 @@ bool Monster::IsMonstersAttacked(Direction d, Location l, int map_num) {
   return is_monster_attacked_;
 }
 
+int slow_monster_move = 0;
 std::vector<Map> Monster::MoveMonster(Direction d, Location l, int map_num) {
+  slow_monster_move++;
   is_monster_move_ = false;
 
   if (IsMonstersAttacked(d, l, map_num)) {
     goto exit_loops;
   }
 
-  for (int i = 0; i < kColTiles; i++) {
-    for (int j = 0; j < kRowTiles; j++) {
-      if (map_screens_[map_num].coordinates_[i][j] == monster_) {
-        rand_direction = rand() % 4;
+  if (slow_monster_move % kRowTiles == 0) {
+    for (int i = 0; i < kColTiles; i++) {
+      for (int j = 0; j < kRowTiles; j++) {
+        if (map_screens_[map_num].coordinates_[i][j] == monster_) {
+          rand_direction = rand() % 4;
 
-        if (rand_direction == 0) {
-          if (map_screens_[map_num].coordinates_[i + 1][j] == empty_tile_) { //down
-            map_screens_[map_num].coordinates_[i + 1][j] = monster_;
-            map_screens_[map_num].coordinates_[i][j] = empty_tile_;
-            monster_direction_ = Direction::kDown;
-            is_monster_move_ = true;
-          }
-        } else if (rand_direction == 1) {
-          if (map_screens_[map_num].coordinates_[i - 1][j] == empty_tile_) {  //up
-            map_screens_[map_num].coordinates_[i - 1][j] = monster_;
-            map_screens_[map_num].coordinates_[i][j] = empty_tile_;
-            monster_direction_ = Direction::kUp;
-            is_monster_move_ = true;
-          }
-        } else if (rand_direction == 2) {
-          if (map_screens_[map_num].coordinates_[i][j - 1] == empty_tile_) {  //left
-            map_screens_[map_num].coordinates_[i][j - 1] = monster_;
-            map_screens_[map_num].coordinates_[i][j] = empty_tile_;
-            monster_direction_ = Direction::kLeft;
-            is_monster_move_ = true;
-          }
-        } else if (rand_direction == 3) {
-          if (map_screens_[map_num].coordinates_[i][j + 1] == empty_tile_) {  //right
-            map_screens_[map_num].coordinates_[i][j + 1] = monster_;
-            map_screens_[map_num].coordinates_[i][j] = empty_tile_;
-            monster_direction_ = Direction::kRight;
-            is_monster_move_ = true;
+          if (rand_direction == 0) {
+            if (map_screens_[map_num].coordinates_[i + 1][j] ==
+                empty_tile_) {  // down
+              map_screens_[map_num].coordinates_[i + 1][j] = monster_;
+              map_screens_[map_num].coordinates_[i][j] = empty_tile_;
+              monster_direction_ = Direction::kDown;
+              is_monster_move_ = true;
+            }
+          } else if (rand_direction == 1) {
+            if (map_screens_[map_num].coordinates_[i - 1][j] ==
+                empty_tile_) {  // up
+              map_screens_[map_num].coordinates_[i - 1][j] = monster_;
+              map_screens_[map_num].coordinates_[i][j] = empty_tile_;
+              monster_direction_ = Direction::kUp;
+              is_monster_move_ = true;
+            }
+          } else if (rand_direction == 2) {
+            if (map_screens_[map_num].coordinates_[i][j - 1] ==
+                empty_tile_) {  // left
+              map_screens_[map_num].coordinates_[i][j - 1] = monster_;
+              map_screens_[map_num].coordinates_[i][j] = empty_tile_;
+              monster_direction_ = Direction::kLeft;
+              is_monster_move_ = true;
+            }
+          } else if (rand_direction == 3) {
+            if (map_screens_[map_num].coordinates_[i][j + 1] ==
+                empty_tile_) {  // right
+              map_screens_[map_num].coordinates_[i][j + 1] = monster_;
+              map_screens_[map_num].coordinates_[i][j] = empty_tile_;
+              monster_direction_ = Direction::kRight;
+              is_monster_move_ = true;
+            }
           }
         }
       }
@@ -112,11 +120,16 @@ std::vector<Map> Monster::MoveMonster(Direction d, Location l, int map_num) {
   return map_screens_;
 }
 
+int attack_delay = 0;
 bool Monster::IsMonsterAttackLink(Location location, int map_num) {
+  attack_delay++;
+
   int p_row = location.Col();
   int p_col = location.Row();
 
-  return map_screens_[map_num].coordinates_[p_row][p_col] == monster_;
+  if (attack_delay % kColTiles == 0) {
+    return map_screens_[map_num].coordinates_[p_row][p_col] == monster_;
+  }
 }
 
 bool Monster::IsMonsterMove() { return is_monster_move_; }

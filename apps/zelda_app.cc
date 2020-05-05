@@ -26,9 +26,6 @@ int left_move_count = 0;
 int right_move_count = 0;
 int back_move_count = 0;
 
-// This count is kept to slow down the monster
-int slow_monster_count = 0;
-
 // This count is kept to for a time delay to show Link attack
 int attack_count = 0;
 
@@ -83,20 +80,16 @@ void Zelda::update() {
 
   Location location = player_engine_.GetPlayer().GetLoc();
 
-  slow_monster_count++;
-  if (slow_monster_count % kColTiles == 0) {
-    mapper_.SetGameScreens(monster_.MoveMonster(player_direction_,
-        location ,map_num));
+  mapper_.SetGameScreens(monster_.MoveMonster(player_direction_,
+      location ,map_num));
 
-    player_engine_.SetTotalMonstersKilled(
-        monster_.GetMonstersKilled());
+  player_engine_.SetTotalMonstersKilled(
+      monster_.GetMonstersKilled());
 
-    if (monster_.IsMonsterAttackLink(location, map_num)) {
-      int current_player_health = player_engine_.GetPlayer().GetCurrentHealth();
-      current_player_health--;
-      player_engine_.SetCurrentPlayerHealth(current_player_health);
-    }
-    slow_monster_count = 0;
+  if (monster_.IsMonsterAttackLink(location, map_num)) {
+    int current_player_health = player_engine_.GetPlayer().GetCurrentHealth();
+    current_player_health--;
+    player_engine_.SetCurrentPlayerHealth(current_player_health);
   }
 
   Location new_player_loc = mapper_.GetPlayerNewLoc(
@@ -289,7 +282,7 @@ void Zelda::DrawMoney() {
 
   for (int i = 0; i < kRowTiles; i++) {
     for (int j = 0; j < kColTiles; j++) {
-      if (maps[map_num].coordinates_[i][j] == 'C') {
+      if (maps[map_num].coordinates_[i][j] == money) {
         cinder::gl::draw(texture, Rectf((kCharacterSize * j *
         getWindowWidth()/kFullScreenWidth),(kCharacterSize * i *
         getWindowHeight()/kFullScreenHeight),(kCharacterSize * j *
