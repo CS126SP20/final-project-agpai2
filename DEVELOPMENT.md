@@ -58,3 +58,5 @@
 7. Working on adding an intro screen, which the user can skip or watch completely before playing the game
 
 - [x] The user can now either watch the entire game intro and increase its speed by clicking enter
+
+8. The player inventory now displays player statistics, which are being read from a JSON file
