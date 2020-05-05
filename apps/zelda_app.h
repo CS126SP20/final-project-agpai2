@@ -82,10 +82,8 @@ class Zelda : public cinder::app::App {
   zelda::Map mapper_;
   zelda::Monster monster_;
 
-  // This is done to keep track of time, while the game is paused
-  std::chrono::time_point<std::chrono::system_clock> last_intact_time_;
-  std::chrono::time_point<std::chrono::system_clock> last_pause_time_;
-  bool is_game_paused_;
+  // This is done to check the game state, ie; playing or paused
+  bool is_game_paused_ = false;
 
   // The current map the player is on
   std::string curr_map_;

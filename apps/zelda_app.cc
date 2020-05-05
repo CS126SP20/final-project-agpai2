@@ -44,8 +44,7 @@ char money = 'C';
 
 Zelda::Zelda()
     : player_engine_{kRowTiles, kColTiles},
-      monster_{},
-      is_game_paused_{false} {}
+      monster_{} {}
 
 void Zelda::setup() {
   cinder::gl::disableDepthWrite();
@@ -94,9 +93,7 @@ void Zelda::update() {
 
     if (monster_.IsMonsterAttackLink(location, map_num)) {
       int current_player_health = player_engine_.GetPlayer().GetCurrentHealth();
-      std::cout << " Current Health " << current_player_health << std::endl;
       current_player_health--;
-      std::cout << "New Current Health " << current_player_health << std::endl;
       player_engine_.SetCurrentPlayerHealth(current_player_health);
     }
     slow_monster_count = 0;
@@ -200,14 +197,12 @@ void Zelda::keyDown(KeyEvent event) {
       break;
     }
     case KeyEvent::KEY_p: {
-      is_game_paused_ = !is_game_paused_;
+      if (is_intro_finished_) {
+        is_game_paused_ = !is_game_paused_;
+      }
 
       if (is_game_paused_) {
         player_engine_.GetPlayer().AddInfoToMenu();
-        player_engine_.GetPlayer().ViewMenu();
-        last_pause_time_ = std::chrono::system_clock::now();
-      } else {
-        last_intact_time_ += std::chrono::system_clock::now() - last_pause_time_;
       }
       break;
     }
@@ -264,7 +259,7 @@ void Zelda::DisplayMenu() {
   if (mapper_.IsSwordTaken()) {
     inventory_path = cinder::fs::path("inventory-1.png");
   } else {
-    inventory_path = cinder::fs::path("inventory.png");
+    inventory_path = cinder::fs::path("inventory-2.png");
   }
 
   cinder::fs::path menu_path = cinder::fs::path(inventory_path);
@@ -273,6 +268,8 @@ void Zelda::DisplayMenu() {
 
 
   cinder::gl::draw(texture, getWindowBounds());
+
+  player_engine_.GetPlayer().ViewMenu();
 }
 
 void Zelda::DrawBackground() {
