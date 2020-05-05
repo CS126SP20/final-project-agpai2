@@ -120,14 +120,13 @@ std::vector<Map> Monster::MoveMonster(Direction d, Location l, int map_num) {
   return map_screens_;
 }
 
-int attack_delay = 0;
 bool Monster::IsMonsterAttackLink(Location location, int map_num) {
-  attack_delay++;
+  attack_delay_++;
 
   int p_row = location.Col();
   int p_col = location.Row();
 
-  if (attack_delay % kColTiles == 0) {
+  if (attack_delay_ % kColTiles == 0) {
     return map_screens_[map_num].coordinates_[p_row][p_col] == monster_;
   }
 }

@@ -83,14 +83,19 @@ void Zelda::update() {
   mapper_.SetGameScreens(monster_.MoveMonster(player_direction_,
       location ,map_num));
 
-  player_engine_.SetTotalMonstersKilled(
-      monster_.GetMonstersKilled());
-
+  int current_player_health = player_engine_.GetPlayer().GetCurrentHealth();
   if (monster_.IsMonsterAttackLink(location, map_num)) {
-    int current_player_health = player_engine_.GetPlayer().GetCurrentHealth();
     current_player_health--;
-    player_engine_.SetCurrentPlayerHealth(current_player_health);
   }
+
+  int money_amount = player_engine_.GetPlayer().GetMoneyAmount();
+  if (maps[map_num].coordinates_[location.Col()][location.Row()] == money) {
+    maps[map_num].coordinates_[location.Col()][location.Row()] = '0';
+    money_amount += 10;
+    mapper_.SetGameScreens(maps);
+  }
+  player_engine_.SetPlayerAttributes(current_player_health, money_amount,
+      monster_.GetMonstersKilled());
 
   Location new_player_loc = mapper_.GetPlayerNewLoc(
       mapper_.GetScreen()[map_num],player_engine_);
@@ -293,12 +298,12 @@ void Zelda::DrawMoney() {
     }
   }
 
-  if (maps[map_num].coordinates_[loc.Col()][loc.Row()] == money) {
+  /*if (maps[map_num].coordinates_[loc.Col()][loc.Row()] == money) {
     maps[map_num].coordinates_[loc.Col()][loc.Row()] = '0';
     player_engine_.SetTotalMoney(
         player_engine_.GetPlayer().GetMoneyAmount() + 10);
     mapper_.SetGameScreens(maps);
-  }
+  }*/
 }
 
 void Zelda::DrawPlayer() {

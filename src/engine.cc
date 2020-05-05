@@ -24,16 +24,10 @@ Direction Engine::GetDirection() { return direction_; }
 
 Player Engine::GetPlayer() const { return player_; }
 
-void Engine::SetCurrentPlayerHealth(int current_health) {
-  player_.SetCurrentHealth(current_health);
-}
-
-void Engine::SetTotalMoney(int set_total_money) {
-  player_.SetMoneyAmount(set_total_money);
-}
-
-void Engine::SetTotalMonstersKilled(int total_monsters_killed) {
-  player_.SetMonstersKilled(total_monsters_killed);
+void Engine::SetPlayerAttributes(int health, int money, int monsters_killed) {
+  player_.SetCurrentHealth(health);
+  player_.SetMoneyAmount(money);
+  player_.SetMonstersKilled(monsters_killed);
 }
 
 // Converts a direction into a delta location.

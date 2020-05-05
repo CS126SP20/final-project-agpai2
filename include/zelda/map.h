@@ -78,7 +78,7 @@ class Map {
     n, o, p, q, r, s, t, u, v, w, x, y, z};
 
  private:
-  int screen_num_{};
+  int screen_num_ = 0;
 
   // Contains all the map labels
   std::vector<std::string> map_labels_;
@@ -90,7 +90,7 @@ class Map {
   std::vector<std::vector<char>> map_;
 
   // These are entry points to different screens and caves
-  std::string entry_points_ = "abcdefghijklmnopqrsdtuvwxyz";
+  std::string entry_points_ = "abcdefghijklmnopqrstuvwxyz";
   std::string cave_entry_points_ = "`~!@#$%^&*()_-+=[{}]|;:',<>.?/";
 
   // These are a set of bool values to check if the screen or cave has been

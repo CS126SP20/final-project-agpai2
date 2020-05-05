@@ -59,6 +59,8 @@ class Monster {
   bool is_monster_attacked_ = false;
 
   bool is_player_attack_ = false;
+
+  int attack_delay_ = 0;
 };
 
 } // namespace zelda

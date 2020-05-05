@@ -25,14 +25,8 @@ class Engine {
   // Gets the player
   Player GetPlayer() const;
 
-  // Sets the current health of the player
-  void SetCurrentPlayerHealth(int current_health);
-
-  // Sets the total money the player has
-  void SetTotalMoney(int set_total_money);
-
-  // Sets the total number of monsters killed
-  void SetTotalMonstersKilled(int total_monsters_killed);
+  // Sets the players attributes, such as health, money, and monsters killed
+  void SetPlayerAttributes(int health, int money, int monsters_killed);
 
   // Changes the coordinates after change in direction
   Location FromDirection(Direction direction);
