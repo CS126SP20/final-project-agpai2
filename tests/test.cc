@@ -5,6 +5,8 @@
 #include <cinder/Rand.h>
 
 #include <catch2/catch.hpp>
+#include <nlohmann/json.hpp>
+#include <fstream>
 
 #include "../include/zelda/location.h"
 #include "../include/zelda/engine.h"
@@ -20,14 +22,14 @@ using zelda::Player;
 using zelda::Monster;
 using zelda::Map;
 
-std::vector<std::vector<char>> sample_screen = {{ '1','1','1','0','0','1','0','0','1','0','0','0','1','0','1','0','0','1','0','1','1'},
+std::vector<std::vector<char>> sample_screen = {{ '1','1','1','p','p','1','p','p','1','p','p','p','1','p','1','p','p','1','p','1','1'},
                                                 { '1','1','1','0','0','1','0','0','1','0','0','0','1','0','1','0','0','1','0','1','1'},
                                                 { '1','1','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','1','1'},
                                                 { '1','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','1','1'},
                                                 { 'h','0','0','0','0','1','0','0','0','0','0','0','1','0','0','0','0','1','0','1','1'},
                                                 { 'h','0','1','0','0','0','0','0','0','0','0','0','0','M','0','0','0','0','0','0','j'},
                                                 { 'h','0','0','0','0','1','0','1','1','0','0','1','1','0','1','0','0','1','0','0','j'},
-                                                { 'h','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','j'},
+                                                { 'h','0','!','!','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','j'},
                                                 { 'h','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','j'},
                                                 { '1','0','0','0','0','1','0','0','0','0','0','0','1','0','0','0','0','1','0','1','1'},
                                                 { '1','1','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','1','1'},
@@ -135,6 +137,10 @@ TEST_CASE("Change in Location", "[direction][location]") {
   SECTION("Move Right") {
     REQUIRE(engine.FromDirection(Direction::kRight) == Location{+1, 0});
   }
+
+  SECTION("Move Null") {
+    REQUIRE(engine.FromDirection(Direction::kNull) == Location{0, 0});
+  }
 }
 
 TEST_CASE("Player's Location", "[player]") {
@@ -161,7 +167,10 @@ TEST_CASE("Monster Movement", "[monster]") {
   REQUIRE_FALSE(monster.IsMonsterMove());
 
   SECTION("Monster moves") {
-    monster.MoveMonster(Direction::kUp, Location{0,0}, 3);
+    for (int i = 0; i < 21; i++) {
+      monster.MoveMonster(Direction::kUp, Location{0, 0},
+          3);
+    }
     REQUIRE(monster.IsMonsterMove());
     REQUIRE(monster.GetMonsterDirection() == Direction::kUp);
   }
@@ -177,6 +186,7 @@ TEST_CASE("Player attacks Monster", "[monster]") {
 
   SECTION("Monster is not attacked") {
     REQUIRE_FALSE(monster.IsPlayerAttack());
+    REQUIRE(monster.GetMonstersKilled() == 0);
   }
 
   monster.SetIsPlayerAttack(true);
@@ -198,7 +208,45 @@ TEST_CASE("Monster attacks Player", "[location][monster][map]") {
   }
 
   SECTION("Player is attacked") {
+    for (int i = 0; i < 12; i++) {
+      monster.IsMonsterAttackLink(Location(12, 6),
+          3);
+    }
     REQUIRE(monster.IsMonsterAttackLink(Location(12, 6), 3));
+  }
+}
+
+TEST_CASE("Player Attributes", "[engine][player]") {
+  Engine engine(0,0);
+  engine.SetPlayerAttributes(3, 20, 5);
+
+  SECTION("Player Health") {
+    REQUIRE(engine.GetPlayer().GetCurrentHealth() == 3);
+  }
+
+  SECTION("Player's Money amount") {
+    REQUIRE(engine.GetPlayer().GetMoneyAmount() == 20);
+  }
+
+  SECTION("Monsters killed by player") {
+
+  }
+}
+
+TEST_CASE("Player Inventory JSON", "[player]") {
+  Player player(Location(5, 10));
+  player.AddInfoToMenu();
+
+  nlohmann::json j;
+
+  SECTION("Inventory is empty") { REQUIRE(j.empty()); }
+
+  std::ifstream read_inventory("menu.json");
+  read_inventory >> j;
+
+  SECTION("Inventory is not empty") {
+    REQUIRE_FALSE(j.empty());
+    REQUIRE(j.size() == 5);
   }
 }
 
@@ -264,12 +312,16 @@ TEST_CASE("Check for Screen Change", "[screen]") {
     REQUIRE(new_loc == Location(1,4));
   }
 
-  SECTION("Changed Map Number") {
-    int change_screen_num = map.GetTransitionScreenNum(5, 'h');
-    REQUIRE(change_screen_num == 3);
+  SECTION("Changed Map Screen Number") {
+    // Screen change when exited from 'h'
+    REQUIRE(map.GetTransitionScreenNum(5, 'h') == 3);
 
-    change_screen_num = map.GetTransitionScreenNum(4, 'e');
-    REQUIRE(change_screen_num == 5);
+    // Screen change when exited from 'e'
+    REQUIRE(map.GetTransitionScreenNum(4, 'e') == 5);
+  }
+
+  SECTION("Changed Cave Screen Number") {
+    REQUIRE(map.GetTransitionScreenNum(7, '!') == 8);
   }
 
   SECTION("Is Sword Taken") {
