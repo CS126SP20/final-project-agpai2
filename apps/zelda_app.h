@@ -47,8 +47,11 @@ class Zelda : public cinder::app::App {
   // current positon.
   void CheckForDirection(const cinder::app::KeyEvent& event);
 
+  // Displays the File Screen, where the user can choose his/her name
+  void DrawFileScreen();
+
   // Displays the Pause menu screen
-  void DisplayMenu();
+  void DrawMenuScreen();
 
   // Draws the game screen's background
   void DrawBackground();
@@ -111,6 +114,7 @@ class Zelda : public cinder::app::App {
   cinder::qtime::MovieGlRef movie_;
   bool is_intro_finished_ = false;
 
+  bool is_game_start_ = false;
 };
 
 }  // namespace zeldaapp

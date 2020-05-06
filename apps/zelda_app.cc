@@ -7,6 +7,20 @@
 #include <cinder/gl/draw.h>
 #include <cinder/gl/gl.h>
 
+#if defined(CINDER_COCOA_TOUCH)
+const char kNormalFont[] = "VCR OSD Mono";
+const char kBoldFont[] = "Arial-BoldMT";
+const char kDifferentFont[] = "AmericanTypewriter";
+#elif defined(CINDER_LINUX)
+const char kNormalFont[] = "VCR OSD Mono";
+const char kBoldFont[] = "Arial Unicode MS";
+const char kDifferentFont[] = "Purisa";
+#else
+const char kNormalFont[] = "VCR OSD Mono";
+const char kBoldFont[] = "Arial Bold";
+const char kDifferentFont[] = "Papyrus";
+#endif
+
 namespace zeldaapp {
 
 using cinder::app::KeyEvent;
@@ -35,6 +49,9 @@ cinder::fs::path move_path;
 cinder::fs::path attack_path;
 cinder::fs::path monster_path;
 cinder::fs::path inventory_path;
+
+// Stores the name of the player
+std::string player_name;
 
 char monster = 'M';
 char money = 'C';
@@ -124,11 +141,44 @@ void Zelda::update() {
       mapper_.GetScreen()[map_num].coordinates_[curr_row - 1][curr_col] != '1';
 }
 
+template <typename C>
+void PrintText(const std::string& text, const C& color, const cinder::ivec2& size,
+               const cinder::vec2& loc) {
+  cinder::gl::color(color);
+
+  auto box = cinder::TextBox()
+      .alignment(cinder::TextBox::LEFT)
+      .font(cinder::Font(kNormalFont, 20))
+      .size(size)
+      .color(color)
+      .backgroundColor(cinder::ColorA(0, 0, 0, 0))
+      .text(text);
+
+  const auto box_size = box.getSize();
+
+  const auto surface = box.render();
+  const auto texture = cinder::gl::Texture::create(surface);
+  cinder::gl::draw(texture, cinder::Rectf(((loc.x/20) + 275),
+                                          ((loc.y/20) + 143),
+                                          ((loc.x/20) + 1475),
+                                          ((loc.y/20) + 341)));
+}
+
 void Zelda::draw() {
   cinder::gl::enableAlphaBlending();
 
   cinder::gl::clear();
   cinder::gl::color(1,1,1);
+
+
+  if (is_intro_finished_) {
+    if (!is_game_start_) {
+      DrawFileScreen();
+      PrintText(player_name, cinder::Color::black(), {500, 50},
+          getWindowCenter());
+      return;
+    }
+  }
 
   if (!is_intro_finished_) {
     if (movie_texture_) {
@@ -138,7 +188,7 @@ void Zelda::draw() {
     DrawBackground();
     DrawMoney();
     if (is_game_paused_) {
-      DisplayMenu();
+      DrawMenuScreen();
       return;
     }
 
@@ -196,7 +246,9 @@ void Zelda::keyDown(KeyEvent event) {
     }
     case KeyEvent::KEY_p: {
       if (is_intro_finished_) {
-        is_game_paused_ = !is_game_paused_;
+        if (is_game_start_) {
+          is_game_paused_ = !is_game_paused_;
+        }
       }
 
       if (is_game_paused_) {
@@ -209,11 +261,24 @@ void Zelda::keyDown(KeyEvent event) {
         is_attack_ = true;
         monster_.SetIsPlayerAttack(true);
       }
+      break;
     }
     case KeyEvent::KEY_RETURN: {
       movie_->setRate(5);
+      break;
     }
   }
+
+  if (is_intro_finished_) {
+    if (!is_game_start_) {
+      player_name += event.getChar();
+      if (event.getCode() == KeyEvent::KEY_SPACE) {
+        is_game_start_ = true;
+        player_engine_.SetPlayerName(player_name);
+      }
+    }
+  }
+
 }
 
 void Zelda::CheckForDirection(const cinder::app::KeyEvent& event) {
@@ -253,7 +318,15 @@ void Zelda::CheckForDirection(const cinder::app::KeyEvent& event) {
   }
 }
 
-void Zelda::DisplayMenu() {
+void Zelda::DrawFileScreen() {
+  cinder::fs::path name_path = cinder::fs::path("file-screen.png");
+  cinder::gl::Texture2dRef texture = cinder::gl::Texture2d::create(
+      loadImage(loadAsset(name_path)));
+
+  cinder::gl::draw(texture, getWindowBounds());
+}
+
+void Zelda::DrawMenuScreen() {
   if (mapper_.IsSwordTaken()) {
     inventory_path = cinder::fs::path("inventory-1.png");
   } else {
@@ -297,13 +370,6 @@ void Zelda::DrawMoney() {
       }
     }
   }
-
-  /*if (maps[map_num].coordinates_[loc.Col()][loc.Row()] == money) {
-    maps[map_num].coordinates_[loc.Col()][loc.Row()] = '0';
-    player_engine_.SetTotalMoney(
-        player_engine_.GetPlayer().GetMoneyAmount() + 10);
-    mapper_.SetGameScreens(maps);
-  }*/
 }
 
 void Zelda::DrawPlayer() {
