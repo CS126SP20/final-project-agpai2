@@ -98,19 +98,24 @@ void PrintMenuText(const std::string& text, const int pos, const int xi,
 void Player::ViewMenu() {
   std::ifstream read_menu("menu.json");
 
-  json j;
-  read_menu >> j;
+  json json;
+  read_menu >> json;
 
-  PrintMenuText(std::to_string(j["Max Health"].get<int>()),
-                20, 345, 65, 1325, 130);
-  PrintMenuText(std::to_string(j["Current Health"].get<int>()),
-                20, 345, 255, 1325, 320);
-  PrintMenuText(std::to_string(j["Monsters Killed"].get<int>()),
-                20, 357, 432, 1337, 497);
-  PrintMenuText(std::to_string(j["Money"].get<int>()),
-                20, 1005, 743, 1985, 808);
-  PrintMenuText(j["Player Name"].get<std::string>(),
-                20, 1172, 623, 2162, 688);
+  int i = 0;
+  PrintMenuText(std::to_string(json["Max Health"].get<int>()),
+                kRatio, kXi[i], kYi[i], kXj[i], kYj[i]);
+  i++;
+  PrintMenuText(std::to_string(json["Current Health"].get<int>()),
+                kRatio, kXi[i], kYi[i], kXj[i], kYj[i]);
+  i++;
+  PrintMenuText(std::to_string(json["Monsters Killed"].get<int>()),
+                kRatio, kXi[i], kYi[i], kXj[i], kYj[i]);
+  i++;
+  PrintMenuText(std::to_string(json["Money"].get<int>()),
+                kRatio, kXi[i], kYi[i], kXj[i], kYj[i]);
+  i++;
+  PrintMenuText(json["Player Name"].get<std::string>(),
+                kRatio, kXi[i], kYi[i], kXj[i], kYj[i]);
 }
 
 } // namespace zelda

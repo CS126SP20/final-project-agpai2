@@ -67,6 +67,10 @@ void Zelda::setup() {
 void Zelda::update() {
   if (is_game_paused_) { return; }
 
+  curr_map_ = mapper_.GetMapLabels();
+
+  map_num = mapper_.GetNewScreenNum();
+
   if(movie_)
     // This is done to get the movie texture representing the
     // movie's current frame
@@ -99,10 +103,6 @@ void Zelda::update() {
 
   Location new_player_loc = mapper_.GetPlayerNewLoc(
       mapper_.GetScreen()[map_num],player_engine_);
-
-  curr_map_ = mapper_.GetMapLabels();
-
-  map_num = mapper_.GetNewScreenNum();
 
   int curr_row = location.Col();
   int curr_col = location.Row();

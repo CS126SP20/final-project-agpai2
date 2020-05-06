@@ -9,6 +9,15 @@
 
 namespace zelda {
 
+const int kRatio = 20;
+
+// These constants are maintained to set bounds of a text box
+// in player inventory
+const int kXi[5] = {345, 345, 357, 1005, 1172};
+const int kXj[5] = {1325, 1325, 1337, 1985, 2162};
+const int kYi[5] = {65, 255, 432, 743, 623};
+const int kYj[5] = {130, 320, 497, 808, 688};
+
 class Player {
  public:
   explicit Player(Location location);
