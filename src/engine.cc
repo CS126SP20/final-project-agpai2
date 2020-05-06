@@ -24,6 +24,10 @@ Direction Engine::GetDirection() { return direction_; }
 
 Player Engine::GetPlayer() const { return player_; }
 
+void Engine::SetPlayerName(const std::string& set_player_name) {
+  player_.SetPlayerName(set_player_name);
+}
+
 void Engine::SetPlayerAttributes(int health, int money, int monsters_killed) {
   player_.SetCurrentHealth(health);
   player_.SetMoneyAmount(money);

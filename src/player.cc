@@ -8,6 +8,7 @@
 #include <fstream>
 
 #include <nlohmann/json.hpp>
+#include <utility>
 
 #include <cinder/Font.h>
 #include <cinder/Text.h>
@@ -40,6 +41,10 @@ void Player::SetLoc(Location set_loc) { loc_ = set_loc; }
 
 Location Player::GetLoc() const { return loc_; }
 
+void Player::SetPlayerName(std::string set_player_name) {
+  player_name_ = std::move(set_player_name);
+}
+
 void Player::SetCurrentHealth(int set_current_health) {
   current_health_ = set_current_health;
 }
@@ -60,7 +65,7 @@ void Player::AddInfoToMenu() {
   json j;
 
   j = {
-      {"Player Name", "Link"},
+      {"Player Name", player_name_},
       {"Max Health", max_health_},
       {"Current Health", current_health_},
       {"Monsters Killed", monsters_killed_},

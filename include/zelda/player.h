@@ -7,12 +7,18 @@
 
 #include "location.h"
 
+#include <string>
+
 namespace zelda {
 
 const int kRatio = 20;
 
 // These constants are maintained to set bounds of a text box
 // in player inventory
+
+
+
+
 const int kXi[5] = {345, 345, 357, 1005, 1172};
 const int kXj[5] = {1325, 1325, 1337, 1985, 2162};
 const int kYi[5] = {65, 255, 432, 743, 623};
@@ -27,6 +33,9 @@ class Player {
 
   // Gets the current location of the player
   Location GetLoc() const;
+
+  // Sets the name of the player
+  void SetPlayerName(std::string set_player_name);
 
   // Sets the current health of the player
   void SetCurrentHealth(int set_current_health);
@@ -51,6 +60,8 @@ class Player {
 
  private:
   Location loc_;
+
+  std::string player_name_;
 
   int max_health_ = 3;
   int current_health_ = 3;

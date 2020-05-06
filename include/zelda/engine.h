@@ -8,6 +8,8 @@
 #include "direction.h"
 #include "player.h"
 
+#include <string>
+
 namespace zelda {
 
 constexpr int kLocConstant = 5;
@@ -24,6 +26,9 @@ class Engine {
 
   // Gets the player
   Player GetPlayer() const;
+
+  // Sets the player's name
+  void SetPlayerName(const std::string& set_player_name);
 
   // Sets the players attributes, such as health, money, and monsters killed
   void SetPlayerAttributes(int health, int money, int monsters_killed);
