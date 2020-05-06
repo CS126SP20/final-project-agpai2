@@ -31,7 +31,7 @@ class Player {
   Location GetLoc() const;
 
   // Sets the name of the player
-  void SetPlayerName(std::string set_player_name);
+  void SetPlayerName(const std::string& set_player_name);
 
   // Sets the current health of the player
   void SetCurrentHealth(int set_current_health);

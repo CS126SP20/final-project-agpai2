@@ -12,7 +12,7 @@
 
 namespace zelda {
 
-constexpr int kLocConstant = 5;
+constexpr int kLocConstant = 6;
 
 class Engine {
  public:

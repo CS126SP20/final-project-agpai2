@@ -84,20 +84,20 @@ void Zelda::setup() {
 void Zelda::update() {
   if (is_game_paused_) { return; }
 
-  curr_map_ = mapper_.GetMapLabels();
-
-  map_num = mapper_.GetNewScreenNum();
-
-  if(movie_)
+  if(movie_) {
     // This is done to get the movie texture representing the
     // movie's current frame
     movie_texture_ = movie_->getTexture();
+  }
 
   movie_->setRate(1);
 
   if(!is_intro_finished_ && movie_->isDone()) {
     is_intro_finished_ = true;
   }
+
+  curr_map_ = mapper_.GetMapLabels();
+  map_num = mapper_.GetNewScreenNum();
 
   Location location = player_engine_.GetPlayer().GetLoc();
 
@@ -116,7 +116,7 @@ void Zelda::update() {
     mapper_.SetGameScreens(maps);
   }
 
-  //player_engine_.SetPlayerName(player_name);
+  player_engine_.SetPlayerName(player_name);
   player_engine_.SetPlayerAttributes(current_player_health, money_amount,
       monster_.GetMonstersKilled());
 
@@ -144,8 +144,8 @@ void Zelda::update() {
 }
 
 template <typename C>
-void PrintText(const std::string& text, const C& color, const cinder::ivec2& size,
-               const cinder::vec2& loc) {
+void PrintText(const std::string& text, const C& color,
+    const cinder::ivec2& size, const cinder::vec2& loc) {
   cinder::gl::color(color);
 
   auto box = cinder::TextBox()
@@ -153,7 +153,8 @@ void PrintText(const std::string& text, const C& color, const cinder::ivec2& siz
       .font(cinder::Font(kNormalFont, 20))
       .size(size)
       .color(color)
-      .backgroundColor(cinder::ColorA(0, 0, 0, 0))
+      .backgroundColor(cinder::ColorA(0, 0, 0,
+          0))
       .text(text);
 
   const auto box_size = box.getSize();
@@ -173,20 +174,17 @@ void Zelda::draw() {
   cinder::gl::color(1,1,1);
 
 
-  if (is_intro_finished_) {
-    if (!is_game_start_) {
-      DrawFileScreen();
-      PrintText(player_name, cinder::Color::black(), {500, 50},
-          getWindowCenter());
-      return;
-    }
+  if (is_intro_finished_ && !is_game_start_) {
+    DrawFileScreen();
+    PrintText(player_name, cinder::Color::black(), {500, 50},
+        getWindowCenter());
   }
 
   if (!is_intro_finished_) {
     if (movie_texture_) {
       cinder::gl::draw(movie_texture_, getWindowBounds());
     }
-  } else {
+  } else if (is_game_start_) {
     DrawBackground();
     DrawMoney();
     if (is_game_paused_) {
@@ -247,10 +245,8 @@ void Zelda::keyDown(KeyEvent event) {
       break;
     }
     case KeyEvent::KEY_p: {
-      if (is_intro_finished_) {
-        if (is_game_start_) {
-          is_game_paused_ = !is_game_paused_;
-        }
+      if (is_intro_finished_ && is_game_start_) {
+        is_game_paused_ = !is_game_paused_;
       }
 
       if (is_game_paused_) {
@@ -271,14 +267,12 @@ void Zelda::keyDown(KeyEvent event) {
     }
   }
 
-  if (is_intro_finished_) {
-    if (!is_game_start_) {
-      player_name += event.getChar();
-      std::cout << player_name;
-      if (event.getCode() == KeyEvent::KEY_SPACE) {
-        player_engine_.SetPlayerName(player_name);
-        is_game_start_ = true;
-      }
+  if (is_intro_finished_ && !is_game_start_) {
+    player_name += event.getChar();
+    std::cout << player_name;
+    if (event.getCode() == KeyEvent::KEY_TAB) {
+      player_engine_.SetPlayerName(player_name);
+      is_game_start_ = true;
     }
   }
 

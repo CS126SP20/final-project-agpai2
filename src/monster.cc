@@ -80,33 +80,33 @@ std::vector<Map> Monster::MoveMonster(Direction d, Location l, int map_num) {
           if (rand_direction == 0) {
             if (map_screens_[map_num].coordinates_[i + 1][j] ==
                 empty_tile_) {  // down
+              monster_direction_ = Direction::kDown;
               map_screens_[map_num].coordinates_[i + 1][j] = monster_;
               map_screens_[map_num].coordinates_[i][j] = empty_tile_;
-              monster_direction_ = Direction::kDown;
               is_monster_move_ = true;
             }
           } else if (rand_direction == 1) {
             if (map_screens_[map_num].coordinates_[i - 1][j] ==
                 empty_tile_) {  // up
+              monster_direction_ = Direction::kUp;
               map_screens_[map_num].coordinates_[i - 1][j] = monster_;
               map_screens_[map_num].coordinates_[i][j] = empty_tile_;
-              monster_direction_ = Direction::kUp;
               is_monster_move_ = true;
             }
           } else if (rand_direction == 2) {
             if (map_screens_[map_num].coordinates_[i][j - 1] ==
                 empty_tile_) {  // left
+              monster_direction_ = Direction::kLeft;
               map_screens_[map_num].coordinates_[i][j - 1] = monster_;
               map_screens_[map_num].coordinates_[i][j] = empty_tile_;
-              monster_direction_ = Direction::kLeft;
               is_monster_move_ = true;
             }
           } else if (rand_direction == 3) {
             if (map_screens_[map_num].coordinates_[i][j + 1] ==
                 empty_tile_) {  // right
+              monster_direction_ = Direction::kRight;
               map_screens_[map_num].coordinates_[i][j + 1] = monster_;
               map_screens_[map_num].coordinates_[i][j] = empty_tile_;
-              monster_direction_ = Direction::kRight;
               is_monster_move_ = true;
             }
           }

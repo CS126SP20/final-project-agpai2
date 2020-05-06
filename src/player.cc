@@ -41,8 +41,8 @@ void Player::SetLoc(Location set_loc) { loc_ = set_loc; }
 
 Location Player::GetLoc() const { return loc_; }
 
-void Player::SetPlayerName(std::string set_player_name) {
-  player_name_ = std::move(set_player_name);
+void Player::SetPlayerName(const std::string& set_player_name) {
+  player_name_ = set_player_name;
 }
 
 void Player::SetCurrentHealth(int set_current_health) {
