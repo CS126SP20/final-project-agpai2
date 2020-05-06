@@ -114,6 +114,7 @@ int Map::GetCurrScreenNum(const Map& curr_map) {
     }
     outer_loop:;
   }
+    //return 0;
 }
 
 int Map::GetTransitionScreenNum(int num, char entry) {
@@ -130,6 +131,7 @@ int Map::GetTransitionScreenNum(int num, char entry) {
       }
     }
   }
+  //return 0;
 }
 
 Location Map::CheckForCaveEntry(const Map& curr_map, Engine engine) {

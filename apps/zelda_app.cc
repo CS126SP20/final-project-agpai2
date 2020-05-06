@@ -115,6 +115,8 @@ void Zelda::update() {
     money_amount += 10;
     mapper_.SetGameScreens(maps);
   }
+
+  //player_engine_.SetPlayerName(player_name);
   player_engine_.SetPlayerAttributes(current_player_health, money_amount,
       monster_.GetMonstersKilled());
 
@@ -272,9 +274,10 @@ void Zelda::keyDown(KeyEvent event) {
   if (is_intro_finished_) {
     if (!is_game_start_) {
       player_name += event.getChar();
+      std::cout << player_name;
       if (event.getCode() == KeyEvent::KEY_SPACE) {
-        is_game_start_ = true;
         player_engine_.SetPlayerName(player_name);
+        is_game_start_ = true;
       }
     }
   }
@@ -283,7 +286,7 @@ void Zelda::keyDown(KeyEvent event) {
 
 void Zelda::CheckForDirection(const cinder::app::KeyEvent& event) {
 
-  if (is_intro_finished_) {
+  if (is_intro_finished_ && is_game_start_) {
     if (is_move_up_ && (event.getCode() == KeyEvent::KEY_UP ||
                         event.getCode() == KeyEvent::KEY_w)) {
       player_engine_.SetDirection(Direction::kUp);

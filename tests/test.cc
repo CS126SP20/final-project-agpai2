@@ -68,13 +68,11 @@ TEST_CASE("Location Values", "[location]") {
   Location loc{6, 10};
 
   SECTION("Row of Location") {
-    int row_result = loc.Row();
-    REQUIRE(row_result == 6);
+    REQUIRE(loc.Row() == 6);
   }
 
   SECTION("Column of Location") {
-    int column_result = loc.Col();
-    REQUIRE(column_result == 10);
+    REQUIRE(loc.Col() == 10);
   }
 }
 
@@ -91,7 +89,6 @@ TEST_CASE("Change in Directions", "[engine-constructor][direction]") {
 
   SECTION("Up Direction") {
     engine.SetDirection(Direction::kUp);
-
     REQUIRE(engine.GetDirection() == Direction::kUp);
   }
 
@@ -146,7 +143,7 @@ TEST_CASE("Change in Location", "[direction][location]") {
 TEST_CASE("Player's Location", "[player]") {
   Player player(Location(2, 5));
 
-  SECTION("Player Location") {
+  SECTION("Initial Player Location") {
     REQUIRE(player.GetLoc() == Location{2,5});
   }
 
