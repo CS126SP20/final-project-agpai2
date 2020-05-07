@@ -112,8 +112,8 @@ class Zelda : public cinder::app::App {
   // These are to maintain the movie textures and play the movie
   cinder::gl::TextureRef movie_texture_;
   cinder::qtime::MovieGlRef movie_;
-  bool is_intro_finished_ = false;
 
+  // Checks if the game has started
   bool is_game_start_ = false;
 };
 

@@ -56,6 +56,8 @@ std::string player_name;
 char monster = 'M';
 char money = 'C';
 
+bool is_intro_finished;
+
 Zelda::Zelda()
     : player_engine_{kRowTiles, kColTiles},
       monster_{} {}
@@ -92,8 +94,9 @@ void Zelda::update() {
 
   movie_->setRate(1);
 
-  if(!is_intro_finished_ && movie_->isDone()) {
-    is_intro_finished_ = true;
+  is_intro_finished = false;
+  if(!is_intro_finished && movie_->isDone()) {
+    is_intro_finished = true;
   }
 
   curr_map_ = mapper_.GetMapLabels();
@@ -174,13 +177,13 @@ void Zelda::draw() {
   cinder::gl::color(1,1,1);
 
 
-  if (is_intro_finished_ && !is_game_start_) {
+  if (is_intro_finished && !is_game_start_) {
     DrawFileScreen();
     PrintText(player_name, cinder::Color::black(), {500, 50},
         getWindowCenter());
   }
 
-  if (!is_intro_finished_) {
+  if (!is_intro_finished) {
     if (movie_texture_) {
       cinder::gl::draw(movie_texture_, getWindowBounds());
     }
@@ -245,7 +248,7 @@ void Zelda::keyDown(KeyEvent event) {
       break;
     }
     case KeyEvent::KEY_p: {
-      if (is_intro_finished_ && is_game_start_) {
+      if (is_intro_finished && is_game_start_) {
         is_game_paused_ = !is_game_paused_;
       }
 
@@ -267,7 +270,7 @@ void Zelda::keyDown(KeyEvent event) {
     }
   }
 
-  if (is_intro_finished_ && !is_game_start_) {
+  if (is_intro_finished && !is_game_start_) {
     player_name += event.getChar();
     std::cout << player_name;
     if (event.getCode() == KeyEvent::KEY_TAB) {
@@ -280,7 +283,7 @@ void Zelda::keyDown(KeyEvent event) {
 
 void Zelda::CheckForDirection(const cinder::app::KeyEvent& event) {
 
-  if (is_intro_finished_ && is_game_start_) {
+  if (is_intro_finished && is_game_start_) {
     if (is_move_up_ && (event.getCode() == KeyEvent::KEY_UP ||
                         event.getCode() == KeyEvent::KEY_w)) {
       player_engine_.SetDirection(Direction::kUp);
@@ -490,7 +493,7 @@ void Zelda::PlayBackgroundTheme() {
       (cinder::app::loadAsset(background_theme_path));
   background_audio_file_ = cinder::audio::Voice::create(source_file);
 
-  if (is_intro_finished_) {
+  if (is_intro_finished) {
     background_audio_file_->start();
   }
 }
