@@ -29,8 +29,21 @@ Unlike the original game, there won't be an specific side/main-quests that will 
 progress further into the game. The user playing this game is given an opportunity to explore the world and the hidden 
 secrets the game has to offer.
 
-## Dependencies
+## Installation
 
+### For Windows Users
+1. If you don't have Visual Studio, [install Visual Studio](https://docs.microsoft.com/en-us/visualstudio/install/install-visual-studio?view=vs-2017).
+2. If you don't have Cinder 0.9.2, [download it](https://libcinder.org/download) and follow the instructions 
+   in the setup guide to set up [Cinder + Git](https://libcinder.org/docs/guides/git/index.html). 
+3. Install [JSON Library - header only](https://github.com/nlohmann/json/releases/download/v3.7.3/include.zip) and 
+   [catchorg/Catch2](https://github.com/catchorg/Catch2.git) and add these libraries to the CMake files. 
+4. Clone this repository using git clone https://github.com/CS126SP20/final-project-agpai2.git
+5. Build and run the project from Visual Studio. 
+
+### For Mac Users
+1. Follow steps 2-4 in installation process for Windows users
+
+## Dependencies
 * CMake
 * clang/clang++
 
@@ -41,6 +54,10 @@ For the implementation of this game, I will be using a couple of external/third-
 * [catchorg/Catch2](https://github.com/catchorg/Catch2.git) 
 * [JSON Library - header only](https://github.com/nlohmann/json/releases/download/v3.7.3/include.zip) 
 
+## Documentation
+This codebase follows the [Google C++ Style Guide](https://google.github.io/styleguide/cppguide.html) with Doxygen-style 
+documentation. You can generate your own HTML version of the documentation, 
+see [the guide on the Doxygen page](http://www.doxygen.nl/manual/doxygen_usage.html).
 
 ## Game Controls
 
@@ -55,3 +72,4 @@ For the implementation of this game, I will be using a couple of external/third-
 | `P`                    | Toggle game pause, shows inventory/menu screen              |
 | `SPACEBAR`             | Attack with sword                                           |
 | `ENTER`                | Skip through the game introduction                          |
+| `TAB`                  | Enter the game play after the user enter the name           |
