@@ -110,6 +110,9 @@ void Zelda::update() {
   int current_player_health = player_engine_.GetPlayer().GetCurrentHealth();
   if (monster_.IsMonsterAttackLink(location, map_num)) {
     current_player_health--;
+    if (current_player_health <= 0) {
+      is_player_killed_ = true;
+    }
   }
 
   int money_amount = player_engine_.GetPlayer().GetMoneyAmount();
@@ -146,30 +149,6 @@ void Zelda::update() {
       mapper_.GetScreen()[map_num].coordinates_[curr_row - 1][curr_col] != '1';
 }
 
-template <typename C>
-void PrintText(const std::string& text, const C& color,
-    const cinder::ivec2& size, const cinder::vec2& loc) {
-  cinder::gl::color(color);
-
-  auto box = cinder::TextBox()
-      .alignment(cinder::TextBox::LEFT)
-      .font(cinder::Font(kNormalFont, 20))
-      .size(size)
-      .color(color)
-      .backgroundColor(cinder::ColorA(0, 0, 0,
-          0))
-      .text(text);
-
-  const auto box_size = box.getSize();
-
-  const auto surface = box.render();
-  const auto texture = cinder::gl::Texture::create(surface);
-  cinder::gl::draw(texture, cinder::Rectf(((loc.x/20) + 275),
-                                          ((loc.y/20) + 143),
-                                          ((loc.x/20) + 1475),
-                                          ((loc.y/20) + 341)));
-}
-
 void Zelda::draw() {
   cinder::gl::enableAlphaBlending();
 
@@ -179,8 +158,7 @@ void Zelda::draw() {
 
   if (is_intro_finished && !is_game_start_) {
     DrawFileScreen();
-    PrintText(player_name, cinder::Color::black(), {500, 50},
-        getWindowCenter());
+    PrintText(player_name, 20, 275, 143, 1475, 341);
   }
 
   if (!is_intro_finished) {
@@ -203,13 +181,17 @@ void Zelda::draw() {
 
     DrawMonster();
   }
+
+  if (is_player_killed_) {
+    RestartGame();
+  }
 }
 
 void Zelda::keyDown(KeyEvent event) {
   switch (event.getCode()) {
     case KeyEvent::KEY_UP:
     case KeyEvent::KEY_w: {
-      if (!is_game_paused_) {
+      if (!is_game_paused_ && !is_player_killed_) {
         CheckForDirection(event);
         player_direction_ = Direction::kUp;
         back_move_count++;
@@ -219,7 +201,7 @@ void Zelda::keyDown(KeyEvent event) {
     }
     case KeyEvent::KEY_DOWN:
     case KeyEvent::KEY_s: {
-      if (!is_game_paused_) {
+      if (!is_game_paused_ && !is_player_killed_) {
         CheckForDirection(event);
         player_direction_ = Direction::kDown;
         front_move_count++;
@@ -229,7 +211,7 @@ void Zelda::keyDown(KeyEvent event) {
     }
     case KeyEvent::KEY_LEFT:
     case KeyEvent::KEY_a: {
-      if (!is_game_paused_) {
+      if (!is_game_paused_ && !is_player_killed_) {
         CheckForDirection(event);
         player_direction_ = Direction::kLeft;
         left_move_count++;
@@ -239,7 +221,7 @@ void Zelda::keyDown(KeyEvent event) {
     }
     case KeyEvent::KEY_RIGHT:
     case KeyEvent::KEY_d: {
-      if (!is_game_paused_) {
+      if (!is_game_paused_ && !is_player_killed_) {
         CheckForDirection(event);
         player_direction_ = Direction::kRight;
         right_move_count++;
@@ -272,10 +254,23 @@ void Zelda::keyDown(KeyEvent event) {
 
   if (is_intro_finished && !is_game_start_) {
     player_name += event.getChar();
-    std::cout << player_name;
     if (event.getCode() == KeyEvent::KEY_TAB) {
       player_engine_.SetPlayerName(player_name);
       is_game_start_ = true;
+    }
+  }
+
+  if (is_player_killed_) {
+    if (event.getChar() == 'y') {
+      is_player_killed_ = false;
+      player_engine_.SetPlayerAttributes(
+          player_engine_.GetPlayer().GetMaxHealth(),
+          player_engine_.GetPlayer().GetMoneyAmount(),
+          monster_.GetMonstersKilled());
+    } else if (event.getChar() == 'n') {
+      is_player_killed_ = false;
+      std::cout << "The Game has ended" << std::endl;
+      exit(0);
     }
   }
 
@@ -517,6 +512,43 @@ void Zelda::ResetPosition(Location location) {
   if (mapper_.IsScreenChange()) {
     player_engine_.Reset(location);
   }
+}
+
+void Zelda::RestartGame() {
+  PrintText("Game Over", 20, 500, 75, 1900, 525);
+  PrintText("Do You Want To Continue?", 20, 300, 350 , 1900, 500);
+  PrintText("Yes or No", 20, 500, 550, 1900, 700);
+}
+
+void Zelda::PrintText(const std::string& text, const int pos, const int xi,
+                      const int yi, const int xj, const int yj) {
+
+  const cinder::vec2 loc = cinder::app::getWindowCenter();
+  const cinder::ivec2 size = {500, 50};
+
+  cinder::ColorA back_color = {0,0,0,0};
+  if (is_player_killed_) {
+    back_color = {0,0,0,0.7};
+  }
+
+  auto box = cinder::TextBox()
+      .alignment(cinder::TextBox::LEFT)
+      .font(cinder::Font(kNormalFont, 20))
+      .size(size)
+      .color(cinder::Color::black())
+      .backgroundColor(cinder::ColorA(0, 0, 0,
+                                      0))
+      .text(text);
+
+  const auto box_size = box.getSize();
+
+  const auto surface = box.render();
+  const auto texture = cinder::gl::Texture::create(surface);
+  cinder::gl::draw(texture, cinder::Rectf(((loc.x/pos) + xi) *
+  cinder::app::getWindowWidth()/kFullScreenWidth,
+  ((loc.y/pos) + yi) * cinder::app::getWindowHeight()/kFullScreenHeight,
+  ((loc.x/pos) + xj) * cinder::app::getWindowWidth()/kFullScreenWidth,
+  ((loc.y/pos) + yj) * cinder::app::getWindowHeight()/kFullScreenHeight));
 }
 
 }  // namespace zeldaapp

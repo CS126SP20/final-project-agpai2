@@ -80,6 +80,13 @@ class Zelda : public cinder::app::App {
   // This is to reset link's position after a screen transition
   void ResetPosition(zelda::Location location);
 
+  // This restarts the game
+  void RestartGame();
+
+  // Prints the text on the cinder screen
+  void PrintText(const std::string& text, int pos, int xi, int yi, int xj,
+      int yj);
+
  private:
   zelda::Engine player_engine_;
   zelda::Map mapper_;
@@ -115,6 +122,9 @@ class Zelda : public cinder::app::App {
 
   // Checks if the game has started
   bool is_game_start_ = false;
+
+  // Checks if the player is killed
+  bool is_player_killed_ = false;
 };
 
 }  // namespace zeldaapp

@@ -39,6 +39,9 @@ class Player {
   // Gets the current health of the player
   int GetCurrentHealth();
 
+  // Gets the maximum health of the player
+  int GetMaxHealth();
+
   // Sets the amount of money the player has
   void SetMoneyAmount(int set_money_amount);
 

@@ -51,6 +51,8 @@ void Player::SetCurrentHealth(int set_current_health) {
 
 int Player::GetCurrentHealth() { return current_health_; }
 
+int Player::GetMaxHealth() { return max_health_; }
+
 void Player::SetMoneyAmount(int set_money_amount) {
   total_money_ = set_money_amount;
 }
