@@ -34,6 +34,16 @@ const int kColTiles = 21;
 const int kFullScreenHeight = 900;
 const int kFullScreenWidth = 1440;
 
+// To maintain relative position of text on screen
+const int kPosRatio = 20;
+
+// These constants are maintained to set bounds of a text box
+// in player inventory
+const int kXi[4] = {275, 500, 300, 500};
+const int kXj[4] = {1475, 1900, 1900, 1900};
+const int kYi[4] = {143, 75, 350, 550};
+const int kYj[4] = {341, 525, 500, 700};
+
 class Zelda : public cinder::app::App {
  public:
   Zelda();

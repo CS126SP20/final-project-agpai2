@@ -11,6 +11,7 @@
 
 namespace zelda {
 
+// To maintain relative position of text on screen
 const int kRatio = 20;
 
 // These constants are maintained to set bounds of a text box

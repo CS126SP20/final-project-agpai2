@@ -40,6 +40,8 @@ int left_move_count = 0;
 int right_move_count = 0;
 int back_move_count = 0;
 
+int motion_count = 2;
+
 // This count is kept to for a time delay to show Link attack
 int attack_count = 0;
 
@@ -158,7 +160,8 @@ void Zelda::draw() {
 
   if (is_intro_finished && !is_game_start_) {
     DrawFileScreen();
-    PrintText(player_name, 20, 275, 143, 1475, 341);
+    PrintText(player_name, kPosRatio, kXi[0], kYi[0], kXj[0],
+        kYj[0]);
   }
 
   if (!is_intro_finished) {
@@ -371,25 +374,25 @@ void Zelda::DrawPlayer() {
   const Location loc = player_engine_.GetPlayer().GetLoc();
 
   if (player_direction_ == Direction::kDown) {
-    if (front_move_count % 2 == 0) {
+    if (front_move_count % motion_count == 0) {
       move_path = cinder::fs::path("link-front-1.png");
     } else {
       move_path = cinder::fs::path("link-front-2.png");
     }
   } else if (player_direction_ == Direction::kUp) {
-    if (back_move_count % 2 == 0) {
+    if (back_move_count % motion_count == 0) {
       move_path = cinder::fs::path("link-back-1.png");
     } else {
       move_path = cinder::fs::path("link-back-2.png");
     }
   } else if (player_direction_ == Direction::kLeft) {
-    if (left_move_count % 2 == 0) {
+    if (left_move_count % motion_count == 0) {
       move_path = cinder::fs::path("link-left-1.png");
     } else {
       move_path = cinder::fs::path("link-left-2.png");
     }
   } else if (player_direction_ == Direction::kRight) {
-    if (right_move_count % 2 == 0) {
+    if (right_move_count % motion_count == 0) {
       move_path = cinder::fs::path("link-right-1.png");
     } else {
       move_path = cinder::fs::path("link-right-2.png");
@@ -515,9 +518,13 @@ void Zelda::ResetPosition(Location location) {
 }
 
 void Zelda::RestartGame() {
-  PrintText("Game Over", 20, 500, 75, 1900, 525);
-  PrintText("Do You Want To Continue?", 20, 300, 350 , 1900, 500);
-  PrintText("Yes or No", 20, 500, 550, 1900, 700);
+  int i = 1;
+  PrintText("Game Over", kPosRatio, kXi[i], kYi[i], kXj[i], kYj[i]);
+  i++;
+  PrintText("Do You Want To Continue?", kPosRatio, kXi[i], kYi[i], kXj[i],
+      kYj[i]);
+  i++;
+  PrintText("Yes or No", kPosRatio, kXi[i], kYi[i], kXj[i], kYj[i]);
 }
 
 void Zelda::PrintText(const std::string& text, const int pos, const int xi,
@@ -526,14 +533,9 @@ void Zelda::PrintText(const std::string& text, const int pos, const int xi,
   const cinder::vec2 loc = cinder::app::getWindowCenter();
   const cinder::ivec2 size = {500, 50};
 
-  cinder::ColorA back_color = {0,0,0,0};
-  if (is_player_killed_) {
-    back_color = {0,0,0,0.7};
-  }
-
   auto box = cinder::TextBox()
       .alignment(cinder::TextBox::LEFT)
-      .font(cinder::Font(kNormalFont, 20))
+      .font(cinder::Font(kNormalFont, kPosRatio))
       .size(size)
       .color(cinder::Color::black())
       .backgroundColor(cinder::ColorA(0, 0, 0,
