@@ -63,3 +63,6 @@
 
 9. Added a file screen, which allows the user to enter any name for the player, after the game intro is played.
    The screen aspect ratio is yet to be adjusted for the same
+   
+10. Managed to finished the key parts of the game, as stated in the project proposal. There is now a game over screen
+    which allows the player to restart the game from the same location
